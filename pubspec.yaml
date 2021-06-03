@@ -26,6 +26,7 @@ dependencies:
   get: ^4.1.4
   http: ^0.13.3
   google_fonts: ^2.1.0
+  get_storage:
 
 
 

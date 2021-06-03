@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:mazad_app/Screens/HomeView/HomeView.dart';
 import 'package:mazad_app/Screens/ProfileView/ProfileView.dart';
 import 'package:mazad_app/Screens/StoreView/StoreView.dart';
@@ -12,6 +13,7 @@ import 'Screens/LoginView/LoginView.dart';
 import 'helpers/StarterView.dart';
 
 void main() async {
+  await GetStorage.init();
   runApp(MyApp());
 }
 
@@ -20,7 +22,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      getPages: [GetPage(name: "/", page: () => HomeView())],
+      getPages: [
+        GetPage(name: "/", page: () => HomeView()),
+
+      ],
       initialBinding: Binding(),
       home: Scaffold(
         body: StarterView(),

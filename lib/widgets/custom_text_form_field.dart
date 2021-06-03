@@ -33,6 +33,7 @@ class CustomTextFormFieldText extends StatelessWidget {
           TextFormField(
             controller: TextEditingController(text: 'yaman@gmail.com'),
             onSaved: onSave as void Function(String?)?,
+
             validator: validator as String? Function(String?)?,
             decoration: InputDecoration(
               hintText: hint,

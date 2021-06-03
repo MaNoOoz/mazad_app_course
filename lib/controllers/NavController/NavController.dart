@@ -6,14 +6,14 @@ import 'package:mazad_app/Screens/StoreView/StoreView.dart';
 
 class NavController extends GetxController {
 
-  int _navigatorValue = 0;
+  int _tapValue = 0;
 
-  get navigatorValue => _navigatorValue;
+  get tapValue => _tapValue;
 
   // Widget currentScreen = HomeView();
 
-  void changeScreen(int selctedIndex) {
-    _navigatorValue = selctedIndex;
+  void changeScreen(int selcetedTap) {
+    _tapValue = selcetedTap;
     update();
   }
 

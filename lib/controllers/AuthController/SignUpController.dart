@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:mazad_app/data/LocalStorage.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,6 +9,7 @@ class SignUpContoller extends GetxController {
 
   String email = "", password = "", name = "";
   RxBool userLogged = false.obs;
+  LocalStorage storage = LocalStorage();
 
   createNewUser() async {
     var url = "$BaseUrl/auth/local/register";
@@ -21,8 +23,8 @@ class SignUpContoller extends GetxController {
     final data = jsonDecode(response.body);
     if (response.statusCode == 200) {
       var jwtToken = data['jwt'];
-      // localStorage.saveToken("jwt", jwtToken);
-      print(jwtToken);
+      storage.saveToken("jwt", jwtToken);
+      print(data['jwt']);
     }
     print(data);
     //
