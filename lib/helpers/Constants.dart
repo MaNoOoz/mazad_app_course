@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mazad_app/helpers/size_config.dart';
 
-const BaseUrl = "http://172.20.112.1:1111";
+const BaseUrl = "http://172.30.128.1:1111";
 
 // const BaseUrl = "http://localhost:1111";
 const AuthUrlRegister = "/auth/local/register";
 
 const Map<String, String> headersNoAuth = {
   'Content-Type': 'application/json',
-  'Accept': 'application/json',
+  "Accept": "application/json",
+  "Access-Control_Allow_Origin": "*"
 };
 
 const kPrimaryColor = Color(0xFF0473C0);
