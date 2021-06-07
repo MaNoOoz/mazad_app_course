@@ -2,9 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mazad_app/helpers/size_config.dart';
 
-const BaseUrl = "http://172.30.128.1:1111";
+const BaseUrl = "http://172.20.176.1:1111";
 
 // const BaseUrl = "http://localhost:1111";
 const AuthUrlRegister = "/auth/local/register";
@@ -16,6 +15,7 @@ const Map<String, String> headersNoAuth = {
 };
 
 const kPrimaryColor = Color(0xFF0473C0);
+const kPrimaryColorShadow = Color(0xFF7B94B1);
 const kPrimaryLightColor = Color(0xFFFFECDF);
 const kPrimaryGradientColor = LinearGradient(
   begin: Alignment.topLeft,
@@ -26,18 +26,31 @@ const kSecondaryColor = Color(0xFF979797);
 const kTextColor = Color(0xFF757575);
 
 const kAnimationDuration = Duration(milliseconds: 200);
-
+TextStyle textStyleSearch = GoogleFonts.cairo(
+  textStyle: TextStyle(
+    color: Colors.black54,
+    fontSize: 14,
+    fontWeight: FontWeight.normal,
+  ),
+);
 final headingStyle = TextStyle(
-  fontSize: getProportionateScreenWidth(28),
-  fontWeight: FontWeight.bold,
+  fontWeight: FontWeight.normal,
   color: Colors.black,
   height: 1.5,
 );
 final headingStyleBlack = GoogleFonts.cairo(
   textStyle: TextStyle(
     fontSize: 20,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.normal,
     color: Colors.black,
+    height: 1.5,
+  ),
+);
+final headingStylePrimary = GoogleFonts.cairo(
+  textStyle: TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.normal,
+    color:kPrimaryColor,
     height: 1.5,
   ),
 );
@@ -45,7 +58,7 @@ final headingStyleWhite = GoogleFonts.almarai(
   textStyle: TextStyle(
     color: kPrimaryLightColor,
     fontSize: 24,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.normal,
   ),
 );
 
@@ -53,7 +66,7 @@ final titlesStyle = GoogleFonts.cairo(
   textStyle: TextStyle(
     color: Colors.red,
     fontSize: 10,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.normal,
   ),
 );
 final titlesStyleBlack = GoogleFonts.cairo(
@@ -63,9 +76,16 @@ final titlesStyleBlack = GoogleFonts.cairo(
     fontWeight: FontWeight.normal,
   ),
 );
+final titlesStyleBlack80 = GoogleFonts.cairo(
+  textStyle: TextStyle(
+    color: Colors.black87,
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+  ),
+);
 final titlesStyleWhite = GoogleFonts.cairo(
   textStyle: TextStyle(
-    color: kSecondaryColor,
+    color: kPrimaryLightColor,
     fontSize: 14,
     fontWeight: FontWeight.normal,
   ),
@@ -75,6 +95,27 @@ final lableStyleBlack = GoogleFonts.cairo(
     color: Colors.black54,
     fontSize: 12,
     fontWeight: FontWeight.normal,
+  ),
+);
+final contentStyleBlack = GoogleFonts.cairo(
+  textStyle: TextStyle(
+    color: Colors.black,
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+  ),
+);
+final contentStylWhite = GoogleFonts.cairo(
+  textStyle: TextStyle(
+    color: Colors.white,
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+  ),
+);
+final contentStyleBlackBold = GoogleFonts.cairo(
+  textStyle: TextStyle(
+    color: Colors.black,
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
   ),
 );
 final lableStylePrimary = GoogleFonts.cairo(
@@ -107,7 +148,7 @@ const String kAddressNullError = "Please Enter your address";
 
 final otpInputDecoration = InputDecoration(
   contentPadding:
-      EdgeInsets.symmetric(vertical: getProportionateScreenWidth(15)),
+      EdgeInsets.symmetric(vertical: 15),
   border: outlineInputBorder(),
   focusedBorder: outlineInputBorder(),
   enabledBorder: outlineInputBorder(),
@@ -115,7 +156,7 @@ final otpInputDecoration = InputDecoration(
 
 OutlineInputBorder outlineInputBorder() {
   return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(getProportionateScreenWidth(15)),
+    borderRadius: BorderRadius.circular((15)),
     borderSide: BorderSide(color: kTextColor),
   );
 }

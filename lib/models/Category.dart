@@ -18,7 +18,6 @@ class Category {
     required this.publishedAt,
     required this.createdAt,
     required this.updatedAt,
-    required this.ads,
   });
 
   int? id;
@@ -27,27 +26,23 @@ class Category {
   DateTime? publishedAt;
   DateTime? createdAt;
   DateTime? updatedAt;
-  List<dynamic> ads;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
         id: json["id"],
         title: json["title"],
-        categoryImage: json["CategoryImage"],
+        categoryImage: json["CategoryImage"]??"",
         publishedAt: DateTime.parse(json["published_at"]),
         createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-        ads: List<dynamic>.from(json["adsInCats"].map((x) => x)).toList(),
-        // ads: toList(json["ads"]),
+        updatedAt: DateTime.parse(json["updated_at"])
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
-        "CategoryImage": categoryImage!,
+        "CategoryImage": categoryImage,
         "published_at": publishedAt!.toIso8601String(),
         "created_at": createdAt!.toIso8601String(),
         "updated_at": updatedAt!.toIso8601String(),
-        "adsInCats": List<dynamic>.from(ads.map((x) => x)),
       };
 
 // static List<Ad> toList(List<dynamic> list) {
