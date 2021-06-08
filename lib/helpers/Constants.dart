@@ -14,6 +14,7 @@ const Map<String, String> headersNoAuth = {
   "Access-Control_Allow_Origin": "*"
 };
 
+
 const kPrimaryColor = Color(0xFF0473C0);
 const kPrimaryColorShadow = Color(0xFF7B94B1);
 const kPrimaryLightColor = Color(0xFFFFECDF);
@@ -58,6 +59,13 @@ final headingStyleWhite = GoogleFonts.almarai(
   textStyle: TextStyle(
     color: kPrimaryLightColor,
     fontSize: 24,
+    fontWeight: FontWeight.normal,
+  ),
+);
+final headingStyleWhite2 = GoogleFonts.almarai(
+  textStyle: TextStyle(
+    color: Colors.white,
+    fontSize: 40,
     fontWeight: FontWeight.normal,
   ),
 );

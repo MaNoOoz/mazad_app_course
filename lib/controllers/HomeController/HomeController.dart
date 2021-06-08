@@ -10,7 +10,7 @@ class HomeViewController extends GetxController {
   List<Ad> _Ads = <Ad>[];
   List<Ad> _adsListFilter = <Ad>[];
 
-  int catId = 0;
+  int catId = 4;
   var likes = 0.obs;
   increment() => likes++;
   List<Category> get categories => _categories;
@@ -54,7 +54,7 @@ class HomeViewController extends GetxController {
     print("getAdsListWithFilter ");
 
     try {
-      await homeService.getAds2(catId).then((value) {
+      await homeService.getAdsWithFilter(catId).then((value) {
         _adsListFilter.clear();
 
         _adsListFilter = value!.map((element) => Ad.fromJson(element)).toList();

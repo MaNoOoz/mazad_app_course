@@ -9,7 +9,7 @@ import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
 
 class HomeView extends GetView<HomeViewController> {
-  var catID = 0;
+  var catID = 4;
 
   @override
   Widget build(BuildContext context) {

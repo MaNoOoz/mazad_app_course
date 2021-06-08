@@ -30,8 +30,20 @@ class HomeService {
       print("Error Geting Data");
     }
   }
-  Future<List<dynamic>?> getAds2(catId) async {
+  Future<List<dynamic>?> getAdsWithFilter(catId) async {
     var url = "$BaseUrl/Ads?category.id=$catId";
+    var response = await http.get(Uri.parse("$url"), headers: headersNoAuth);
+    final data = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      // print(data);
+
+      return data;
+    }else{
+      print("Error Geting Data");
+    }
+  }
+  Future<List<dynamic>?> getAdsForUser(userId) async {
+    var url = "$BaseUrl/Ads?user.id=$userId";
     var response = await http.get(Uri.parse("$url"), headers: headersNoAuth);
     final data = jsonDecode(response.body);
     if (response.statusCode == 200) {

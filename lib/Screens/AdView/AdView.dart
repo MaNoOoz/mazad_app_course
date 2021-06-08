@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 import 'package:mazad_app/controllers/AuthController/AdViewContoller/AdViewContoller.dart';
 import 'package:mazad_app/helpers/Constants.dart';
@@ -21,15 +22,14 @@ class AdView extends GetView<AdViewContoller> {
       // resizeToAvoidBottomInset: true,
       // extendBody: false,
       appBar: AppBar(
-        backgroundColor: kPrimaryColor, // status bar color
+        backgroundColor: kPrimaryColor,
+        // status bar color
         brightness: Brightness.light,
         elevation: 0,
         title: Text("${ad.title.toString()}"),
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(CupertinoIcons.share))
+          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.share))
         ],
-
-
       ),
 
       bottomSheet: _buildBottomSheet(),
@@ -277,28 +277,7 @@ class AdView extends GetView<AdViewContoller> {
                 ),
               ),
             ),
-            Flexible(
-              flex: 4,
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: PageView.builder(
-                  scrollDirection: Axis.horizontal,
-                  physics: PageScrollPhysics(),
-                  pageSnapping: true,
-                  allowImplicitScrolling: true,
-                  itemCount: ad.adImages?.length == 0 ? 5 : ad.adImages?.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      // child: Image.network(
-                      //   "${ad.adImages?[index].name ?? ""}",
-                      //   semanticLabel: "صور الإعلان",
-                      // ),
-                      child: Placeholder(),
-                    );
-                  },
-                ),
-              ),
-            ),
+            Container(height: 500, child: AdImagesCards2()),
             Divider(
               thickness: 1,
               color: kPrimaryColorShadow,
@@ -412,6 +391,85 @@ class AdView extends GetView<AdViewContoller> {
         ),
       ),
     );
+  }
+
+  Widget AdImagesCards() {
+    return Flexible(
+      flex: 4,
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: PageView.builder(
+          scrollDirection: Axis.horizontal,
+          physics: PageScrollPhysics(),
+          pageSnapping: true,
+          allowImplicitScrolling: true,
+          itemCount: ad.adImages?.length == 0 ? 5 : ad.adImages?.length,
+          itemBuilder: (BuildContext context, int index) {
+            return AdImages(
+                // child: Image.network(
+                //   "${ad.adImages?[index].name ?? ""}",
+                //   semanticLabel: "صور الإعلان",
+                // ),
+                );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget AdImagesCards2() {
+    return Swiper(
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+                elevation: 6,
+                color: Colors.blue,
+                margin: EdgeInsets.all(1),
+                semanticContainer: true,
+                clipBehavior: Clip.antiAlias,
+                shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(20.0),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: new Image.network(
+                    "https://static.autox.com/uploads/2018/10/Royal-Enfield-Thunderbird-350X-story-2-.jpg",
+                    fit: BoxFit.fill,
+                    // fit: BoxFit.fill,
+                  ),
+                )),
+          ),
+        );
+      },
+      itemCount: ad.adImages!.length == 0 ? 5 : ad.adImages!.length,
+
+      // itemCount: ad.adImages!.length,
+      pagination: new SwiperPagination(),
+      layout: SwiperLayout.STACK,
+      // layout: SwiperLayout.TINDER,
+      itemWidth: 350.0,
+      itemHeight: 350.0,
+      // control: new SwiperControl(),
+    );
+  }
+
+  Widget AdImages() {
+    return Stack(alignment: Alignment.center, children: [
+      Card(
+        elevation: 4,
+        color: Colors.white54,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          width: 220,
+          height: 200,
+          // child: Placeholder(),
+          // child: Image.asset("assets/icons/home.png"),
+          child: FlutterLogo(),
+        ),
+      )
+    ]);
   }
 
   Widget fotter(context) {

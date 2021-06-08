@@ -29,6 +29,8 @@ dependencies:
   get_storage:
   bottom_sheet:
   uuid:
+  flutter_card_swipper: ^0.4.0
+  clay_containers: 0.3.2
   auto_size_text: ^3.0.0-nullsafety.0
 
 
