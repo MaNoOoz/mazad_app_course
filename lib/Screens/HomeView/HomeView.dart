@@ -8,7 +8,7 @@ import 'package:mazad_app/controllers/HomeController/HomeController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
 
-class HomeView extends GetView<HomeViewController> {
+class HomeView extends StatelessWidget {
   var catID = 4;
 
   @override
@@ -16,8 +16,8 @@ class HomeView extends GetView<HomeViewController> {
     return Scaffold(
         body: ListView(
       children: [
-        _buildTabBar(controller),
-        _bulidBody(controller),
+        _buildTabBar(),
+        _bulidBody(),
         Container(
           height: 10,
         ),
@@ -29,58 +29,58 @@ class HomeView extends GetView<HomeViewController> {
     ));
   }
 
-  Widget _buildTabBar(HomeViewController c) {
-    return DefaultTabController(
-      length: controller.categories.length,
-      initialIndex: 0,
-      child: Container(
-        color: Colors.white,
-        // height: 100,
-        // width: 300,
-        child: TabBar(
-          onTap: (index) async {
-            // await c.getCategoryList();
-            catID = c.categories[index].id!;
-            // print(c.categories[index].id);
-            c.catId = catID;
-            print(c.catId);
-            await c.getAdsListWithFilter(catID);
-          },
-          labelColor: kPrimaryColor,
-          isScrollable: true,
-          indicatorColor: kPrimaryColor,
-          unselectedLabelColor: Colors.grey,
-          labelStyle: GoogleFonts.cairo(fontWeight: FontWeight.w600),
-          tabs: List.generate(
-            c.categories.length,
-            (index) => Tab(
-              text: c.categories[index].title,
+  Widget _buildTabBar() {
+    return GetBuilder<HomeViewController>(
+       builder: (c) {
+      return DefaultTabController(
+        length: c.categories.length,
+        initialIndex: 0,
+        child: Container(
+          color: Colors.white,
+          // height: 100,
+          // width: 300,
+          child: TabBar(
+            onTap: (index) async {
+              catID = c.categories[index].id!;
+              c.catId = catID;
+              await c.getAdsListWithFilter(catID);
+            },
+            labelColor: kPrimaryColor,
+            isScrollable: true,
+            indicatorColor: kPrimaryColor,
+            unselectedLabelColor: Colors.grey,
+            labelStyle: GoogleFonts.cairo(fontWeight: FontWeight.w600),
+            tabs: List.generate(
+              c.categories.length,
+              (index) => Tab(
+                text: c.categories[index].title,
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
-  Widget _bulidBody(HomeViewController c) {
+  Widget _bulidBody() {
     return GetBuilder<HomeViewController>(
-        init: Get.find<HomeViewController>(),
         builder: (controller) {
           print("_bulidBody called");
 
-          return c.adsListFilter.length == 0
+          return controller.adsListFilter.length == 0
               ? _EmptyView()
               : Container(
                   height: 300,
                   color: Colors.white,
                   child: ListView.builder(
-                    itemCount: c.adsListFilter.length,
+                    itemCount: controller.adsListFilter.length,
                     itemBuilder: (ctx, i) {
-                      Ad adModel = c.adsListFilter[i];
+                      Ad adModel = controller.adsListFilter[i];
                       // return Text("${adModel.content}");
 
                       return AdCard(
-                          model: adModel, press: () => Get.to(() =>AdView(adModel)));
+                          model: adModel,
+                          press: () => Get.to(() => AdView(adModel)));
                     },
                   ),
                 );

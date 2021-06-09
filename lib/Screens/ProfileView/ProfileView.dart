@@ -1,15 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:clay_containers/clay_containers.dart';
-import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/controllers/ProfileController/ProfileController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
+import 'package:mazad_app/models/Ad.dart';
 
 class ProfileView extends GetView<ProfileController> {
-
-
   @override
   Widget build(BuildContext context) {
     var screenW = MediaQuery.of(context).size.width;
@@ -26,7 +25,6 @@ class ProfileView extends GetView<ProfileController> {
                 child: Stack(
                   children: [
                     wallImage(screenW),
-                    userImage(),
                   ],
                 ),
               ),
@@ -55,17 +53,114 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: ListView(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: List.generate(
-                      10, (index) => ListTile(leading: Text("AA"))),
-                ),
-              ),
+              adsList(context),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget adsList(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        children: List.generate(
+          controller.Ads.length,
+          (index) {
+            final item = controller.Ads[index];
+            return Dismissible(
+              background: Container(
+                color: Colors.red,
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Row(
+                    textDirection: TextDirection.rtl,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Icon(Icons.delete, color: Colors.white),
+                      SizedBox(width: 20),
+                      Text('حذف', style: titlesStyleWhite),
+                    ],
+                  ),
+                ),
+              ),
+              secondaryBackground: Container(
+                color: Colors.blue,
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Row(
+                    textDirection: TextDirection.rtl,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(Icons.favorite, color: Colors.white),
+                      SizedBox(width: 20),
+                      Text('إضافة إلى المفضلة', style: titlesStyleWhite),
+                    ],
+                  ),
+                ),
+              ),
+
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black26, width: 0.4),
+                  boxShadow: [
+                    BoxShadow(
+                        // color: Theme.of(context).primaryColor.withOpacity(0.1),
+                        // color: Theme.of(context).shadowColor.withOpacity(0.15),
+                        color: Colors.black12,
+                        blurRadius: 22,
+                        offset: Offset(-10, 5)),
+                  ],
+                ),
+                child: ListTile(
+                  isThreeLine: true,
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    child: Text('${item.title!.substring(0, 1).toString()}'),
+                    foregroundColor: Colors.white,
+                  ),
+                  title: Text('${item.title}'),
+                  subtitle:
+                      Text('${item.content!.substring(0, 20).toString()}'),
+                ),
+              ),
+              onDismissed: (direction) {
+                if (direction == DismissDirection.startToEnd) {
+                  print("Add to favorite list");
+
+
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("${item.title} Removed."),
+                    backgroundColor: Colors.red,
+                  ));
+
+                  /// todo send delete request to backend
+
+                  print("Delete From Cart List");
+                }
+              },
+              confirmDismiss: (DismissDirection direction) async {
+                if (direction == DismissDirection.endToStart) {
+                  print("Add to favorite list");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("${item.title} Added."),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } else {
+                 await showAlert(context, item,controller);
+                }
+              },
+              key: Key('item ${controller.Ads[index]}'),
+            );
+          },
         ),
       ),
     );
@@ -93,10 +188,14 @@ class ProfileView extends GetView<ProfileController> {
                 Container(
                   height: 32,
                 ),
-                Text(
-                  "يمان",
-                  style: headingStyleWhite2,
-                ),
+                GetBuilder<LoginController>(
+                    init: LoginController(),
+                    builder: (value) {
+                      return Text(
+                        "${value.user!.email}",
+                        style: headingStyleWhite2,
+                      );
+                    }),
               ],
             ),
           ),
@@ -107,24 +206,6 @@ class ProfileView extends GetView<ProfileController> {
         ),
       ),
     );
-  }
-
-  Widget userImage() {
-    return Positioned(
-        top: 130,
-        left: 0,
-        right: 0,
-        child: CircleAvatar(
-          backgroundColor: Colors.blue.shade400,
-          radius: 50,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset(
-              "assets/icons/home.png",
-              scale: 1.5,
-            ),
-          ),
-        ));
   }
 }
 
@@ -144,4 +225,31 @@ class ClippingClass extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+Future showAlert(BuildContext context, Ad ad ,ProfileController pc) async {
+  return await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Delete Confirmation"),
+        content: const Text("Are you sure you want to delete this item?"),
+        actions: <Widget>[
+          FlatButton(
+              onPressed: () async {
+                Navigator.of(context).pop(true);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("${ad.title} Removed."),
+                  backgroundColor: Colors.red,
+                ));
+              },
+              child: const Text("Delete")),
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text("Cancel"),
+          ),
+        ],
+      );
+    },
+  );
 }

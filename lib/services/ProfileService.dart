@@ -15,7 +15,6 @@ class ProfileService {
     var response = await http.get(Uri.parse("$url"), headers: headersNoAuth);
     final data = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      // print(data);
 
       return data;
     }else{

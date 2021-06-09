@@ -69,6 +69,13 @@ final headingStyleWhite2 = GoogleFonts.almarai(
     fontWeight: FontWeight.normal,
   ),
 );
+final headingStyleBlack2 = GoogleFonts.almarai(
+  textStyle: TextStyle(
+    color: Colors.black54,
+    fontSize: 40,
+    fontWeight: FontWeight.normal,
+  ),
+);
 
 final titlesStyle = GoogleFonts.cairo(
   textStyle: TextStyle(

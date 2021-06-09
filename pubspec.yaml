@@ -28,7 +28,9 @@ dependencies:
   google_fonts: ^2.1.0
   get_storage:
   bottom_sheet:
+  flutter_staggered_grid_view:
   uuid:
+  flutter_slidable: ^0.6.0
   flutter_card_swipper: ^0.4.0
   clay_containers: 0.3.2
   auto_size_text: ^3.0.0-nullsafety.0

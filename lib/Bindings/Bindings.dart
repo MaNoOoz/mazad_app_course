@@ -5,12 +5,14 @@ import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/controllers/AuthController/SignUpController.dart';
 import 'package:mazad_app/controllers/HomeController/HomeController.dart';
 import 'package:mazad_app/controllers/NavController/NavController.dart';
+import 'package:mazad_app/controllers/ProfileController/ProfileController.dart';
 
 class Binding extends Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
     Get.lazyPut(() => NavController());
+    Get.lazyPut(() => ProfileController());
     Get.lazyPut(() => LoginController());
     Get.lazyPut(() => SignUpContoller());
     Get.lazyPut(() => HomeViewController());

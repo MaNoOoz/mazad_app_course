@@ -15,6 +15,8 @@ import 'helpers/StarterView.dart';
 
 void main() async {
   await GetStorage.init();
+  WidgetsFlutterBinding.ensureInitialized();
+   Binding().dependencies();
   runApp(MyApp());
 }
 
@@ -24,10 +26,12 @@ class MyApp extends StatelessWidget {
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+
       getPages: [
-        GetPage(name: "/", page: () => HomeView()),
+        GetPage(name: "/", page: () => MyApp()),
 
       ],
+      defaultTransition: Transition.fadeIn,
       initialBinding: Binding(),
       home: Scaffold(
         body: StarterView(),

@@ -20,9 +20,9 @@ class AuthService {
     var isUserLogged = await storage.readToken();
     if (isUserLogged != 0) {
       token = isUserLogged;
-      print(token);
+      // print(token);
     } else {
-      print("getLoggedUserId : error in user token");
+      // print("getLoggedUserId : error in user token");
     }
     return token;
   }

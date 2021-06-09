@@ -277,51 +277,60 @@ class AdView extends GetView<AdViewContoller> {
                 ),
               ),
             ),
-            Container(height: 500, child: AdImagesCards2()),
+            LimitedBox(maxHeight: 300, child: AdImagesCards2()),
             Divider(
               thickness: 1,
               color: kPrimaryColorShadow,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: AutoSizeText.rich(
-                    TextSpan(
-                      style: headingStylePrimary,
-                      children: [
-                        TextSpan(
-                          text: "التفاصيل",
-                        ),
-                      ],
+            LimitedBox(
+              maxHeight: 60,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: AutoSizeText.rich(
+                      TextSpan(
+                        style: headingStylePrimary,
+                        children: [
+                          TextSpan(
+                            text: "التفاصيل",
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-            Flexible(
-              flex: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  textDirection: TextDirection.rtl,
-                  children: [
-                    Flexible(
-                      child: AutoSizeText.rich(
-                        TextSpan(
-                          style: headingStyleBlack,
-                          children: [
-                            TextSpan(
-                              text: "${ad.content.toString()} ",
-                            ),
-                          ],
+            LimitedBox(
+              maxHeight: 250,
+              // padding: const EdgeInsets.all(16.0),
+              child: ListView(
+                padding: EdgeInsets.all(10),
+                children: [
+                  Row(
+                    // textDirection: TextDirection.rtl,
+                    children: [
+                      Flexible(
+                        child: AutoSizeText.rich(
+                          TextSpan(
+                            style: headingStyleBlack,
+                            children: [
+                              TextSpan(
+                                text: "${ad.content.toString()} ",
+                              ),
+                            ],
+                          ),
+                          textDirection: TextDirection.rtl,
+                          maxFontSize: 44,
+                          minFontSize: 10,
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
             ),
             Divider(
@@ -421,26 +430,24 @@ class AdView extends GetView<AdViewContoller> {
     return Swiper(
       itemBuilder: (BuildContext context, int index) {
         return Container(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Card(
-                elevation: 6,
-                color: Colors.blue,
-                margin: EdgeInsets.all(1),
-                semanticContainer: true,
-                clipBehavior: Clip.antiAlias,
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(20.0),
+          // color: Colors.blue.shade50,
+          child: Card(
+              // elevation: 16,
+              // color: Colors.blue,
+              // margin: EdgeInsets.all(1),
+              semanticContainer: true,
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: new Image.network(
+                  "https://static.autox.com/uploads/2018/10/Royal-Enfield-Thunderbird-350X-story-2-.jpg",
+                  fit: BoxFit.fill,
+                  // fit: BoxFit.fill,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: new Image.network(
-                    "https://static.autox.com/uploads/2018/10/Royal-Enfield-Thunderbird-350X-story-2-.jpg",
-                    fit: BoxFit.fill,
-                    // fit: BoxFit.fill,
-                  ),
-                )),
-          ),
+              )),
         );
       },
       itemCount: ad.adImages!.length == 0 ? 5 : ad.adImages!.length,
@@ -448,6 +455,9 @@ class AdView extends GetView<AdViewContoller> {
       // itemCount: ad.adImages!.length,
       pagination: new SwiperPagination(),
       layout: SwiperLayout.STACK,
+      scale: 4,
+      autoplay: true,
+      // fade: 50,
       // layout: SwiperLayout.TINDER,
       itemWidth: 350.0,
       itemHeight: 350.0,
@@ -533,6 +543,9 @@ class AdView extends GetView<AdViewContoller> {
       height: 400,
       padding: EdgeInsetsDirectional.all(12),
       child: ListView.builder(
+          reverse: true,
+          // physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
           itemCount: ad.comments!.length,
           itemBuilder: (context, i) {
             return Card(
@@ -548,6 +561,7 @@ class AdView extends GetView<AdViewContoller> {
                 child: Container(
                   padding: EdgeInsets.all(10),
                   height: 150,
+                  width: 200,
                   child: Column(
                     children: [
                       Row(

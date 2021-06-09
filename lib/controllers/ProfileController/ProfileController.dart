@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
+import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/models/Ad.dart';
+import 'package:mazad_app/services/AuthService.dart';
 import 'package:mazad_app/services/ProfileService.dart';
 
 class ProfileController extends GetxController {
-
   final profileService = ProfileService();
 
   List<Ad> _Ads = <Ad>[];
-
 
   List<Ad> get Ads => _Ads;
 
@@ -19,7 +19,11 @@ class ProfileController extends GetxController {
 
   // get User Ads
   Future<List<Ad>?> getAdsListForUser(int userId) async {
-    print("getAdsListWithFilter ");
+    print("getAdsListForUser ");
+    LoginController s = LoginController();
+    var user = await s.getUser();
+    userId = user!.id;
+    // print(user.id);
 
     try {
       await profileService.getAdsForUser(userId).then((value) {
@@ -27,9 +31,9 @@ class ProfileController extends GetxController {
 
         _Ads = value!.map((element) => Ad.fromJson(element)).toList();
         _Ads.forEach((Ad element) {
-          print("${element.title}");
+          // print("${element.title}");
         });
-        print("FILTER LIST ${_Ads.length}");
+        // print("FILTER LIST ${_Ads.length}");
       });
     } catch (e) {
       print(e);
@@ -39,6 +43,10 @@ class ProfileController extends GetxController {
     return _Ads;
   }
 
-
-
+  @override
+  void onInit() async {
+    // TODO: implement onInit
+    super.onInit();
+    await getAdsListForUser(userId);
+  }
 }

@@ -1,27 +1,24 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:mazad_app/Screens/LoginView/LoginView.dart';
 import 'package:mazad_app/controllers/AuthController/SignUpController.dart';
 import 'package:mazad_app/data/LocalStorage.dart';
-import 'package:mazad_app/widgets/custom_buttom.dart';
-import 'package:mazad_app/widgets/custom_text.dart';
+import 'package:mazad_app/helpers/Constants.dart';
+
 import 'package:mazad_app/widgets/custom_text_form_field.dart';
 
-class SignUpView extends GetView<SignUpContoller>{
-
+class SignUpView extends GetView<SignUpContoller> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   LocalStorage storage = LocalStorage();
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        title: Text("مستخدم جديد",style: headingStyleWhite,),
+        backgroundColor: Colors.blue,
         elevation: 0.0,
         leading: GestureDetector(
             onTap: () {
@@ -29,28 +26,27 @@ class SignUpView extends GetView<SignUpContoller>{
             },
             child: Icon(
               Icons.arrow_back,
-              color: Colors.black,
+              color: Colors.white,
             )),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(
-          top: 50,
-          right: 20,
-          left: 20,
+        padding: const EdgeInsets.all(
+            32
         ),
         child: Form(
           key: _formKey,
           child: ListView(
             children: [
-              CustomText(
-                text: "Sign Up,",
-                fontSize: 30, maxLine: 1,
+              Text(
+                "مستخدم جديد",
+                style: headingStylePrimary,
+                textDirection: TextDirection.rtl,
               ),
               SizedBox(
                 height: 30,
               ),
               CustomTextFormFieldText(
-                text: 'Name',
+                text: 'الإسم',
                 // hint: 'yourName',
                 onSave: (value) {
                   controller.name = value;
@@ -65,7 +61,7 @@ class SignUpView extends GetView<SignUpContoller>{
                 height: 30,
               ),
               CustomTextFormFieldText(
-                text: 'Email',
+                text: 'الإيميل',
                 // hint: ' yourEmail@gmail.com',
                 onSave: (value) {
                   controller.email = value;
@@ -80,7 +76,7 @@ class SignUpView extends GetView<SignUpContoller>{
                 height: 40,
               ),
               CustomTextFormFieldText(
-                text: 'Password',
+                text: 'كلمة السر',
                 // hint: '**********',
                 onSave: (value) {
                   controller.password = value;
@@ -94,24 +90,36 @@ class SignUpView extends GetView<SignUpContoller>{
               SizedBox(
                 height: 15,
               ),
-              CustomButton(
-                onPress: () async {
+              MaterialButton(
+                onPressed: () async {
                   _formKey.currentState!.save();
 
                   if (_formKey.currentState!.validate()) {
                     await controller.createNewUser();
                   }
                 },
-                text: 'Create New User',
+                child: Text(
+                  'مستخدم جديد',
+                  style: headingStyleWhite,
+                ),
+                shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(10.0),
+                ),
+                color: kPrimaryColor,
               ),
-              CustomButton(
-                onPress: () async {
-                  // final box = GetStorage();
-                  var storedToken =  await storage.readToken();
-
+              MaterialButton(
+                onPressed: () async {
+                  var storedToken = await storage.readToken();
                   print(storedToken);
                 },
-                text: 'Read Token',
+                child: Text(
+                  'Read Token',
+                  style: headingStyleWhite,
+                ),
+                shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(10.0),
+                ),
+                color: kPrimaryColor,
               ),
               SizedBox(
                 height: 40,
@@ -122,5 +130,4 @@ class SignUpView extends GetView<SignUpContoller>{
       ),
     );
   }
-
 }

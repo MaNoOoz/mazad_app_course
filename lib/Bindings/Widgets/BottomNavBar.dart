@@ -50,7 +50,7 @@ class BottomNav extends GetView<NavController> {
       ],
       currentIndex: controller.tapValue,
       onTap: (index) {
-        print(index);
+        // print(index);
         controller.changeScreen(index);
 
       },

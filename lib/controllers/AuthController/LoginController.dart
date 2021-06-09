@@ -17,12 +17,12 @@ class LoginController extends GetxController {
 
   LocalStorage storage = LocalStorage();
 
-  late User _user;
+  User? _user;
 
-  User get user => _user;
+  User? get user => _user;
   final AuthService authService = AuthService();
 
-  loginUser() async {
+  Future<bool> loginUser() async {
     var url = "$BaseUrl/auth/local";
     var body = jsonEncode({
       "identifier": "$email",
@@ -37,11 +37,12 @@ class LoginController extends GetxController {
       storage.saveToken("jwt", jwtToken);
       print(" Token From Login : $jwtToken");
 
-      Get.to(() => StarterView());
+      return true;
     }
+    return false;
   }
 
-  Future<User> getUser() async {
+  Future<User?> getUser() async {
     try {
       User user = await authService.getUserApi();
       _user = user;
@@ -65,7 +66,6 @@ class LoginController extends GetxController {
       update();
     }
     await getUser();
-
   }
 
   @override

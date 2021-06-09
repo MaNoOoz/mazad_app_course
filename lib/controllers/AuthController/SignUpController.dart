@@ -24,9 +24,9 @@ class SignUpContoller extends GetxController {
     if (response.statusCode == 200) {
       var jwtToken = data['jwt'];
       storage.saveToken("jwt", jwtToken);
-      print(data['jwt']);
+      // print(data['jwt']);
     }
-    print(data);
+    // print(data);
     //
   }
 }

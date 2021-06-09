@@ -1,9 +1,6 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'custom_text.dart';
+import 'package:mazad_app/helpers/Constants.dart';
 
 class CustomTextFormFieldText extends StatelessWidget {
   final String? text;
@@ -24,16 +21,18 @@ class CustomTextFormFieldText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
+        textDirection: TextDirection.rtl,
         children: [
-          CustomText(
-            text: text,
-            fontSize: 14,
-            color: Colors.grey.shade900, maxLine: 1,
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: Text(
+              "$text",
+              style: titlesStyleBlack,
+            ),
           ),
           TextFormField(
             controller: TextEditingController(text: 'yaman@gmail.com'),
             onSaved: onSave as void Function(String?)?,
-
             validator: validator as String? Function(String?)?,
             decoration: InputDecoration(
               hintText: hint,
@@ -68,11 +67,14 @@ class CustomTextFormFieldPassword extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Column(
+        textDirection: TextDirection.rtl,
         children: [
-          CustomText(
-            text: text,
-            fontSize: 14,
-            color: Colors.grey.shade900, maxLine: 1,
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: Text(
+              "$text",
+              style: titlesStyleBlack,
+            ),
           ),
           TextFormField(
             controller: TextEditingController(text: '123123'),

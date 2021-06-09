@@ -1,17 +1,14 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mazad_app/Screens/HomeView/HomeView.dart';
 import 'package:mazad_app/Screens/SignUpView/SignUpView.dart';
 import 'package:mazad_app/controllers/AuthController/LoginController.dart';
-import 'package:mazad_app/services/AuthService.dart';
-import 'package:mazad_app/widgets/custom_buttom.dart';
-import 'package:mazad_app/widgets/custom_button_social.dart';
-import 'package:mazad_app/widgets/custom_text.dart';
+import 'package:mazad_app/helpers/Constants.dart';
+import 'package:mazad_app/helpers/StarterView.dart';
+
 import 'package:mazad_app/widgets/custom_text_form_field.dart';
 
-class LoginView extends GetView<LoginController>
-
-{
+class LoginView extends GetView<LoginController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -21,35 +18,35 @@ class LoginView extends GetView<LoginController>
       appBar: AppBar(
         backgroundColor: Colors.blue,
         elevation: 0.0,
-        title: Text("Login View"),
-      ),
-
-      body: Padding(
-        padding: const EdgeInsets.only(
-          top: 50,
-          right: 20,
-          left: 20,
+        title: Text(
+          " الدخول",
+          style: headingStyleWhite,
         ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(32),
         child: Form(
           key: _formKey,
           child: ListView(
             children: [
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CustomText(
-                    text: "Welcome,",
-                    fontSize: 30, maxLine: 1,
+                  Text(
+                    "مرحبا",
+                    style: headingStyleBlack2,
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Get.to(SignUpView());
+                    onTap: () async{
+                      Get.to(() => SignUpView(),
+                          fullscreenDialog: true,
+                          transition: Transition.zoom,
+                          duration: Duration(microseconds: 4000),
+                          curve: Curves.bounceIn);
                     },
-                    child: CustomText(
-                      text: "Sign Up",
-                      color: primaryColor,
-                      fontSize: 18, maxLine: 1,
+                    child: Text(
+                      "تسجيل",
+                      style: headingStylePrimary,
                     ),
                   ),
                 ],
@@ -57,23 +54,15 @@ class LoginView extends GetView<LoginController>
               SizedBox(
                 height: 10,
               ),
-              CustomText(
-                text: 'Sign in to Continue',
-                fontSize: 14,
-                color: Colors.grey, maxLine: 1,
-              ),
               SizedBox(
                 height: 30,
               ),
               CustomTextFormFieldText(
-                text: 'Email',
+                text: 'إيميل',
                 hint: 'yaman@gmail.com',
-
-
                 onSave: (value) {
                   controller.email = value;
                 },
-
                 validator: (value) {
                   if (value == null) {
                     print("ERROR");
@@ -84,7 +73,7 @@ class LoginView extends GetView<LoginController>
                 height: 40,
               ),
               CustomTextFormFieldPassword(
-                text: 'Password',
+                text: 'كلمة السر',
                 hint: '123123',
                 onSave: (value) {
                   controller.password = value;
@@ -98,51 +87,47 @@ class LoginView extends GetView<LoginController>
               SizedBox(
                 height: 20,
               ),
-              CustomText(
-                text: 'Forgot Password?',
-                fontSize: 14,
-                alignment: Alignment.topRight, maxLine: 1,
+              Text(
+                'نسيت كلمة السر',
+                style: titlesStyleBlack,
               ),
               SizedBox(
                 height: 15,
               ),
-              CustomButton(
-                onPress: () async{
+              MaterialButton(
+                child: Text(
+                  'دخول',
+                  style: headingStyleWhite,
+                ),
+                shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(10.0),
+                ),
+                color: kPrimaryColor,
+                onPressed: () async {
                   _formKey.currentState!.save();
 
                   if (_formKey.currentState!.validate()) {
-                    await controller.loginUser();
+                    var a = await controller.loginUser();
+                    print(" loginUser Pressed login value is  : $a");
+                    if(a == true){
+                      Get.to(()=>StarterView());
+                    }else{
+                      print(" somthing wrong  : $a");
+
+                    }
+
                   }
                 },
-                text: 'SIGN IN',
               ),
               SizedBox(
                 height: 40,
               ),
-              CustomText(
-                text: '-OR-',
-                alignment: Alignment.center, maxLine: 1,
+              SizedBox(
+                height: 40,
               ),
               SizedBox(
                 height: 40,
               ),
-              // CustomButtonSocial(
-              //   text: 'Sign In with Facebook',
-              //   onPress: () {
-              //     // controller.facebookSignInMethod();
-              //   },
-              //   imageName: 'assets/images/facebook.png',
-              // ),
-              SizedBox(
-                height: 40,
-              ),
-              // CustomButtonSocial(
-              //   text: 'Sign In with Google',
-              //   onPress: () {
-              //     // controller.googleSignInMethod();
-              //   },
-              //   imageName: 'assets/images/google.png',
-              // ),
             ],
           ),
         ),

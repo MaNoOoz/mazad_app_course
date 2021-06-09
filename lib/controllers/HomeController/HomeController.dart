@@ -10,7 +10,7 @@ class HomeViewController extends GetxController {
   List<Ad> _Ads = <Ad>[];
   List<Ad> _adsListFilter = <Ad>[];
 
-  int catId = 4;
+  int catId = 2;
   var likes = 0.obs;
   increment() => likes++;
   List<Category> get categories => _categories;
@@ -59,7 +59,7 @@ class HomeViewController extends GetxController {
 
         _adsListFilter = value!.map((element) => Ad.fromJson(element)).toList();
         _adsListFilter.forEach((Ad element) {
-          print("${element.title}");
+          // print("${element.title}");
         });
         print("FILTER LIST ${adsListFilter.length}");
       });
