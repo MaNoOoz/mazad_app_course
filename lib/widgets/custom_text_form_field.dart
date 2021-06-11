@@ -1,67 +1,53 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 
 class CustomTextFormFieldText extends StatelessWidget {
-  final String? text;
+  final String? labelText;
+  final Function? onTap;
+  final ValueChanged<String>? onChanged;
+  final Function? onEditingComplete;
+  final bool? obscureText;
+  final TextInputType? textInputType;
+  final Function(String?)? onSaved;
+  final bool? autocorrect;
+  final FormFieldValidator<String>? validator;
+  final String? errorText;
+  final String? initialValue;
+  final TextEditingController? controller;
+  final int? maxLines;
+  final List<TextInputFormatter>? inputFormatters;
+  final bool? autovalidate;
+  final String? hintText;
+  final TextStyle? hintTextStyle;
+  final TextStyle? labelTextStyle;
+  final TextInputAction? textInputAction;
+  final Widget? suffix;
+  final Widget? suffixIcon;
 
-  final String? hint;
-
-  final Function? onSave;
-  final Function? validator;
-
-  CustomTextFormFieldText({
-    this.text,
-    this.hint,
-    this.onSave,
-    this.validator,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        textDirection: TextDirection.rtl,
-        children: [
-          Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: Text(
-              "$text",
-              style: titlesStyleBlack,
-            ),
-          ),
-          TextFormField(
-            controller: TextEditingController(text: 'yaman@gmail.com'),
-            onSaved: onSave as void Function(String?)?,
-            validator: validator as String? Function(String?)?,
-            decoration: InputDecoration(
-              hintText: hint,
-              hintStyle: TextStyle(
-                color: Colors.black,
-              ),
-              fillColor: Colors.white,
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class CustomTextFormFieldPassword extends StatelessWidget {
-  final String? text;
-
-  final String? hint;
-
-  final Function? onSave;
-  final Function? validator;
-
-  CustomTextFormFieldPassword({
-    this.text,
-    this.hint,
-    this.onSave,
-    this.validator,
-  });
+  const CustomTextFormFieldText(
+      {required this.labelText,
+      this.onTap,
+      this.onChanged,
+      this.onEditingComplete,
+      this.obscureText,
+      this.labelTextStyle,
+      required this.textInputType,
+      this.onSaved,
+      this.hintTextStyle,
+      this.autocorrect,
+      this.validator,
+      this.errorText,
+      this.initialValue,
+      this.controller,
+      this.maxLines,
+      this.inputFormatters,
+      this.autovalidate,
+      this.hintText,
+      this.textInputAction,
+      this.suffix,
+      this.suffixIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -69,23 +55,24 @@ class CustomTextFormFieldPassword extends StatelessWidget {
       child: Column(
         textDirection: TextDirection.rtl,
         children: [
-          Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: Text(
-              "$text",
-              style: titlesStyleBlack,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: AlignmentDirectional.centerEnd,
+              child: Text(
+                "$labelText",
+                style: labelTextStyle,
+              ),
             ),
           ),
           TextFormField(
-            controller: TextEditingController(text: '123123'),
-            onSaved: onSave as void Function(String?)?,
-            validator: validator as String? Function(String?)?,
+            initialValue: initialValue,
+            onSaved: onSaved as void Function(String?)?,
+            validator: validator,
+            keyboardType: textInputType,
             decoration: InputDecoration(
-              hintText: hint,
-              hintStyle: TextStyle(
-                color: Colors.black,
-              ),
-              fillColor: Colors.white,
+              hintText: hintText,
+              hintStyle: hintTextStyle,
             ),
           )
         ],

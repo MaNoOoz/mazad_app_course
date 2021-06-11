@@ -38,13 +38,13 @@ class ProfileView extends GetView<ProfileController> {
                     alignment: AlignmentDirectional.center,
                     child: AutoSizeText.rich(
                       TextSpan(
-                        style: headingStylePrimary,
+                        style: fontStyle,
                         children: [
                           TextSpan(
                             text: "إعلاناتي",
                           ),
                           TextSpan(
-                            style: titlesStyleBlack80,
+                            style: fontStyle,
                             // text: "  (${ad.adImages!.length})",
                           ),
                         ],
@@ -82,7 +82,7 @@ class ProfileView extends GetView<ProfileController> {
                     children: [
                       Icon(Icons.delete, color: Colors.white),
                       SizedBox(width: 20),
-                      Text('حذف', style: titlesStyleWhite),
+                      Text('حذف', style: fontStyle),
                     ],
                   ),
                 ),
@@ -97,7 +97,7 @@ class ProfileView extends GetView<ProfileController> {
                     children: [
                       Icon(Icons.favorite, color: Colors.white),
                       SizedBox(width: 20),
-                      Text('إضافة إلى المفضلة', style: titlesStyleWhite),
+                      Text('إضافة إلى المفضلة', style: fontStyle),
                     ],
                   ),
                 ),
@@ -193,7 +193,7 @@ class ProfileView extends GetView<ProfileController> {
                     builder: (value) {
                       return Text(
                         "${value.user!.email}",
-                        style: headingStyleWhite2,
+                        style: fontStyle,
                       );
                     }),
               ],

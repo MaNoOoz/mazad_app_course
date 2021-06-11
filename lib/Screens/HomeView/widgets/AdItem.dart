@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart' show Ad;
@@ -19,7 +20,11 @@ class AdCard extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenH = MediaQuery.of(context).size.width;
 
-    // print(model['ad_images'][0]['name'].runtimeType);
+    var checkImages = model.adImages!.length == 0;
+    // if (checkImages) {
+    //   print("this add has no  images ");
+    //   print("${model.adImages![0]!.url}");
+    // }
 
     return GestureDetector(
       onTap: press,
@@ -65,7 +70,7 @@ class AdCard extends StatelessWidget {
                     textDirection: TextDirection.rtl,
                     children: [
                       ///Right Side
-                      rightSide(),
+                      !checkImages ? rightSide() : Container(),
 
                       Container(
                         width: 1,
@@ -95,10 +100,8 @@ class AdCard extends StatelessWidget {
   }
 
   Widget rightSide() {
-    var checkImages = model.adImages!.length == 0;
-    if (checkImages) {
-      print("this add has no  images ");
-    }
+    var image = "$BaseUrl${model.adImages![0].url}";
+
     return Container(
       color: Colors.white,
       child: Column(
@@ -110,9 +113,13 @@ class AdCard extends StatelessWidget {
               child: Container(
                 height: 100,
                 width: 100,
-                child: checkImages
-                    ? Image.asset('assets/icons/home.png')
-                    : Image.network(model.adImages![0].name.toString()),
+                child: CachedNetworkImage(
+                  imageUrl: "$image",
+                  placeholder: (context, url) =>
+                      Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => Image.network(
+                      "https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg"),
+                ),
               ),
             ),
           ),
@@ -144,7 +151,7 @@ class AdCard extends StatelessWidget {
                     textDirection: TextDirection.rtl,
                     overflow: TextOverflow.ellipsis,
                     // softWrap: false,
-                    style: headingStylePrimary,
+                    style: fontStyle,
                   ),
                   SizedBox(height: 5),
                 ],
@@ -171,12 +178,12 @@ class AdCard extends StatelessWidget {
             child: Text.rich(
               TextSpan(
                 children: [
-                  TextSpan(text: " منذ : ", style: lableStyleBlack),
+                  TextSpan(text: " منذ : ", style: fontStyle),
                   TextSpan(
                       // text: "${cat.createdAt!.toLocal().day.toString()}",
                       text: "${model.createdAt!.toLocal().day.toString()}",
-                      style: lableStyleBlack),
-                  TextSpan(text: "يوم", style: lableStyleBlack),
+                      style: fontStyle),
+                  TextSpan(text: "يوم", style: fontStyle),
                 ],
               ),
               textDirection: TextDirection.rtl,
@@ -227,7 +234,7 @@ class AdCard extends StatelessWidget {
                         ),
                         TextSpan(
                             text: " ${model.comments!.length}",
-                            style: titlesStyleBlack),
+                            style: fontStyle),
                       ],
                     ),
                     textDirection: TextDirection.rtl,
@@ -256,7 +263,7 @@ class AdCard extends StatelessWidget {
                         ),
                         TextSpan(
                             text: " ${model.comments!.length}",
-                            style: titlesStyleBlack),
+                            style: fontStyle),
                       ],
                     ),
                     textDirection: TextDirection.rtl,

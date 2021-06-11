@@ -48,8 +48,7 @@ class Ad {
         publishedAt: DateTime.parse(json["published_at"]),
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        adImages: List<AdImage>.from(
-            json["ad_images"].map((x) => AdImage.fromJson(x))),
+        adImages: List<AdImage>.from(json["ad_images"].map((x) => AdImage.fromJson(x))),
         tags: List<Tag>.from(json["tags"].map((x) => Tag.fromJson(x))),
         comments: List<Comment>.from(
             json["comments"].map((x) => Comment.fromJson(x))),

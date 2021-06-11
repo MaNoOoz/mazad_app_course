@@ -55,8 +55,8 @@ class BottomNav extends GetView<NavController> {
 
       },
       selectedItemColor: kPrimaryColor,
-      selectedLabelStyle: lableStylePrimary,
-      unselectedLabelStyle: ulableStylePrimary,
+      selectedLabelStyle: fontStyle,
+      unselectedLabelStyle: fontStyle.copyWith(color: Colors.black),
     );
   }
 

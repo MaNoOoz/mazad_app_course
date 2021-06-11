@@ -30,8 +30,7 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _buildTabBar() {
-    return GetBuilder<HomeViewController>(
-       builder: (c) {
+    return GetBuilder<HomeViewController>(builder: (c) {
       return DefaultTabController(
         length: c.categories.length,
         initialIndex: 0,
@@ -63,28 +62,33 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _bulidBody() {
-    return GetBuilder<HomeViewController>(
-        builder: (controller) {
-          print("_bulidBody called");
+    return GetBuilder<HomeViewController>(builder: (controller) {
+      print("_bulidBody called");
 
-          return controller.adsListFilter.length == 0
-              ? _EmptyView()
-              : Container(
-                  height: 300,
-                  color: Colors.white,
-                  child: ListView.builder(
-                    itemCount: controller.adsListFilter.length,
-                    itemBuilder: (ctx, i) {
-                      Ad adModel = controller.adsListFilter[i];
-                      // return Text("${adModel.content}");
-
-                      return AdCard(
-                          model: adModel,
-                          press: () => Get.to(() => AdView(adModel)));
-                    },
-                  ),
-                );
-        });
+      return controller.adsListFilter!.length == 0
+          ? _EmptyView()
+          : Container(
+              height: 300,
+              color: Colors.white,
+              child: ListView.builder(
+                itemCount: controller.adsListFilter!.length,
+                itemBuilder: (ctx, i) {
+                  Ad adModel = controller.adsListFilter![i];
+                  var images = controller.adsListFilter![i].adImages;
+                  // var hasImages = images!.length == 0;
+                  // print(images);
+                  // if (hasImages) {
+                  //   print(images.length);
+                  // } else {
+                  //   print(images.length);
+                  // }
+                  return AdCard(
+                      model: adModel,
+                      press: () => Get.to(() => AdView(adModel)));
+                },
+              ),
+            );
+    });
   }
 
   Widget _EmptyView() {

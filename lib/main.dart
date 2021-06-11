@@ -33,9 +33,7 @@ class MyApp extends StatelessWidget {
       ],
       defaultTransition: Transition.fadeIn,
       initialBinding: Binding(),
-      home: Scaffold(
-        body: StarterView(),
-      ),
+      home:  StarterView(),
     );
   }
 }

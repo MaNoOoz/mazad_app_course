@@ -9,6 +9,7 @@ import 'package:mazad_app/controllers/HomeController/HomeController.dart';
 import 'package:mazad_app/controllers/NavController/NavController.dart';
 import 'package:mazad_app/data/LocalStorage.dart';
 
+import '../main.dart';
 import 'Constants.dart';
 
 class StarterView extends GetWidget<LoginController> {
@@ -22,12 +23,12 @@ class StarterView extends GetWidget<LoginController> {
         ? LoginView()
         : GetBuilder<NavController>(
             builder: (navController) {
-              return Scaffold (
+              return Scaffold(
                 appBar: AppBar(
                   leading: Icon(Icons.home),
                   title: Text(
                     "مزاد",
-                    style: headingStyleWhite,
+                    style: fontStyle,
                   ),
                   centerTitle: true,
                   actions: [
@@ -46,17 +47,14 @@ class StarterView extends GetWidget<LoginController> {
                         }),
                     IconButton(
                         onPressed: () async {
-                          await storage
-                              .deleteToken()
-                              .then((value) => Get.offAll(() => LoginView()));
+                          await storage.deleteToken().then((value) => Get.offAll(() => MyApp()));
                         },
                         icon: Icon(Icons.ac_unit)),
                     IconButton(
                       onPressed: () async {
                         // return Get.to(AddAdView());
-                        final HomeViewController c =
-                            Get.put(HomeViewController());
-                        await c.getCategoryList();
+                        // final HomeViewController c = Get.put(HomeViewController());
+                        // await c.getCategoryList();
                       },
                       icon: Icon(Icons.add),
                       tooltip: "Add Ad",

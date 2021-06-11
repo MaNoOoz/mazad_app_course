@@ -5,15 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
+import 'package:flutter_card_swipper/widgets/flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:get/get.dart';
 import 'package:mazad_app/controllers/AuthController/AdViewContoller/AdViewContoller.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
 
 class AdView extends GetView<AdViewContoller> {
-  final Ad ad;
+  final Ad model;
 
-  AdView(this.ad);
+  AdView(this.model);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class AdView extends GetView<AdViewContoller> {
         // status bar color
         brightness: Brightness.light,
         elevation: 0,
-        title: Text("${ad.title.toString()}"),
+        title: Text("${model.title.toString()}"),
         actions: [
           IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.share))
         ],
@@ -59,7 +60,7 @@ class AdView extends GetView<AdViewContoller> {
                           TextSpan(text: "كلمات دلالية"),
                         ],
                       ),
-                      style: headingStylePrimary,
+                      style: fontStyle,
                     ),
                   ],
                 ),
@@ -76,7 +77,7 @@ class AdView extends GetView<AdViewContoller> {
                           TextSpan(text: "  التعليقات"),
                         ],
                       ),
-                      style: headingStylePrimary,
+                      style: fontStyle,
                     ),
                   ],
                 ),
@@ -121,7 +122,7 @@ class AdView extends GetView<AdViewContoller> {
                         // ),
                         Flexible(
                           child: TextField(
-                            style: headingStylePrimary,
+                            style: fontStyle,
                             textDirection: TextDirection.rtl,
                             // controller: textFieldController,
                             textCapitalization: TextCapitalization.sentences,
@@ -204,17 +205,17 @@ class AdView extends GetView<AdViewContoller> {
               AutoSizeText.rich(
                 TextSpan(
                   children: [
-                    TextSpan(text: "  ${ad.user?.username ?? "No Name"}  "),
+                    TextSpan(text: "  ${model.user?.username ?? "No Name"}  "),
                   ],
                 ),
               ),
               Spacer(),
-              AutoSizeText.rich(TextSpan(style: lableStylePrimary, children: [
+              AutoSizeText.rich(TextSpan(style: fontStyle, children: [
                 TextSpan(
                   text: "منذ ",
                 ),
                 TextSpan(
-                  text: "${ad.createdAt!.toLocal().day.toString()} ",
+                  text: "${model.createdAt!.toLocal().day.toString()} ",
                 ),
                 TextSpan(
                   text: "أيام ",
@@ -227,8 +228,8 @@ class AdView extends GetView<AdViewContoller> {
           ),
           ListTile(
             title: Text(
-              "${ad.title}",
-              style: headingStylePrimary,
+              "${model.title}",
+              style: fontStyle,
             ),
           ),
         ],
@@ -258,14 +259,14 @@ class AdView extends GetView<AdViewContoller> {
                           alignment: AlignmentDirectional.centerEnd,
                           child: AutoSizeText.rich(
                             TextSpan(
-                              style: headingStylePrimary,
+                              style: fontStyle,
                               children: [
                                 TextSpan(
                                   text: " صور الإعلان",
                                 ),
                                 TextSpan(
-                                  style: titlesStyleBlack80,
-                                  text: "  (${ad.adImages!.length})",
+                                  style: fontStyle,
+                                  text: "  (${model.adImages!.length})",
                                 ),
                               ],
                             ),
@@ -292,7 +293,7 @@ class AdView extends GetView<AdViewContoller> {
                     padding: const EdgeInsets.all(8.0),
                     child: AutoSizeText.rich(
                       TextSpan(
-                        style: headingStylePrimary,
+                        style: fontStyle,
                         children: [
                           TextSpan(
                             text: "التفاصيل",
@@ -316,10 +317,12 @@ class AdView extends GetView<AdViewContoller> {
                       Flexible(
                         child: AutoSizeText.rich(
                           TextSpan(
-                            style: headingStyleBlack,
+                            style: fontStyle.copyWith(
+                              fontSize: 22,color: Colors.black45
+                            ),
                             children: [
                               TextSpan(
-                                text: "${ad.content.toString()} ",
+                                text: "${model.content.toString()} ",
                               ),
                             ],
                           ),
@@ -359,13 +362,14 @@ class AdView extends GetView<AdViewContoller> {
                             ),
                           ],
                         ),
-                        style: contentStyleBlack,
+                        style: fontStyle,
                       ),
                       Spacer(),
                       Text.rich(
                         TextSpan(
                           children: [
-                            TextSpan(text: "${ad.comments!.length.toString()}"),
+                            TextSpan(
+                                text: "${model.comments!.length.toString()}"),
                             TextSpan(text: " "),
                             WidgetSpan(
                               child: Icon(
@@ -375,7 +379,7 @@ class AdView extends GetView<AdViewContoller> {
                             ),
                           ],
                         ),
-                        style: contentStyleBlack,
+                        style: fontStyle,
                       ),
                       Spacer(),
                       Text.rich(
@@ -389,7 +393,7 @@ class AdView extends GetView<AdViewContoller> {
                             ),
                           ],
                         ),
-                        style: contentStyleBlack,
+                        style: fontStyle,
                       ),
                     ],
                   ),
@@ -402,84 +406,40 @@ class AdView extends GetView<AdViewContoller> {
     );
   }
 
-  Widget AdImagesCards() {
-    return Flexible(
-      flex: 4,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: PageView.builder(
-          scrollDirection: Axis.horizontal,
-          physics: PageScrollPhysics(),
-          pageSnapping: true,
-          allowImplicitScrolling: true,
-          itemCount: ad.adImages?.length == 0 ? 5 : ad.adImages?.length,
-          itemBuilder: (BuildContext context, int index) {
-            return AdImages(
-                // child: Image.network(
-                //   "${ad.adImages?[index].name ?? ""}",
-                //   semanticLabel: "صور الإعلان",
-                // ),
-                );
-          },
-        ),
-      ),
-    );
-  }
-
   Widget AdImagesCards2() {
     return Swiper(
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          // color: Colors.blue.shade50,
-          child: Card(
-              // elevation: 16,
-              // color: Colors.blue,
-              // margin: EdgeInsets.all(1),
-              semanticContainer: true,
-              clipBehavior: Clip.antiAlias,
-              shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: new Image.network(
-                  "https://static.autox.com/uploads/2018/10/Royal-Enfield-Thunderbird-350X-story-2-.jpg",
-                  fit: BoxFit.fill,
-                  // fit: BoxFit.fill,
-                ),
-              )),
-        );
-      },
-      itemCount: ad.adImages!.length == 0 ? 5 : ad.adImages!.length,
-
-      // itemCount: ad.adImages!.length,
-      pagination: new SwiperPagination(),
+      itemCount: model.adImages!.length == 0 ? 5 : model.adImages!.length,
       layout: SwiperLayout.STACK,
-      scale: 4,
-      autoplay: true,
+      autoplay: false,
+      itemWidth: 250.00,
+      itemHeight: 300.00,
+      viewportFraction: 0.11,
+      indicatorLayout: PageIndicatorLayout.NONE,
+      pagination: SwiperPagination(margin: new EdgeInsets.all(0.0)),
+      // itemCount: ad.adImages!.length,
+      scale: 0.9,
       // fade: 50,
       // layout: SwiperLayout.TINDER,
-      itemWidth: 350.0,
-      itemHeight: 350.0,
-      // control: new SwiperControl(),
-    );
-  }
+      control: new SwiperControl(color: Colors.black38),
+      itemBuilder: (BuildContext context, int index) {
+        var image = "$BaseUrl${model.adImages![index].url}";
 
-  Widget AdImages() {
-    return Stack(alignment: Alignment.center, children: [
-      Card(
-        elevation: 4,
-        color: Colors.white54,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: Container(
-          width: 220,
-          height: 200,
-          // child: Placeholder(),
-          // child: Image.asset("assets/icons/home.png"),
-          child: FlutterLogo(),
-        ),
-      )
-    ]);
+        return Container(
+          // color: Colors.blue.shade50,
+          height: 360,
+          width: 300,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            // child: new Image.network("https://static.autox.com/uploads/2018/10/Royal-Enfield-Thunderbird-350X-story-2-.jpg",
+            child: Image.network(
+              "$image",
+              fit: BoxFit.contain,
+              // fit: BoxFit.fill,
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Widget fotter(context) {
@@ -495,7 +455,7 @@ class AdView extends GetView<AdViewContoller> {
               Text.rich(
                 TextSpan(
                   children: [
-                    TextSpan(text: "  ${ad.user?.username ?? "No Name"}  "),
+                    TextSpan(text: "  ${model.user?.username ?? "No Name"}  "),
                     WidgetSpan(
                       child: Icon(
                         Icons.phone,
@@ -504,7 +464,7 @@ class AdView extends GetView<AdViewContoller> {
                     ),
                   ],
                 ),
-                style: contentStyleBlack,
+                style: fontStyle,
               ),
             ],
           ),
@@ -519,8 +479,8 @@ class AdView extends GetView<AdViewContoller> {
                 TextSpan(
                   children: [
                     TextSpan(
-                        text: "  ${ad.user?.email ?? " No Name "}  ",
-                        style: contentStyleBlack),
+                        text: "  ${model.user?.email ?? " No Name "}  ",
+                        style: fontStyle),
                     WidgetSpan(
                       child: Icon(
                         Icons.mail,
@@ -528,7 +488,7 @@ class AdView extends GetView<AdViewContoller> {
                       ),
                     ),
                   ],
-                  style: contentStyleBlack,
+                  style: fontStyle,
                 ),
               ),
             ],
@@ -546,7 +506,7 @@ class AdView extends GetView<AdViewContoller> {
           reverse: true,
           // physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: ad.comments!.length,
+          itemCount: model.comments!.length,
           itemBuilder: (context, i) {
             return Card(
                 shape: RoundedRectangleBorder(
@@ -577,11 +537,11 @@ class AdView extends GetView<AdViewContoller> {
                           ),
                           Text.rich(
                             TextSpan(
-                              style: titlesStyleBlack,
+                              style: fontStyle,
                               children: [
                                 TextSpan(
                                     text:
-                                        "  ${ad.user?.username ?? "No Name"}  "),
+                                        "  ${model.user?.username ?? "No Name"}  "),
                               ],
                             ),
                           ),
@@ -593,8 +553,8 @@ class AdView extends GetView<AdViewContoller> {
                               TextSpan(
                                 children: [
                                   TextSpan(
-                                      text: "${ad.comments?[i].id ?? "1"}",
-                                      style: titlesStyleWhite)
+                                      text: "${model.comments?[i].id ?? "1"}",
+                                      style: fontStyle)
                                 ],
                               ),
                             ),
@@ -609,11 +569,11 @@ class AdView extends GetView<AdViewContoller> {
                         flex: 4,
                         child: AutoSizeText.rich(
                           TextSpan(
-                            style: contentStyleBlack,
+                            style: fontStyle,
                             children: [
                               TextSpan(
                                   text:
-                                      "  ${ad.comments?[i].commentText ?? "No Name"}")
+                                      "  ${model.comments?[i].commentText ?? "No Name"}")
                             ],
                           ),
                         ),
@@ -636,7 +596,7 @@ class AdView extends GetView<AdViewContoller> {
       ),
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: ad.tags!.length,
+          itemCount: model.tags!.length,
           shrinkWrap: true,
 
           // padding: EdgeInsets.all(10),
@@ -654,8 +614,8 @@ class AdView extends GetView<AdViewContoller> {
                   child: Container(
                     margin: EdgeInsets.all(1),
                     child: Text(
-                      "${ad.tags![i].tagName}",
-                      style: contentStylWhite,
+                      "${model.tags![i].tagName}",
+                      style: fontStyle,
                     ),
                   ),
                 ),

@@ -11,12 +11,12 @@ class Binding extends Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
-    Get.lazyPut(() => NavController());
-    Get.lazyPut(() => ProfileController());
-    Get.lazyPut(() => LoginController());
-    Get.lazyPut(() => SignUpContoller());
-    Get.lazyPut(() => HomeViewController());
-    Get.lazyPut(() => HomeView());
-    Get.lazyPut(() => LoginView());
+    Get.lazyPut<NavController>(() => NavController());
+    Get.lazyPut<ProfileController>(() => ProfileController());
+    Get.lazyPut<LoginController>(() => LoginController());
+    Get.lazyPut<SignUpContoller>(() => SignUpContoller());
+    Get.lazyPut<HomeViewController>(() => HomeViewController());
+    Get.lazyPut<HomeView>(() => HomeView());
+    Get.lazyPut<LoginView>(() => LoginView());
   }
 }

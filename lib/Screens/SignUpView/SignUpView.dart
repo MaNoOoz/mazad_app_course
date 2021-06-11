@@ -17,7 +17,10 @@ class SignUpView extends GetView<SignUpContoller> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("مستخدم جديد",style: headingStyleWhite,),
+        title: Text(
+          "مستخدم جديد",
+          style: fontStyle.copyWith(color: Colors.white),
+        ),
         backgroundColor: Colors.blue,
         elevation: 0.0,
         leading: GestureDetector(
@@ -30,62 +33,83 @@ class SignUpView extends GetView<SignUpContoller> {
             )),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(
-            32
-        ),
+        padding: const EdgeInsets.all(32),
         child: Form(
           key: _formKey,
           child: ListView(
             children: [
-              Text(
-                "مستخدم جديد",
-                style: headingStylePrimary,
-                textDirection: TextDirection.rtl,
+              GestureDetector(
+                onTap: () {
+                  Get.to(LoginView());
+                },
+                child: Text(
+                  " لديك حساب ؟",
+                  style: fontStyle.copyWith(color: kPrimaryColor, fontSize: 20),
+                  textDirection: TextDirection.rtl,
+                ),
               ),
               SizedBox(
                 height: 30,
               ),
               CustomTextFormFieldText(
-                text: 'الإسم',
-                // hint: 'yourName',
-                onSave: (value) {
-                  controller.name = value;
+                textInputType: TextInputType.emailAddress,
+                hintText: 'الإسم',
+                // initialValue: 'الإسم',
+                onSaved: (value) {
+                  controller.email = value!;
+                },
+                hintTextStyle:
+                    fontStyle.copyWith(color: Colors.black45, fontSize: 14),
+                labelTextStyle:
+                    fontStyle.copyWith(color: Colors.black, fontSize: 14),
+                validator: (value) {
+                  if (value == null) {
+                    print("ERROR");
+                  }
+                },
+                labelText: 'الإسم',
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              CustomTextFormFieldText(
+                textInputType: TextInputType.emailAddress,
+                hintText: 'إيميل',
+                // initialValue: 'yaman@gmail.com',
+                onSaved: (value) {
+                  controller.email = value!;
                 },
                 validator: (value) {
                   if (value == null) {
                     print("ERROR");
                   }
                 },
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              CustomTextFormFieldText(
-                text: 'الإيميل',
-                // hint: ' yourEmail@gmail.com',
-                onSave: (value) {
-                  controller.email = value;
-                },
-                validator: (value) {
-                  if (value == null) {
-                    print("ERROR");
-                  }
-                },
+                hintTextStyle:
+                    fontStyle.copyWith(color: Colors.black45, fontSize: 14),
+                labelTextStyle:
+                    fontStyle.copyWith(color: Colors.black, fontSize: 14),
+                labelText: 'إيميل',
               ),
               SizedBox(
                 height: 40,
               ),
               CustomTextFormFieldText(
-                text: 'كلمة السر',
-                // hint: '**********',
-                onSave: (value) {
-                  controller.password = value;
+                textInputType: TextInputType.emailAddress,
+                hintText: 'كلمة السر',
+                // initialValue: 'yaman@gmail.com',
+                onSaved: (value) {
+                  controller.email = value!;
                 },
                 validator: (value) {
                   if (value == null) {
-                    print('error');
+                    print("ERROR");
                   }
                 },
+                hintTextStyle:
+                    fontStyle.copyWith(color: Colors.black45, fontSize: 14),
+                labelTextStyle:
+                    fontStyle.copyWith(color: Colors.black, fontSize: 14),
+                labelText: 'كلمة السر',
               ),
               SizedBox(
                 height: 15,
@@ -100,7 +124,7 @@ class SignUpView extends GetView<SignUpContoller> {
                 },
                 child: Text(
                   'مستخدم جديد',
-                  style: headingStyleWhite,
+                  style: fontStyle.copyWith(color: Colors.white),
                 ),
                 shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(10.0),
@@ -114,7 +138,7 @@ class SignUpView extends GetView<SignUpContoller> {
                 },
                 child: Text(
                   'Read Token',
-                  style: headingStyleWhite,
+                  style: fontStyle.copyWith(color: Colors.white),
                 ),
                 shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(10.0),
