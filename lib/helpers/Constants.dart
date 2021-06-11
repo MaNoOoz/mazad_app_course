@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const BaseUrl = "http://172.27.128.1:1111";
+const BaseUrl = "http://192.168.122.1:1111";
 
 // const BaseUrl = "http://localhost:1111";
 const AuthUrlRegister = "/auth/local/register";

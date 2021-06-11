@@ -42,15 +42,18 @@ class LoginView extends GetView<LoginController> {
                 ),
               ),
               SizedBox(
-                height: 100,
+                height: 30,
               ),
-
               CustomTextFormFieldText(
                 textInputType: TextInputType.emailAddress,
                 hintText: 'إيميل',
                 initialValue: 'yaman@gmail.com',
-                onSaved: (value) {
-                  controller.email = value!;
+
+                onSaved: (value) async{
+                  controller.identifier = value!.trim();
+                  printInfo(info: "$value");
+
+
                 },
                 validator: (value) {
                   if (value == null) {
@@ -74,9 +77,10 @@ class LoginView extends GetView<LoginController> {
                     fontStyle.copyWith(color: Colors.black45, fontSize: 14),
                 labelTextStyle:
                     fontStyle.copyWith(color: Colors.black, fontSize: 14),
-
                 onSaved: (value) {
-                  controller.password = value!;
+                  controller.password = value!.trim();
+                  printInfo(info: "$value");
+
                 },
                 validator: (value) {
                   if (value == null) {
@@ -108,13 +112,13 @@ class LoginView extends GetView<LoginController> {
                   _formKey.currentState!.save();
 
                   if (_formKey.currentState!.validate()) {
-                    var a = await controller.loginUser();
-                    print(" loginUser Pressed login value is  : $a");
-                    if (a == true) {
-                      Get.to(() => HomeView());
-                    } else {
-                      print(" somthing wrong  : $a");
-                    }
+                     await controller.loginUser();
+                    print(" loginUser Pressed login value is  : ");
+                    // if (a == true) {
+                    //   Get.to(() => HomeView());
+                    // } else {
+                    //   print(" somthing wrong  : $a");
+                    // }
                   }
                 },
               ),

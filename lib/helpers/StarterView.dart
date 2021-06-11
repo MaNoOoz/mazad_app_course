@@ -47,7 +47,7 @@ class StarterView extends GetWidget<LoginController> {
                         }),
                     IconButton(
                         onPressed: () async {
-                          await storage.deleteToken().then((value) => Get.offAll(() => MyApp()));
+                          await storage.deleteToken().then((value) => Get.to(() => MyApp()));
                         },
                         icon: Icon(Icons.ac_unit)),
                     IconButton(

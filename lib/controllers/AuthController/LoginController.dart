@@ -11,7 +11,7 @@ import 'package:mazad_app/models/User.dart';
 import 'package:mazad_app/services/AuthService.dart';
 
 class LoginController extends GetxController {
-  String email = "", password = "", name = "";
+  String identifier = "", password = "", name = "";
 
   RxBool userLogged = false.obs;
 
@@ -22,24 +22,24 @@ class LoginController extends GetxController {
   User? get user => _user;
   final AuthService authService = AuthService();
 
-  Future<bool> loginUser() async {
+  loginUser() async {
     var url = "$BaseUrl/auth/local";
     var body = jsonEncode({
-      "identifier": "$email",
+      "identifier": "$identifier",
       "password": "$password",
     });
     var response =
-        await http.post(Uri.parse("$url"), headers: headersNoAuth, body: body);
+        await http.post(Uri.parse("$url"),  body: body);
     final data = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
       var jwtToken = data['jwt'];
       storage.saveToken("jwt", jwtToken);
       print(" Token From Login : $jwtToken");
+    } else {
+      print(" Error From Login : ${response.statusCode}");
 
-      return true;
     }
-    return false;
   }
 
   Future<User?> getUser() async {

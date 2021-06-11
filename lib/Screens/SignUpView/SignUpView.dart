@@ -38,21 +38,23 @@ class SignUpView extends GetView<SignUpContoller> {
           key: _formKey,
           child: ListView(
             children: [
-              GestureDetector(
-                onTap: () {
-                  Get.to(LoginView());
-                },
+              Center(
                 child: Text(
-                  " لديك حساب ؟",
-                  style: fontStyle.copyWith(color: kPrimaryColor, fontSize: 20),
-                  textDirection: TextDirection.rtl,
+                  "مزاد",
+                  style: fontStyle.copyWith(
+                      color: Colors.pink.shade200,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 48),
                 ),
               ),
               SizedBox(
-                height: 30,
+                height: 10,
+              ),
+              SizedBox(
+                height: 20,
               ),
               CustomTextFormFieldText(
-                textInputType: TextInputType.emailAddress,
+                textInputType: TextInputType.name,
                 hintText: 'الإسم',
                 // initialValue: 'الإسم',
                 onSaved: (value) {
@@ -70,7 +72,7 @@ class SignUpView extends GetView<SignUpContoller> {
                 labelText: 'الإسم',
               ),
               SizedBox(
-                height: 30,
+                height: 20,
               ),
               CustomTextFormFieldText(
                 textInputType: TextInputType.emailAddress,
@@ -91,10 +93,10 @@ class SignUpView extends GetView<SignUpContoller> {
                 labelText: 'إيميل',
               ),
               SizedBox(
-                height: 40,
+                height: 20,
               ),
               CustomTextFormFieldText(
-                textInputType: TextInputType.emailAddress,
+                textInputType: TextInputType.visiblePassword,
                 hintText: 'كلمة السر',
                 // initialValue: 'yaman@gmail.com',
                 onSaved: (value) {
@@ -123,7 +125,7 @@ class SignUpView extends GetView<SignUpContoller> {
                   }
                 },
                 child: Text(
-                  'مستخدم جديد',
+                  'تسجيل',
                   style: fontStyle.copyWith(color: Colors.white),
                 ),
                 shape: new RoundedRectangleBorder(
@@ -148,6 +150,17 @@ class SignUpView extends GetView<SignUpContoller> {
               SizedBox(
                 height: 40,
               ),
+              GestureDetector(
+                onTap: () {
+                  Get.to(LoginView());
+                },
+                child: Text(
+                  " لديك حساب ؟",
+                  style: fontStyle.copyWith(color: kPrimaryColor, fontSize: 20),
+                  textDirection: TextDirection.rtl,
+                ),
+              ),
+
             ],
           ),
         ),
