@@ -151,7 +151,7 @@ class AdCard extends StatelessWidget {
                     textDirection: TextDirection.rtl,
                     overflow: TextOverflow.ellipsis,
                     // softWrap: false,
-                    style: fontStyle,
+                    style: fontStyle.copyWith(color: kPrimaryColor,fontWeight: FontWeight.normal,fontSize: 60),
                   ),
                   SizedBox(height: 5),
                 ],
@@ -174,22 +174,34 @@ class AdCard extends StatelessWidget {
       height: 25,
       child: Row(
         children: [
+          Spacer(),
           Expanded(
             child: Text.rich(
               TextSpan(
                 children: [
-                  TextSpan(text: " منذ : ", style: fontStyle),
                   TextSpan(
-                      // text: "${cat.createdAt!.toLocal().day.toString()}",
-                      text: "${model.createdAt!.toLocal().day.toString()}",
-                      style: fontStyle),
-                  TextSpan(text: "يوم", style: fontStyle),
+                    text: " منذ : ",
+                    style:
+                        fontStyle.copyWith(color: Colors.black45, fontSize: 14),
+                  ),
+                  TextSpan(
+                    // text: "${model.createdAt.toString()}",
+                    text: "${model.createdAt!.toLocal().hour.toString()}",
+                    style:
+                        fontStyle.copyWith(color: Colors.black45, fontSize: 14),
+                  ),
+                  TextSpan(
+                    text: " ساعة",
+                    style:
+                        fontStyle.copyWith(color: Colors.black45, fontSize: 12),
+                  ),
                 ],
               ),
               textDirection: TextDirection.rtl,
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.start,
             ),
           ),
+
         ],
       ),
     );
@@ -233,8 +245,11 @@ class AdCard extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                            text: " ${model.comments!.length}",
-                            style: fontStyle),
+                          text: "  ( ${model.likes!.length} )  ",
+                            style: fontStyle.copyWith(
+                                color: Colors.blue, fontSize: 16),
+
+                        ),
                       ],
                     ),
                     textDirection: TextDirection.rtl,
@@ -262,8 +277,9 @@ class AdCard extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                            text: " ${model.comments!.length}",
-                            style: fontStyle),
+                            text: "  ( ${model.comments!.length} )  ",
+                            style: fontStyle.copyWith(
+                                color: Colors.blue, fontSize: 16),),
                       ],
                     ),
                     textDirection: TextDirection.rtl,

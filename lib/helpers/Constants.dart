@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const BaseUrl = "http://192.168.122.1:1111";
+// const BaseUrl = "http://192.168.8.100:1111";
+const BaseUrl = "http://172.27.128.1:1111";
 
 // const BaseUrl = "http://localhost:1111";
 const AuthUrlRegister = "/auth/local/register";
+const AuthUrlLogin = "/auth/local/";
 
 const Map<String, String> headersNoAuth = {
-  'Content-Type': 'application/json',
-  "Accept": "application/json",
-  "Access-Control_Allow_Origin": "*"
+  'Content-Type': 'text/plain',
+  "Accept": "application/json"
 };
 
 const kPrimaryColor = Color(0xFF0473C0);
@@ -37,7 +38,8 @@ final fontStyle = GoogleFonts.almarai(
 const defaultDuration = Duration(milliseconds: 250);
 
 // Form Error
-final RegExp emailValidatorRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+final RegExp emailValidatorRegExp =
+    RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 const String kEmailNullError = "Please Enter your email";
 const String kInvalidEmailError = "Please Enter Valid Email";
 const String kPassNullError = "Please Enter your password";

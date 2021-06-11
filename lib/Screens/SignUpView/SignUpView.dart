@@ -58,15 +58,21 @@ class SignUpView extends GetView<SignUpContoller> {
                 hintText: 'الإسم',
                 // initialValue: 'الإسم',
                 onSaved: (value) {
-                  controller.email = value!;
+                  SignUpContoller.to.name = value!;
+                },
+                onTap: () {
+                  _formKey.currentState!.save();
+                  if (controller.name.isNotEmpty)
+                    printError(info: "${controller.name}");
+                  if (controller.name.isEmpty) printError(info: "NO TEXT");
                 },
                 hintTextStyle:
                     fontStyle.copyWith(color: Colors.black45, fontSize: 14),
                 labelTextStyle:
                     fontStyle.copyWith(color: Colors.black, fontSize: 14),
                 validator: (value) {
-                  if (value == null) {
-                    print("ERROR");
+                  if (value!.isEmpty) {
+                    print("isEmpty");
                   }
                 },
                 labelText: 'الإسم',
@@ -100,7 +106,7 @@ class SignUpView extends GetView<SignUpContoller> {
                 hintText: 'كلمة السر',
                 // initialValue: 'yaman@gmail.com',
                 onSaved: (value) {
-                  controller.email = value!;
+                  controller.password = value!;
                 },
                 validator: (value) {
                   if (value == null) {
@@ -121,7 +127,8 @@ class SignUpView extends GetView<SignUpContoller> {
                   _formKey.currentState!.save();
 
                   if (_formKey.currentState!.validate()) {
-                    await controller.createNewUser();
+                    await controller.createNewUser2();
+
                   }
                 },
                 child: Text(
@@ -154,13 +161,14 @@ class SignUpView extends GetView<SignUpContoller> {
                 onTap: () {
                   Get.to(LoginView());
                 },
-                child: Text(
-                  " لديك حساب ؟",
-                  style: fontStyle.copyWith(color: kPrimaryColor, fontSize: 20),
-                  textDirection: TextDirection.rtl,
+                child: Center(
+                  child: Text(
+                    " لديك حساب ؟",
+                    style: fontStyle.copyWith(color: kPrimaryColor, fontSize: 20),
+                    textDirection: TextDirection.rtl,
+                  ),
                 ),
               ),
-
             ],
           ),
         ),

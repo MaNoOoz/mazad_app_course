@@ -1,44 +1,44 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:mazad_app/Screens/HomeView/HomeView.dart';
-import 'package:mazad_app/Screens/LoginView/LoginView.dart';
 import 'package:mazad_app/data/LocalStorage.dart';
 import 'package:mazad_app/helpers/Constants.dart';
-import 'package:http/http.dart' as http;
 import 'package:mazad_app/helpers/StarterView.dart';
 import 'package:mazad_app/models/User.dart';
 import 'package:mazad_app/services/AuthService.dart';
 
 class LoginController extends GetxController {
   String identifier = "", password = "", name = "";
-
   RxBool userLogged = false.obs;
-
   LocalStorage storage = LocalStorage();
-
   User? _user;
 
   User? get user => _user;
+
   final AuthService authService = AuthService();
 
-  loginUser() async {
-    var url = "$BaseUrl/auth/local";
-    var body = jsonEncode({
-      "identifier": "$identifier",
-      "password": "$password",
-    });
-    var response =
-        await http.post(Uri.parse("$url"),  body: body);
-    final data = jsonDecode(response.body);
+  loginUser2() async {
+    var headers = {'Content-Type': 'application/json'};
+    var request = http.Request('POST', Uri.parse('$BaseUrl$AuthUrlLogin'));
+    request.body =
+        json.encode({"identifier": "$identifier", "password": "$password"});
+    request.headers.addAll(headers);
 
+    http.StreamedResponse streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
     if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
       var jwtToken = data['jwt'];
+      // print(data);
       storage.saveToken("jwt", jwtToken);
       print(" Token From Login : $jwtToken");
-    } else {
-      print(" Error From Login : ${response.statusCode}");
+      var a = await storage.readToken();
+      print(" Token From app : $a");
 
+    } else {
+      print(response.reasonPhrase);
     }
   }
 
@@ -49,7 +49,7 @@ class LoginController extends GetxController {
     } catch (e) {
       print(e);
     }
-    // update();
+    update();
 
     return _user;
   }
@@ -63,9 +63,10 @@ class LoginController extends GetxController {
     if (checkLogin != null) {
       userLogged.value = true;
       print("User Logged : ${userLogged.value}");
+      await getUser();
+
       update();
     }
-    await getUser();
   }
 
   @override

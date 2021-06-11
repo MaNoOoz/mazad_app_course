@@ -1,13 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:flutter_card_swipper/widgets/flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:get/get.dart';
-import 'package:mazad_app/controllers/AuthController/AdViewContoller/AdViewContoller.dart';
+import 'package:mazad_app/controllers/AdViewContoller/AdViewContoller.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
 
@@ -318,8 +316,7 @@ class AdView extends GetView<AdViewContoller> {
                         child: AutoSizeText.rich(
                           TextSpan(
                             style: fontStyle.copyWith(
-                              fontSize: 22,color: Colors.black45
-                            ),
+                                fontSize: 22, color: Colors.black45),
                             children: [
                               TextSpan(
                                 text: "${model.content.toString()} ",

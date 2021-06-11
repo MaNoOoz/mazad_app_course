@@ -5,7 +5,7 @@ import 'package:mazad_app/helpers/Constants.dart';
 
 class CustomTextFormFieldText extends StatelessWidget {
   final String? labelText;
-  final Function? onTap;
+  final GestureTapCallback? onTap;
   final ValueChanged<String>? onChanged;
   final Function? onEditingComplete;
   final bool? obscureText;
@@ -67,7 +67,9 @@ class CustomTextFormFieldText extends StatelessWidget {
           ),
           TextFormField(
             initialValue: initialValue,
-            onSaved: onSaved as void Function(String?)?,
+            onTap: onTap,
+            onSaved: onSaved,
+            onChanged: onChanged,
             validator: validator,
             keyboardType: textInputType,
             decoration: InputDecoration(

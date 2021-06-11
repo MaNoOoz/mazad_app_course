@@ -1,15 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mazad_app/Screens/HomeView/HomeView.dart';
 import 'package:mazad_app/Screens/SignUpView/SignUpView.dart';
 import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/helpers/StarterView.dart';
-
 import 'package:mazad_app/widgets/custom_text_form_field.dart';
-
-import '../../main.dart';
 
 class LoginView extends GetView<LoginController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -47,13 +43,12 @@ class LoginView extends GetView<LoginController> {
               CustomTextFormFieldText(
                 textInputType: TextInputType.emailAddress,
                 hintText: 'إيميل',
-                initialValue: 'yaman@gmail.com',
-
-                onSaved: (value) async{
+                initialValue: 'asd@gmail.com',
+                onSaved: (value) async {
                   controller.identifier = value!.trim();
-                  printInfo(info: "$value");
-
-
+                },
+                onTap: () {
+                  printInfo(info: "${controller.identifier}");
                 },
                 validator: (value) {
                   if (value == null) {
@@ -72,7 +67,7 @@ class LoginView extends GetView<LoginController> {
               CustomTextFormFieldText(
                 textInputType: TextInputType.visiblePassword,
                 hintText: 'كلمة السر',
-                initialValue: '123456',
+                initialValue: 'asdasd',
                 hintTextStyle:
                     fontStyle.copyWith(color: Colors.black45, fontSize: 14),
                 labelTextStyle:
@@ -80,7 +75,6 @@ class LoginView extends GetView<LoginController> {
                 onSaved: (value) {
                   controller.password = value!.trim();
                   printInfo(info: "$value");
-
                 },
                 validator: (value) {
                   if (value == null) {
@@ -112,10 +106,11 @@ class LoginView extends GetView<LoginController> {
                   _formKey.currentState!.save();
 
                   if (_formKey.currentState!.validate()) {
-                     await controller.loginUser();
-                    print(" loginUser Pressed login value is  : ");
+                     await controller.loginUser2();
+                     // await controller.loginUser2();
+                    // print(" loginUser Pressed login value is  : $a");
                     // if (a == true) {
-                    //   Get.to(() => HomeView());
+                    //   Get.to(() => StarterView());
                     // } else {
                     //   print(" somthing wrong  : $a");
                     // }
@@ -133,9 +128,11 @@ class LoginView extends GetView<LoginController> {
                       duration: Duration(microseconds: 4000),
                       curve: Curves.bounceIn);
                 },
-                child: Text(
-                  "مستخدم جديد ؟",
-                  style: fontStyle.copyWith(color: kPrimaryColor, fontSize: 20),
+                child: Center(
+                  child: Text(
+                    "مستخدم جديد ؟",
+                    style: fontStyle.copyWith(color: kPrimaryColor, fontSize: 20),
+                  ),
                 ),
               ),
             ],

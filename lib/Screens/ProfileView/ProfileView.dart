@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/controllers/ProfileController/ProfileController.dart';
@@ -68,9 +67,9 @@ class ProfileView extends GetView<ProfileController> {
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         children: List.generate(
-          controller.Ads.length,
+          controller.adList.length,
           (index) {
-            final item = controller.Ads[index];
+            final item = controller.adList[index];
             return Dismissible(
               background: Container(
                 color: Colors.red,
@@ -102,7 +101,6 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                 ),
               ),
-
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(const Radius.circular(10.0)),
@@ -132,8 +130,6 @@ class ProfileView extends GetView<ProfileController> {
               onDismissed: (direction) {
                 if (direction == DismissDirection.startToEnd) {
                   print("Add to favorite list");
-
-
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text("${item.title} Removed."),
@@ -155,10 +151,10 @@ class ProfileView extends GetView<ProfileController> {
                     ),
                   );
                 } else {
-                 await showAlert(context, item,controller);
+                  await showAlert(context, item, controller);
                 }
               },
-              key: Key('item ${controller.Ads[index]}'),
+              key: Key('item ${controller.adList[index]}'),
             );
           },
         ),
@@ -186,16 +182,20 @@ class ProfileView extends GetView<ProfileController> {
             child: Column(
               children: [
                 Container(
-                  height: 32,
+                  color: Colors.red,
+                  child: GetBuilder<LoginController>(
+                      init: LoginController(),
+                      builder: (value) {
+                        return Text(
+                          // "${value.user!.email}",
+                          "User Name",
+                          style: fontStyle.copyWith(
+                              color: Colors.white,
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold),
+                        );
+                      }),
                 ),
-                GetBuilder<LoginController>(
-                    init: LoginController(),
-                    builder: (value) {
-                      return Text(
-                        "${value.user!.email}",
-                        style: fontStyle,
-                      );
-                    }),
               ],
             ),
           ),
@@ -227,7 +227,7 @@ class ClippingClass extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
-Future showAlert(BuildContext context, Ad ad ,ProfileController pc) async {
+Future showAlert(BuildContext context, Ad ad, ProfileController pc) async {
   return await showDialog(
     context: context,
     builder: (BuildContext context) {

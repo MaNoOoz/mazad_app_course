@@ -65,16 +65,16 @@ class HomeView extends StatelessWidget {
     return GetBuilder<HomeViewController>(builder: (controller) {
       print("_bulidBody called");
 
-      return controller.adsListFilter!.length == 0
+      return controller.adsListFilter.length == 0
           ? _EmptyView()
           : Container(
               height: 300,
               color: Colors.white,
               child: ListView.builder(
-                itemCount: controller.adsListFilter!.length,
+                itemCount: controller.adsListFilter.length,
                 itemBuilder: (ctx, i) {
-                  Ad adModel = controller.adsListFilter![i];
-                  var images = controller.adsListFilter![i].adImages;
+                  Ad adModel = controller.adsListFilter[i];
+                  var images = controller.adsListFilter[i].adImages;
                   // var hasImages = images!.length == 0;
                   // print(images);
                   // if (hasImages) {

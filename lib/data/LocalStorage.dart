@@ -10,7 +10,7 @@ class LocalStorage {
   readToken() async {
     var token = await box.read("jwt");
     if (token == null) {
-      token = "0";
+      token = null;
     }
     return token;
   }

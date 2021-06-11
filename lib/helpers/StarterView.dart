@@ -12,13 +12,13 @@ import 'package:mazad_app/data/LocalStorage.dart';
 import '../main.dart';
 import 'Constants.dart';
 
-class StarterView extends GetWidget<LoginController> {
+class StarterView extends StatelessWidget {
   final LocalStorage storage = LocalStorage();
 
   @override
   Widget build(BuildContext context) {
     // var isLogged = (value.user);
-    var isUserThere = Get.find<LoginController>().user == null;
+    var isUserThere = Get.find<LoginController>().userLogged.value == false;
     return isUserThere
         ? LoginView()
         : GetBuilder<NavController>(
@@ -28,7 +28,7 @@ class StarterView extends GetWidget<LoginController> {
                   leading: Icon(Icons.home),
                   title: Text(
                     "مزاد",
-                    style: fontStyle,
+                    style: fontStyle.copyWith(color: Colors.white,fontSize: 26),
                   ),
                   centerTitle: true,
                   actions: [
@@ -47,7 +47,9 @@ class StarterView extends GetWidget<LoginController> {
                         }),
                     IconButton(
                         onPressed: () async {
-                          await storage.deleteToken().then((value) => Get.to(() => MyApp()));
+                          await storage
+                              .deleteToken()
+                              .then((value) => Get.to(() => LoginView()));
                         },
                         icon: Icon(Icons.ac_unit)),
                     IconButton(
