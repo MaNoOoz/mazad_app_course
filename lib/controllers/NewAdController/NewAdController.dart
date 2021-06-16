@@ -17,7 +17,7 @@ class NewAdController extends GetxController {
   static NewAdController to = Get.find();
   var logger = Logger();
 
-  NewAdService _newAdService = NewAdService();
+  NewAdService newAddService = NewAdService();
   final HomeViewController homeViewController =
       Get.put<HomeViewController>(HomeViewController());
   String title = '';
@@ -57,7 +57,7 @@ class NewAdController extends GetxController {
 
   tester() async {
     // print("A");
-    await _newAdService.test();
+    await newAddService.test();
   }
 
   chosenImagesSingleImagePicker(ImageSource imageSource) async {
@@ -112,6 +112,8 @@ class NewAdController extends GetxController {
         // print("path : ${path}");
         files2.add(file);
       }
+      logger.d("files2 leng : ${files2.length}");
+
       // PlatformFile file = result.files.first;
       // print(file.name);
       // print(file.bytes);
@@ -130,7 +132,7 @@ class NewAdController extends GetxController {
     File file = files.first;
 
     try {
-      ImagesFilesFromServer = await _newAdService
+      ImagesFilesFromServer = await newAddService
           .uploadImage(file)
           .catchError((onError) => printError(info: onError.toString()));
       // print(ImagesFilesFromServer.length);
@@ -144,23 +146,31 @@ class NewAdController extends GetxController {
     NewAd ad;
     // var image;
 
-    /// trying single image
-    var UploadImage = await uploadImage(files);
-    // String json = jsonEncode(UploadImage);
-    // logger.d(json);
-    Upload image = Upload();
+    // /// trying single image
+    // var UploadImage = await uploadImage(files);
+    // // String json = jsonEncode(UploadImage);
+    // // logger.d(json);
+    // Upload image = Upload();
+    //
+    // for (Upload q in UploadImage) {
+    //   image = q;
+    //   // logger.d(image.toJson());
+    // }
 
-    for (Upload q in UploadImage) {
-      image = q;
-      // logger.d(image.toJson());
-    }
-
-    // todo first upload image to backend then take the id and url and linked to new ad object
+    // todo first upload image to backend then take the id and url and linked to new ad object [*]
 
     // var map = UploadImage.map((e) => e.toJson());
     // logger.d(map);
 
     /// trying multi image
+    // todo first upload images to backend realated to an object [*]
+
+
+
+
+
+
+
 
     catTitle = selectedCat;
     //  get User name
@@ -168,8 +178,9 @@ class NewAdController extends GetxController {
         .getUser()
         .then((value) => value!.username);
     id = await Get.find<LoginController>().getUser().then((value) => value!.id);
-    var ImageId = image.id;
-    var ImageUrl = image.url;
+
+    // var ImageId = image.id;
+    // var ImageUrl = image.url;
 
     ad = NewAd(
       title: title,
