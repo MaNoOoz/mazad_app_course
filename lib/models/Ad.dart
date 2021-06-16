@@ -8,6 +8,8 @@ import 'UploadModel.dart';
 
 Ad adFromJson(String str) => Ad.fromJson(json.decode(str));
 
+AdImage imagesFromAd(String str) => AdImage.fromJson(json.decode(str));
+
 String adToJson(Ad data) => json.encode(data.toJson());
 
 User userFromJson(String str) => User.fromJson(json.decode(str));
@@ -118,8 +120,8 @@ class Tag {
 
 class AdImage {
   AdImage({
-   required this.id,
-   required this.name,
+    required this.id,
+    required this.name,
     this.alternativeText,
     this.caption,
     this.width,
@@ -182,7 +184,7 @@ class AdImage {
         "caption": caption,
         "width": width,
         "height": height,
-    "formats": formats == null ? null : formats!.toJson(),
+        "formats": formats == null ? null : formats!.toJson(),
         "hash": hash,
         "ext": ext,
         "mime": mime,
@@ -195,8 +197,6 @@ class AdImage {
         "updated_at": updatedAt,
       };
 }
-
-
 
 class Thumbnail {
   Thumbnail({

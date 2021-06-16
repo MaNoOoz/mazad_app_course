@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -163,13 +162,18 @@ class NewAdController extends GetxController {
     // logger.d(map);
 
     /// trying multi image
-    // todo first upload images to backend realated to an object [*]
+    // todo first upload images to backend related to an object [*]
 
+    List UploadImage = await newAddService.uploadImages(files2);
+    List<AdImage> list = [];
 
-
-
-
-
+    for (Upload a in UploadImage) {
+      var mapFromObject = a.toJson();
+      AdImage imageFromUploadMoedl = AdImage.fromJson(mapFromObject);
+      // logger.d(imageFromUploadMoedl.id);
+      list.add(imageFromUploadMoedl);
+    }
+    // logger.d(list.length);
 
 
     catTitle = selectedCat;
@@ -190,20 +194,20 @@ class NewAdController extends GetxController {
       category: Category(id: 2, title: catTitle),
       comments: comments,
       likes: 50,
-      // images: <AdImage>[AdImage(id: ImageId!, name: ImageUrl!)],
+      images: list,
       publishedAt: publishedAt,
       createdBy: createdBy,
       updatedBy: updatedBy,
     );
 
-    // print(ad.category!.title);
+    // logger.d(ad.images);
     return ad;
   }
 
   sendToServer() async {
     var newAd = await adFromInput();
     var mapFromObject = newAd.toJson(); //todo uncommit
-    print(mapFromObject);
+    // logger.d(mapFromObject.length);
     // await _newAdService.createNewAd(mapFromObject);
   }
 

@@ -112,9 +112,19 @@ class NewAdService {
     if (response.statusCode == 200) {
       log("${response.statusCode}");
       log("${response.data.runtimeType}");
-      Logger().d("${response.data.toString()}");
-
+      // Logger().d("${response.data.toString()}");
+      List<Upload> listOfImages = [];
+      List<dynamic> dataList = response.data;
+      var json_object = dataList.map((dynamic e) => e).toList();
+      for (var s in json_object) {
+        final upload = Upload.fromJson(s);
+        listOfImages.add(upload);
+      }
+      return listOfImages;
+    } else {
+      print("uploadImage  json result :");
     }
+
   }
 
   Future test() async {
