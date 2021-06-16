@@ -7,26 +7,45 @@ import 'package:mazad_app/Screens/HomeView/widgets/AdItem.dart';
 import 'package:mazad_app/controllers/HomeController/HomeController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
+import 'package:mazad_app/utils/app_state.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends GetView<HomeViewController> {
   var catID = 4;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: ListView(
-      children: [
-        _buildTabBar(),
-        _bulidBody(),
-        Container(
-          height: 10,
+    return SafeArea(
+      child: Scaffold(
+        body: Obx(
+          () {
+            if (controller.appState() == AppState.LOADING) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (controller.appState() == AppState.ERROR) {
+              return Center(
+                  child: FlatButton(
+                child: Text('مشكلة بالإتصال حاول مرة أخرى '),
+                onPressed: () async => controller.getCategoryList(),
+              ));
+            }
+
+            return Column(
+              children: [
+                _buildTabBar(),
+                _bulidBody(),
+                Container(
+                  height: 10,
+                ),
+                Container(
+                  height: 10,
+                  color: Colors.blue.shade300,
+                ),
+              ],
+            );
+          },
         ),
-        Container(
-          height: 10,
-          color: Colors.blue.shade300,
-        ),
-      ],
-    ));
+      ),
+    );
   }
 
   Widget _buildTabBar() {
@@ -67,25 +86,28 @@ class HomeView extends StatelessWidget {
 
       return controller.adsListFilter.length == 0
           ? _EmptyView()
-          : Container(
-              height: 300,
-              color: Colors.white,
-              child: ListView.builder(
-                itemCount: controller.adsListFilter.length,
-                itemBuilder: (ctx, i) {
-                  Ad adModel = controller.adsListFilter[i];
-                  var images = controller.adsListFilter[i].adImages;
-                  // var hasImages = images!.length == 0;
-                  // print(images);
-                  // if (hasImages) {
-                  //   print(images.length);
-                  // } else {
-                  //   print(images.length);
-                  // }
-                  return AdCard(
-                      model: adModel,
-                      press: () => Get.to(() => AdView(adModel)));
-                },
+          : Expanded(
+              child: Container(
+                // height: 500,
+                color: Colors.white,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: controller.adsListFilter.length,
+                  itemBuilder: (ctx, i) {
+                    Ad adModel = controller.adsListFilter[i];
+                    var images = controller.adsListFilter[i].adImages;
+                    // var hasImages = images!.length == 0;
+                    // print(images);
+                    // if (hasImages) {
+                    //   print(images.length);
+                    // } else {
+                    //   print(images.length);
+                    // }
+                    return AdCard(
+                        model: adModel,
+                        press: () => Get.to(() => AdView(adModel)));
+                  },
+                ),
               ),
             );
     });

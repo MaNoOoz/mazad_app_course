@@ -1,12 +1,8 @@
-import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:mazad_app/Screens/HomeView/HomeView.dart';
+import 'package:mazad_app/Bindings/Routers.dart';
 import 'package:mazad_app/data/LocalStorage.dart';
-import 'package:mazad_app/helpers/Constants.dart';
-import 'package:mazad_app/helpers/StarterView.dart';
-import 'package:mazad_app/models/User.dart';
+import 'package:mazad_app/models/Ad.dart';
 import 'package:mazad_app/services/AuthService.dart';
 
 class LoginController extends GetxController {
@@ -19,26 +15,17 @@ class LoginController extends GetxController {
 
   final AuthService authService = AuthService();
 
-  loginUser2() async {
-    var headers = {'Content-Type': 'application/json'};
-    var request = http.Request('POST', Uri.parse('$BaseUrl$AuthUrlLogin'));
-    request.body =
-        json.encode({"identifier": "$identifier", "password": "$password"});
-    request.headers.addAll(headers);
-
-    http.StreamedResponse streamedResponse = await request.send();
-    var response = await http.Response.fromStream(streamedResponse);
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      var jwtToken = data['jwt'];
-      // print(data);
-      storage.saveToken("jwt", jwtToken);
-      print(" Token From Login : $jwtToken");
-      var a = await storage.readToken();
-      print(" Token From app : $a");
-
-    } else {
-      print(response.reasonPhrase);
+  signInUser() async {
+    var ok = await authService.userLogin(identifier, password);
+    if (ok) {
+      Get.offAllNamed(Routers.initialRoute);
+    }else{
+      Get.snackbar(
+        'Somthing Wrong',
+        'Make Sure Login Info Is Correct',
+        colorText: Colors.white,
+        backgroundColor: Colors.red,
+      );
     }
   }
 

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart' show Ad;
 import 'package:uuid/uuid.dart';
-
+import 'package:timeago/timeago.dart' as timeago;
 class AdCard extends StatelessWidget {
   Ad model;
   final GestureTapCallback? press;
@@ -151,7 +151,10 @@ class AdCard extends StatelessWidget {
                     textDirection: TextDirection.rtl,
                     overflow: TextOverflow.ellipsis,
                     // softWrap: false,
-                    style: fontStyle.copyWith(color: kPrimaryColor,fontWeight: FontWeight.normal,fontSize: 60),
+                    style: fontStyle.copyWith(
+                        color: kPrimaryColor,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 60),
                   ),
                   SizedBox(height: 5),
                 ],
@@ -164,6 +167,9 @@ class AdCard extends StatelessWidget {
   }
 
   header(screenWidth, screenH, dynamic ad) {
+
+    var time2 = timeago.format(model.updatedAt!,locale: 'ar',);
+
     return Container(
       decoration: BoxDecoration(
         // color: Theme.of(context).primaryColor,
@@ -186,22 +192,21 @@ class AdCard extends StatelessWidget {
                   ),
                   TextSpan(
                     // text: "${model.createdAt.toString()}",
-                    text: "${model.createdAt!.toLocal().hour.toString()}",
+                    text: "${time2}",
                     style:
                         fontStyle.copyWith(color: Colors.black45, fontSize: 14),
                   ),
-                  TextSpan(
-                    text: " ساعة",
-                    style:
-                        fontStyle.copyWith(color: Colors.black45, fontSize: 12),
-                  ),
+                  // TextSpan(
+                  //   text: " ساعة",
+                  //   style:
+                  //       fontStyle.copyWith(color: Colors.black45, fontSize: 12),
+                  // ),
                 ],
               ),
               textDirection: TextDirection.rtl,
               textAlign: TextAlign.start,
             ),
           ),
-
         ],
       ),
     );
@@ -246,9 +251,8 @@ class AdCard extends StatelessWidget {
                         ),
                         TextSpan(
                           text: "  ( ${model.likes!.length} )  ",
-                            style: fontStyle.copyWith(
-                                color: Colors.blue, fontSize: 16),
-
+                          style: fontStyle.copyWith(
+                              color: Colors.blue, fontSize: 16),
                         ),
                       ],
                     ),
@@ -277,9 +281,10 @@ class AdCard extends StatelessWidget {
                           ),
                         ),
                         TextSpan(
-                            text: "  ( ${model.comments!.length} )  ",
-                            style: fontStyle.copyWith(
-                                color: Colors.blue, fontSize: 16),),
+                          text: "  ( ${model.comments!.length} )  ",
+                          style: fontStyle.copyWith(
+                              color: Colors.blue, fontSize: 16),
+                        ),
                       ],
                     ),
                     textDirection: TextDirection.rtl,

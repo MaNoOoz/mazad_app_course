@@ -1,8 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // const BaseUrl = "http://192.168.8.100:1111";
-const BaseUrl = "http://172.27.128.1:1111";
+const BaseUrl = "http://192.168.8.101:1111";
 
 // const BaseUrl = "http://localhost:1111";
 const AuthUrlRegister = "/auth/local/register";
@@ -12,6 +14,8 @@ const Map<String, String> headersNoAuth = {
   'Content-Type': 'text/plain',
   "Accept": "application/json"
 };
+
+
 
 const kPrimaryColor = Color(0xFF0473C0);
 const kPrimaryColorShadow = Color(0xFF7B94B1);
@@ -60,5 +64,51 @@ OutlineInputBorder outlineInputBorder() {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular((15)),
     borderSide: BorderSide(color: kTextColor),
+  );
+}
+
+Decoration containerStyle = BoxDecoration(
+  color: kPrimaryColor,
+  borderRadius: BorderRadius.all(Radius.circular(10)),
+  border: Border.all(color: kPrimaryColor, width: 1.0),
+  boxShadow: [
+    BoxShadow(
+        color: kPrimaryColor.withOpacity(0.1),
+        blurRadius: 1,
+        offset: Offset(-10, 12)),
+  ],
+);
+
+InputDecoration textFieldDecorationCircle(
+    {String? hint, String? lable, Icon? icon, TextStyle? style}) {
+  style = fontStyle.copyWith(color: Colors.grey, fontSize: 14);
+  return InputDecoration(
+    // prefixIcon: icon,
+//      prefixIcon: icon,
+//     icon: icon,
+    suffixIcon: icon,
+    hintTextDirection: TextDirection.rtl,
+    floatingLabelBehavior: FloatingLabelBehavior.never,
+    contentPadding: EdgeInsets.all(10),
+    hintText: hint,
+    labelText: lable,
+    hintStyle: style,
+    labelStyle: style,
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.blue),
+      borderRadius: BorderRadius.all(Radius.circular(5)),
+    ),
+    disabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey),
+      borderRadius: BorderRadius.all(Radius.circular(5)),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey),
+      borderRadius: BorderRadius.all(Radius.circular(5)),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.redAccent),
+      borderRadius: BorderRadius.all(Radius.circular(5)),
+    ),
   );
 }

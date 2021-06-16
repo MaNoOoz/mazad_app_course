@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
-import 'package:mazad_app/models/Ad.dart' show Ad;
-import 'package:mazad_app/models/Category.dart';
+import 'package:mazad_app/models/Ad.dart' show Ad,Category;
+// import 'package:mazad_app/models/Category.dart';
 import 'package:mazad_app/services/Home%20Service.dart';
+import 'package:mazad_app/utils/app_state.dart';
 
 class HomeViewController extends GetxController {
   final homeService = HomeService();
@@ -12,6 +13,7 @@ class HomeViewController extends GetxController {
 
   int catId = 2;
   var likes = 0.obs;
+  final appState = Rx<AppState>(AppState.LOADING);
 
   increment() => likes++;
 
@@ -24,7 +26,7 @@ class HomeViewController extends GetxController {
   Future<List<Category>?> getCategoryList() async {
     try {
       homeService.getCategories().then((value) {
-        _categories.clear();
+        // _categories.clear();
         _categories =
             value!.map((element) => Category.fromJson(element)).toList();
       });
@@ -36,23 +38,8 @@ class HomeViewController extends GetxController {
     return categories;
   }
 
-  Future<List<Ad>?> getAdsList() async {
-    try {
-      homeService.getAds().then((value) {
-        _adList.clear();
-        _adList = value!.map((element) => Ad.fromJson(element)).toList();
 
-        // _Ads.addAll(_Ads);
-      });
-    } catch (e) {
-      print(e);
-    }
-    update();
-
-    return ads;
-  }
-
-  Future<List<Ad>?> getAdsListWithFilter(int catId) async {
+  Future<List<Ad>?> getAdsListWithFilter(var catId) async {
     print("getAdsListWithFilter ");
 
     try {
@@ -82,8 +69,10 @@ class HomeViewController extends GetxController {
   void onInit() async {
     // TODO: implement onInit
     super.onInit();
+
     await getCategoryList();
-    // await getAdsList();
     await getAdsListWithFilter(catId);
+    appState.value = AppState.DONE;
+
   }
 }

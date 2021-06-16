@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mazad_app/controllers/AuthController/LoginController.dart';
+import 'package:mazad_app/Screens/AdView/AdView.dart';
 import 'package:mazad_app/controllers/ProfileController/ProfileController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
@@ -20,7 +20,7 @@ class ProfileView extends GetView<ProfileController> {
           child: Column(
             children: [
               Container(
-                height: 300,
+                height: 100,
                 child: Stack(
                   children: [
                     wallImage(screenW),
@@ -53,6 +53,9 @@ class ProfileView extends GetView<ProfileController> {
                 ),
               ),
               adsList(context),
+              SizedBox(
+                height: 100,
+              ),
             ],
           ),
         ),
@@ -62,45 +65,18 @@ class ProfileView extends GetView<ProfileController> {
 
   Widget adsList(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(12.0),
+      height: 250,
       child: ListView(
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
+        // padding: EdgeInsets.all(12),
+        // physics: NeverScrollableScrollPhysics(),
         children: List.generate(
           controller.adList.length,
           (index) {
             final item = controller.adList[index];
-            return Dismissible(
-              background: Container(
-                color: Colors.red,
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Row(
-                    textDirection: TextDirection.rtl,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Icon(Icons.delete, color: Colors.white),
-                      SizedBox(width: 20),
-                      Text('حذف', style: fontStyle),
-                    ],
-                  ),
-                ),
-              ),
-              secondaryBackground: Container(
-                color: Colors.blue,
-                child: Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Row(
-                    textDirection: TextDirection.rtl,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(Icons.favorite, color: Colors.white),
-                      SizedBox(width: 20),
-                      Text('إضافة إلى المفضلة', style: fontStyle),
-                    ],
-                  ),
-                ),
-              ),
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(const Radius.circular(10.0)),
@@ -116,6 +92,7 @@ class ProfileView extends GetView<ProfileController> {
                   ],
                 ),
                 child: ListTile(
+                  onTap: () => Get.to(() => AdView(item)),
                   isThreeLine: true,
                   leading: CircleAvatar(
                     backgroundColor: Colors.blue,
@@ -127,34 +104,6 @@ class ProfileView extends GetView<ProfileController> {
                       Text('${item.content!.substring(0, 20).toString()}'),
                 ),
               ),
-              onDismissed: (direction) {
-                if (direction == DismissDirection.startToEnd) {
-                  print("Add to favorite list");
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("${item.title} Removed."),
-                    backgroundColor: Colors.red,
-                  ));
-
-                  /// todo send delete request to backend
-
-                  print("Delete From Cart List");
-                }
-              },
-              confirmDismiss: (DismissDirection direction) async {
-                if (direction == DismissDirection.endToStart) {
-                  print("Add to favorite list");
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("${item.title} Added."),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                } else {
-                  await showAlert(context, item, controller);
-                }
-              },
-              key: Key('item ${controller.adList[index]}'),
             );
           },
         ),
@@ -182,19 +131,18 @@ class ProfileView extends GetView<ProfileController> {
             child: Column(
               children: [
                 Container(
-                  color: Colors.red,
-                  child: GetBuilder<LoginController>(
-                      init: LoginController(),
-                      builder: (value) {
-                        return Text(
-                          // "${value.user!.email}",
-                          "User Name",
-                          style: fontStyle.copyWith(
-                              color: Colors.white,
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold),
-                        );
-                      }),
+                  height: 30,
+                ),
+                Container(
+                  // color: Colors.red,
+                  child: Text(
+                    "${controller.user!.email}",
+                    // "User Name",
+                    style: fontStyle.copyWith(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),
@@ -253,3 +201,91 @@ Future showAlert(BuildContext context, Ad ad, ProfileController pc) async {
     },
   );
 }
+
+/// crash code  ==================
+//              return Dismissible(
+//               background: Container(
+//                 color: Colors.red,
+//                 child: Padding(
+//                   padding: const EdgeInsets.all(15),
+//                   child: Row(
+//                     textDirection: TextDirection.rtl,
+//                     mainAxisAlignment: MainAxisAlignment.end,
+//                     children: [
+//                       Icon(Icons.delete, color: Colors.white),
+//                       SizedBox(width: 20),
+//                       Text('حذف', style: fontStyle),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//               secondaryBackground: Container(
+//                 color: Colors.blue,
+//                 child: Padding(
+//                   padding: const EdgeInsets.all(15),
+//                   child: Row(
+//                     textDirection: TextDirection.rtl,
+//                     mainAxisAlignment: MainAxisAlignment.start,
+//                     children: [
+//                       Icon(Icons.favorite, color: Colors.white),
+//                       SizedBox(width: 20),
+//                       Text('إضافة إلى المفضلة', style: fontStyle),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//               child: Container(
+//                 decoration: BoxDecoration(
+//                   borderRadius: BorderRadius.all(const Radius.circular(10.0)),
+//                   color: Colors.white,
+//                   border: Border.all(color: Colors.black26, width: 0.4),
+//                   boxShadow: [
+//                     BoxShadow(
+//                         // color: Theme.of(context).primaryColor.withOpacity(0.1),
+//                         // color: Theme.of(context).shadowColor.withOpacity(0.15),
+//                         color: Colors.black12,
+//                         blurRadius: 22,
+//                         offset: Offset(-10, 5)),
+//                   ],
+//                 ),
+//                 child: ListTile(
+//                   isThreeLine: true,
+//                   leading: CircleAvatar(
+//                     backgroundColor: Colors.blue,
+//                     child: Text('${item.title!.substring(0, 1).toString()}'),
+//                     foregroundColor: Colors.white,
+//                   ),
+//                   title: Text('${item.title}'),
+//                   subtitle:
+//                       Text('${item.content!.substring(0, 20).toString()}'),
+//                 ),
+//               ),
+//               onDismissed: (direction) {
+//                 if (direction == DismissDirection.startToEnd) {
+//                   print("Add to favorite list");
+//                 } else {
+//                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//                     content: Text("${item.title} Removed."),
+//                     backgroundColor: Colors.red,
+//                   ));
+//
+//                   /// todo send delete request to backend
+//
+//                   print("Delete From Cart List");
+//                 }
+//               },
+//               confirmDismiss: (DismissDirection direction) async {
+//                 if (direction == DismissDirection.endToStart) {
+//                   print("Add to favorite list");
+//                   ScaffoldMessenger.of(context).showSnackBar(
+//                     SnackBar(
+//                       content: Text("${item.title} Added."),
+//                       backgroundColor: Colors.green,
+//                     ),
+//                   );
+//                 } else {
+//                   await showAlert(context, item, controller);
+//                 }
+//               },
+//               key: Key('item ${controller.adList[index]}'),
+//             );

@@ -6,24 +6,22 @@ import 'package:mazad_app/services/ProfileService.dart';
 class ProfileController extends GetxController {
   final profileService = ProfileService();
 
-  List<Ad> _adList = <Ad>[];
+  List<Ad> adList = <Ad>[];
 
   int userId = 4;
+  User? user = User();
 
-  List<Ad> get adList => _adList; // get User Ads
   Future<List<Ad>?> getAdsListForUser(int userId) async {
     print("getAdsListForUser ");
-    LoginController s = LoginController();
-    var user = await s.getUser();
-    userId = user!.id;
-    // print(user.id);
+    userId = user!.id!;
+    print(user!.id);
 
     try {
       await profileService.getAdsForUser(userId).then((value) {
-        _adList.clear();
+        adList.clear();
 
-        _adList = value!.map((element) => Ad.fromJson(element)).toList();
-        _adList.forEach((Ad element) {
+        adList = value!.map((element) => Ad.fromJson(element)).toList();
+        adList.forEach((Ad element) {
           // print("${element.title}");
         });
         // print("FILTER LIST ${_Ads.length}");
@@ -33,13 +31,14 @@ class ProfileController extends GetxController {
     }
     update();
 
-    return _adList;
+    return adList;
   }
 
   @override
   void onInit() async {
     // TODO: implement onInit
     super.onInit();
+    user = await Get.find<LoginController>().getUser();
     await getAdsListForUser(userId);
   }
 }

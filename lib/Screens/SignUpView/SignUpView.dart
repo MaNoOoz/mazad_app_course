@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:mazad_app/Screens/LoginView/LoginView.dart';
 import 'package:mazad_app/controllers/AuthController/SignUpController.dart';
 import 'package:mazad_app/data/LocalStorage.dart';
 import 'package:mazad_app/helpers/Constants.dart';
-
 import 'package:mazad_app/widgets/custom_text_form_field.dart';
 
 class SignUpView extends GetView<SignUpContoller> {
@@ -128,7 +126,6 @@ class SignUpView extends GetView<SignUpContoller> {
 
                   if (_formKey.currentState!.validate()) {
                     await controller.createNewUser2();
-
                   }
                 },
                 child: Text(
@@ -164,7 +161,8 @@ class SignUpView extends GetView<SignUpContoller> {
                 child: Center(
                   child: Text(
                     " لديك حساب ؟",
-                    style: fontStyle.copyWith(color: kPrimaryColor, fontSize: 20),
+                    style:
+                        fontStyle.copyWith(color: kPrimaryColor, fontSize: 20),
                     textDirection: TextDirection.rtl,
                   ),
                 ),

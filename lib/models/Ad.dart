@@ -4,24 +4,30 @@
 
 import 'dart:convert';
 
+import 'UploadModel.dart';
+
 Ad adFromJson(String str) => Ad.fromJson(json.decode(str));
 
 String adToJson(Ad data) => json.encode(data.toJson());
 
+User userFromJson(String str) => User.fromJson(json.decode(str));
+
+String userToJson(User data) => json.encode(data.toJson());
+
 class Ad {
   Ad({
-    required this.id,
-    required this.title,
-    required this.content,
-    required this.user,
-    required this.category,
-    required this.publishedAt,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.adImages,
-    required this.tags,
-    required this.comments,
-    required this.likes,
+    this.id,
+    this.title,
+    this.content,
+    this.user,
+    this.category,
+    this.publishedAt,
+    this.createdAt,
+    this.updatedAt,
+    this.adImages,
+    this.tags,
+    this.comments,
+    this.likes,
   });
 
   int? id;
@@ -38,20 +44,28 @@ class Ad {
   List<Comment>? comments;
 
   factory Ad.fromJson(Map<String, dynamic> json) => Ad(
-        id: json["id"]== null ? null :json["id"],
-        title: json["title"]== null ? null :json["title"],
-        content: json["content"]== null ? null :json["content"],
-        likes: json["likes"]== null ? null :json["likes"],
+        id: json["id"] == null ? null : json["id"],
+        title: json["title"] == null ? null : json["title"],
+        content: json["content"] == null ? null : json["content"],
+        likes: json["likes"] == null ? null : json["likes"],
         user: json["user"] == null ? null : User.fromJson(json["user"]),
         category: json["category"] == null
             ? null
             : Category.fromJson(json["category"]),
-        publishedAt: DateTime.parse(json["published_at"]== null ? null :json["published_at"],),
-        createdAt: DateTime.parse(json["created_at"]== null ? null :json["created_at"],),
-        updatedAt: DateTime.parse(json["updated_at"]== null ? null :json["updated_at"],),
-        adImages: List<AdImage>.from(json["ad_images"].map((x) => AdImage.fromJson(x))),
+        publishedAt: DateTime.parse(
+          json["published_at"] == null ? null : json["published_at"],
+        ),
+        createdAt: DateTime.parse(
+          json["created_at"] == null ? null : json["created_at"],
+        ),
+        updatedAt: DateTime.parse(
+          json["updated_at"] == null ? null : json["updated_at"],
+        ),
+        adImages: List<AdImage>.from(
+            json["ad_images"].map((x) => AdImage.fromJson(x))),
         tags: List<Tag>.from(json["tags"].map((x) => Tag.fromJson(x))),
-        comments: List<Comment>.from(json["comments"].map((x) => Comment.fromJson(x))),
+        comments: List<Comment>.from(
+            json["comments"].map((x) => Comment.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -104,42 +118,42 @@ class Tag {
 
 class AdImage {
   AdImage({
-    required this.id,
-    required this.name,
-    required this.alternativeText,
-    required this.caption,
-    required this.width,
-    required this.height,
-    required this.formats,
-    required this.hash,
-    required this.ext,
-    required this.mime,
-    required this.size,
-    required this.url,
-    required this.previewUrl,
-    required this.provider,
-    required this.providerMetadata,
-    required this.createdAt,
-    required this.updatedAt,
+   required this.id,
+   required this.name,
+    this.alternativeText,
+    this.caption,
+    this.width,
+    this.height,
+    this.formats,
+    this.hash,
+    this.ext,
+    this.mime,
+    this.size,
+    this.url,
+    this.previewUrl,
+    this.provider,
+    this.providerMetadata,
+    this.createdAt,
+    this.updatedAt,
   });
 
   int id;
   String name;
-  String alternativeText;
-  String caption;
-  int width;
-  int height;
-  Formats formats;
-  String hash;
-  String ext;
-  String mime;
-  double size;
-  String url;
+  String? alternativeText;
+  String? caption;
+  int? width;
+  int? height;
+  Formats? formats;
+  String? hash;
+  String? ext;
+  String? mime;
+  double? size;
+  String? url;
   dynamic previewUrl;
-  String provider;
+  String? provider;
   dynamic providerMetadata;
-  DateTime createdAt;
-  DateTime updatedAt;
+  String? createdAt;
+  String? updatedAt;
 
   factory AdImage.fromJson(Map<String, dynamic> json) => AdImage(
         id: json["id"],
@@ -157,8 +171,8 @@ class AdImage {
         previewUrl: json["previewUrl"],
         provider: json["provider"],
         providerMetadata: json["provider_metadata"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"],
+        updatedAt: json["updated_at"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -168,7 +182,7 @@ class AdImage {
         "caption": caption,
         "width": width,
         "height": height,
-        "formats": formats.toJson(),
+    "formats": formats == null ? null : formats!.toJson(),
         "hash": hash,
         "ext": ext,
         "mime": mime,
@@ -177,26 +191,12 @@ class AdImage {
         "previewUrl": previewUrl,
         "provider": provider,
         "provider_metadata": providerMetadata,
-        "created_at": createdAt.toIso8601String(),
-        "updated_at": updatedAt.toIso8601String(),
+        "created_at": createdAt,
+        "updated_at": updatedAt,
       };
 }
 
-class Formats {
-  Formats({
-    required this.thumbnail,
-  });
 
-  Thumbnail thumbnail;
-
-  factory Formats.fromJson(Map<String, dynamic> json) => Formats(
-        thumbnail: Thumbnail.fromJson(json["thumbnail"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "thumbnail": thumbnail.toJson(),
-      };
-}
 
 class Thumbnail {
   Thumbnail({
@@ -248,37 +248,54 @@ class Thumbnail {
 
 class Category {
   Category({
-    required this.id,
-    required this.title,
-    required this.categoryImage,
-    required this.publishedAt,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id,
+    this.title,
+    this.categoryImage,
+    this.publishedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   int? id;
   String? title;
   String? categoryImage;
   DateTime? publishedAt;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  String? createdAt;
+  String? updatedAt;
+
+  Category copyWith({
+    int? id,
+    String? title,
+    String? categoryImage,
+    DateTime? publishedAt,
+    String? createdAt,
+    String? updatedAt,
+  }) =>
+      Category(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        categoryImage: categoryImage ?? this.categoryImage,
+        publishedAt: publishedAt ?? this.publishedAt,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
         id: json["id"],
         title: json["title"],
         categoryImage: json["CategoryImage"],
         publishedAt: DateTime.parse(json["published_at"]),
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"],
+        updatedAt: json["updated_at"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
         "CategoryImage": categoryImage,
-        "published_at": publishedAt!.toIso8601String(),
-        "created_at": createdAt!.toIso8601String(),
-        "updated_at": updatedAt!.toIso8601String(),
+        "published_at": publishedAt?.toIso8601String(),
+        "created_at": createdAt,
+        "updated_at": updatedAt,
       };
 }
 
@@ -316,24 +333,25 @@ class Comment {
 
 class User {
   User({
-    required this.id,
-    required this.username,
-    required this.email,
-    required this.provider,
-    required this.confirmed,
-    required this.blocked,
-    required this.role,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id,
+    this.username,
+    this.email,
+    this.provider,
+    this.confirmed,
+    this.blocked,
+    // this.role,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  int id;
+  int? id;
   String? username;
   String? email;
   String? provider;
   bool? confirmed;
   dynamic blocked;
-  int? role;
+
+  // Role? role;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -344,7 +362,8 @@ class User {
         provider: json["provider"] == null ? null : json["provider"],
         confirmed: json["confirmed"] == null ? null : json["confirmed"],
         blocked: json["blocked"],
-        role: json["role"] == null ? null : json["role"],
+        // role: json["role"] == null ? null : json["role"],
+        // role: json["role"] == null ? null : Role.fromJson(json["role"]),
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
@@ -360,8 +379,38 @@ class User {
         "provider": provider == null ? null : provider,
         "confirmed": confirmed == null ? null : confirmed,
         "blocked": blocked,
-        "role": role == null ? null : role,
+        // "role": role == null ? null : role,
+        // "role": role == null ? null : role!.toJson(),
+
         "created_at": createdAt == null ? null : createdAt!.toIso8601String(),
         "updated_at": updatedAt == null ? null : updatedAt!.toIso8601String(),
+      };
+}
+
+class Role {
+  Role({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.type,
+  });
+
+  int id;
+  String name;
+  String description;
+  String type;
+
+  factory Role.fromJson(Map<String, dynamic> json) => Role(
+        id: json["id"] == null ? null : json["id"],
+        name: json["name"] == null ? null : json["name"],
+        description: json["description"] == null ? null : json["description"],
+        type: json["type"] == null ? null : json["type"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id == null ? null : id,
+        "name": name == null ? null : name,
+        "description": description == null ? null : description,
+        "type": type == null ? null : type,
       };
 }

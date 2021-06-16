@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:mazad_app/data/LocalStorage.dart';
 import 'package:mazad_app/helpers/Constants.dart';
-import 'package:http/http.dart' as http;
 
 class SignUpContoller extends GetxController {
   static SignUpContoller get to => Get.find();

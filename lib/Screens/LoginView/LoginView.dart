@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:mazad_app/Screens/SignUpView/SignUpView.dart';
 import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
-import 'package:mazad_app/helpers/StarterView.dart';
 import 'package:mazad_app/widgets/custom_text_form_field.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -106,8 +105,8 @@ class LoginView extends GetView<LoginController> {
                   _formKey.currentState!.save();
 
                   if (_formKey.currentState!.validate()) {
-                     await controller.loginUser2();
-                     // await controller.loginUser2();
+                    await controller.signInUser();
+                    // await controller.loginUser2();
                     // print(" loginUser Pressed login value is  : $a");
                     // if (a == true) {
                     //   Get.to(() => StarterView());
@@ -131,7 +130,8 @@ class LoginView extends GetView<LoginController> {
                 child: Center(
                   child: Text(
                     "مستخدم جديد ؟",
-                    style: fontStyle.copyWith(color: kPrimaryColor, fontSize: 20),
+                    style:
+                        fontStyle.copyWith(color: kPrimaryColor, fontSize: 20),
                   ),
                 ),
               ),

@@ -4,9 +4,6 @@ import 'package:mazad_app/controllers/NavController/NavController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 
 class BottomNav extends GetView<NavController> {
-
-
-
   Widget bottomNavBar() {
     return BottomNavigationBar(
       items: [
@@ -51,11 +48,10 @@ class BottomNav extends GetView<NavController> {
       onTap: (index) {
         // print(index);
         controller.changeScreen(index);
-
       },
       selectedItemColor: kPrimaryColor,
-      selectedLabelStyle: fontStyle,
-      unselectedLabelStyle: fontStyle.copyWith(color: Colors.black),
+      selectedLabelStyle: fontStyle.copyWith(fontSize: 17),
+      unselectedLabelStyle: fontStyle.copyWith(color: Colors.black,fontSize: 16),
     );
   }
 

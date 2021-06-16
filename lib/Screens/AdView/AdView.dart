@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:mazad_app/controllers/AdViewContoller/AdViewContoller.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class AdView extends GetView<AdViewContoller> {
   final Ad model;
@@ -18,6 +19,7 @@ class AdView extends GetView<AdViewContoller> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      key: UniqueKey(),
       // resizeToAvoidBottomInset: true,
       // extendBody: false,
       appBar: AppBar(
@@ -25,7 +27,7 @@ class AdView extends GetView<AdViewContoller> {
         // status bar color
         brightness: Brightness.light,
         elevation: 0,
-        title: Text("${model.title.toString()}"),
+        title: Text("${model.title.toString()}",style: fontStyle.copyWith(color: Colors.white,fontSize: 16),),
         actions: [
           IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.share))
         ],
@@ -183,6 +185,11 @@ class AdView extends GetView<AdViewContoller> {
   }
 
   Widget header() {
+    var time2 = timeago.format(
+      model.updatedAt!,
+      locale: 'ar',
+    );
+
     return Card(
         child: Container(
       padding: EdgeInsets.all(10),
@@ -208,17 +215,19 @@ class AdView extends GetView<AdViewContoller> {
                 ),
               ),
               Spacer(),
-              AutoSizeText.rich(TextSpan(style: fontStyle, children: [
+              AutoSizeText.rich(
                 TextSpan(
-                  text: "منذ ",
+                  style: fontStyle.copyWith(fontSize: 14,color: Colors.black45),
+                  children: [
+                    TextSpan(
+                      text: "منذ ",
+                    ),
+                    TextSpan(
+                      text: "${time2} ",
+                    ),
+                  ],
                 ),
-                TextSpan(
-                  text: "${model.createdAt!.toLocal().day.toString()} ",
-                ),
-                TextSpan(
-                  text: "أيام ",
-                ),
-              ])),
+              ),
             ],
           ),
           Container(
@@ -534,7 +543,7 @@ class AdView extends GetView<AdViewContoller> {
                           ),
                           Text.rich(
                             TextSpan(
-                              style: fontStyle,
+                              style: fontStyle.copyWith(color: Colors.black45,fontSize: 14),
                               children: [
                                 TextSpan(
                                     text:
@@ -551,7 +560,7 @@ class AdView extends GetView<AdViewContoller> {
                                 children: [
                                   TextSpan(
                                       text: "${model.comments?[i].id ?? "1"}",
-                                      style: fontStyle)
+                                      style: fontStyle.copyWith(color: Colors.black45,fontSize: 14))
                                 ],
                               ),
                             ),
@@ -612,7 +621,7 @@ class AdView extends GetView<AdViewContoller> {
                     margin: EdgeInsets.all(1),
                     child: Text(
                       "${model.tags![i].tagName}",
-                      style: fontStyle,
+                      style: fontStyle.copyWith(color: Colors.white,fontSize: 14),
                     ),
                   ),
                 ),
