@@ -303,7 +303,7 @@ class NewAdView extends GetView<NewAdController> {
               color: kPrimaryColor,
               onPressed: () async {
                 // await controller.uploadImage(controller.files);
-                var q = await controller.adFromInput();
+                // var q = await controller.adFromInput();
                 // Logger().e(q.images![0].id);
                 // Logger().e(q.toJson());
                 // await controller.newAddService.uploadImages(controller.files2);
@@ -312,7 +312,7 @@ class NewAdView extends GetView<NewAdController> {
 
                 if (controller.formKey.currentState!.validate()) {
                   // await controller.adFromInput();
-                  // await controller.sendToServer();
+                  await controller.sendToServer();
 
                 }
               },

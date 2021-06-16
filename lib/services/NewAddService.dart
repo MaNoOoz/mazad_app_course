@@ -28,7 +28,7 @@ class NewAdService {
       'Content-Type': 'application/json'
     };
     final String encodedData = json.encode(body);
-    print(encodedData);
+    Logger().d(encodedData);
 
     var response = await http
         .post(Uri.parse("$url"), headers: headers, body: encodedData)

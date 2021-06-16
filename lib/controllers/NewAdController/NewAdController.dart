@@ -175,7 +175,6 @@ class NewAdController extends GetxController {
     }
     // logger.d(list.length);
 
-
     catTitle = selectedCat;
     //  get User name
     username = await Get.find<LoginController>()
@@ -208,7 +207,7 @@ class NewAdController extends GetxController {
     var newAd = await adFromInput();
     var mapFromObject = newAd.toJson(); //todo uncommit
     // logger.d(mapFromObject.length);
-    // await _newAdService.createNewAd(mapFromObject);
+    await newAddService.createNewAd(mapFromObject);
   }
 
   List<String>? _dropDownMenuItemsStrings = <String>[];
