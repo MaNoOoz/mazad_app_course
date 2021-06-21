@@ -102,9 +102,12 @@ class LoginView extends GetView<LoginController> {
                 ),
                 color: kPrimaryColor,
                 onPressed: () async {
+                  Get.put<LoginController>(LoginController());
+
                   _formKey.currentState!.save();
 
                   if (_formKey.currentState!.validate()) {
+                    Get.put<LoginController>(LoginController());
                     await controller.signInUser();
                     // await controller.loginUser2();
                     // print(" loginUser Pressed login value is  : $a");

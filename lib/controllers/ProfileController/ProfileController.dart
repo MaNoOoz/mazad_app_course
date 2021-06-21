@@ -41,4 +41,5 @@ class ProfileController extends GetxController {
     user = await Get.find<LoginController>().getUser();
     await getAdsListForUser(userId);
   }
+
 }

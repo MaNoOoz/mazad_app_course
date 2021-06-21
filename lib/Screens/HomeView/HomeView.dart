@@ -32,14 +32,17 @@ class HomeView extends GetView<HomeViewController> {
             return Column(
               children: [
                 _buildTabBar(),
+                SizedBox(
+                  height: 30,
+                ),
                 _bulidBody(),
                 Container(
                   height: 10,
                 ),
-                Container(
-                  height: 10,
-                  color: Colors.blue.shade300,
-                ),
+                // Container(
+                //   height: 10,
+                //   color: Colors.blue.shade300,
+                // ),
               ],
             );
           },
@@ -89,7 +92,7 @@ class HomeView extends GetView<HomeViewController> {
           : Expanded(
               child: Container(
                 // height: 500,
-                color: Colors.white,
+                color: Colors.blue.shade50,
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: controller.adsListFilter.length,
@@ -119,7 +122,7 @@ class HomeView extends GetView<HomeViewController> {
       // height: 100,
       // width: 300,
       child: Center(
-        child: Text("لا يوجد إعلانات"),
+        child: Text("لا يوجد إعلانات",style: fontStyle.copyWith(fontSize: 20),),
       ),
     );
   }

@@ -32,15 +32,15 @@ class AdCard extends StatelessWidget {
         width: double.infinity,
         margin: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 10),
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          border: Border.all(color: Theme.of(context).primaryColor, width: 1.0),
-          boxShadow: [
-            BoxShadow(
-                color: Theme.of(context).primaryColor.withOpacity(0.1),
-                blurRadius: 1,
-                offset: Offset(-10, 12)),
-          ],
+          // color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          // border: Border.all(color: Theme.of(context).primaryColor, width: 1.0),
+          // boxShadow: [
+            // BoxShadow(
+            //     color: Colors.black12,
+                // blurRadius: 11,
+                // offset: Offset(-12, 12)),
+          // ],
         ),
         child: Container(
           height: 200,
@@ -61,7 +61,7 @@ class AdCard extends StatelessWidget {
               header(screenWidth, screenH, model),
               Container(
                 height: 1,
-                color: Colors.black26,
+                color: Colors.black12,
               ),
               Expanded(
                 child: Padding(
@@ -85,7 +85,7 @@ class AdCard extends StatelessWidget {
               ),
               Container(
                 height: 1,
-                color: Colors.black26,
+                color: Colors.black12,
               ),
               fotter(
                 screenWidth,
@@ -132,7 +132,7 @@ class AdCard extends StatelessWidget {
     return Expanded(
       child: Container(
         color: Colors.white,
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           textDirection: TextDirection.rtl,
@@ -147,13 +147,14 @@ class AdCard extends StatelessWidget {
                 children: <Widget>[
                   AutoSizeText(
                     "${model.title}",
-                    maxFontSize: 22,
+                    maxFontSize: 20,
+                    maxLines: 3,
                     textDirection: TextDirection.rtl,
                     overflow: TextOverflow.ellipsis,
                     // softWrap: false,
                     style: fontStyle.copyWith(
-                        color: kPrimaryColor,
-                        fontWeight: FontWeight.normal,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.bold,
                         fontSize: 60),
                   ),
                   SizedBox(height: 5),
@@ -175,7 +176,7 @@ class AdCard extends StatelessWidget {
         // color: Theme.of(context).primaryColor,
         color: Colors.white,
 
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        // borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       height: 25,
       child: Row(
@@ -194,7 +195,7 @@ class AdCard extends StatelessWidget {
                     // text: "${model.createdAt.toString()}",
                     text: "${time2}",
                     style:
-                        fontStyle.copyWith(color: Colors.black45, fontSize: 14),
+                    fontStyle.copyWith(color: Colors.black45, fontSize: 14),
                   ),
                   // TextSpan(
                   //   text: " ساعة",
@@ -224,77 +225,74 @@ class AdCard extends StatelessWidget {
 
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      height: 40,
-      child: Center(
-        child: Container(
-          // color: Colors.red,
-          width: screenWidth,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                flex: 1,
-                child: Center(
-                  child: Text.rich(
-                    TextSpan(
-                      children: [
-                        WidgetSpan(
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Icon(
-                              Icons.favorite,
-                              size: 22,
-                              color: Colors.black26,
-                            ),
-                          ),
+      height: 30,
+      child: Container(
+        color: Colors.white,
+        padding: EdgeInsets.all(4),
+        width: screenWidth,
+        child: Row(
+          textDirection: TextDirection.rtl,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              flex: 1,
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    WidgetSpan(
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Icon(
+                          Icons.favorite_border,
+                          size: 22,
+                          color: Colors.black12,
                         ),
-                        TextSpan(
-                          text: "  ( ${model.likes!.length} )  ",
-                          style: fontStyle.copyWith(
-                              color: Colors.blue, fontSize: 16),
-                        ),
-                      ],
+                      ),
                     ),
-                    textDirection: TextDirection.rtl,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              Expanded(
-                flex: 2,
-                child: Center(
-                  child: Text.rich(
                     TextSpan(
-                      children: [
-                        WidgetSpan(
-                          child: GestureDetector(
-                            child: Icon(
-                              Icons.comment,
-                              size: 22,
-                              color: Colors.black26,
-                            ),
-                          ),
-                        ),
-                        TextSpan(
-                          text: "  ( ${model.comments!.length} )  ",
-                          style: fontStyle.copyWith(
-                              color: Colors.blue, fontSize: 16),
-                        ),
-                      ],
+                      text: "  ( ${model.likes!.length} )  ",
+                      style: fontStyle.copyWith(
+                          color: Colors.blue, fontSize: 16),
                     ),
-                    textDirection: TextDirection.rtl,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                  ),
+                  ],
                 ),
+                textDirection: TextDirection.rtl,
+                textAlign: TextAlign.start,
               ),
-            ],
-          ),
+            ),
+            Spacer(),
+            Expanded(
+              flex: 1,
+              child: Container(),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    WidgetSpan(
+                      child: GestureDetector(
+                        child: Icon(
+                          Icons.mode_comment_outlined,
+                          size: 22,
+                          color: Colors.black12,
+                        ),
+                      ),
+                    ),
+                    TextSpan(
+                      text: "  ( ${model.comments!.length} )  ",
+                      style: fontStyle.copyWith(
+                          color: Colors.blue, fontSize: 16),
+                    ),
+                  ],
+                ),
+                textDirection: TextDirection.rtl,
+                textAlign: TextAlign.end,
+                maxLines: 1,
+              ),
+            ),
+          ],
         ),
       ),
     );

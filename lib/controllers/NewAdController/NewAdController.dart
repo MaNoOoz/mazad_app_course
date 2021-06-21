@@ -17,8 +17,7 @@ class NewAdController extends GetxController {
   var logger = Logger();
 
   NewAdService newAddService = NewAdService();
-  final HomeViewController homeViewController =
-      Get.put<HomeViewController>(HomeViewController());
+  final HomeViewController homeViewController = Get.put<HomeViewController>(HomeViewController());
   String title = '';
   String content = "";
   List<Tag> tags = <Tag>[];

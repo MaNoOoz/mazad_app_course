@@ -8,6 +8,7 @@ import 'package:mazad_app/Screens/ProfileView/ProfileView.dart';
 import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/controllers/NavController/NavController.dart';
 import 'package:mazad_app/controllers/NewAdController/NewAdController.dart';
+import 'package:mazad_app/controllers/ProfileController/ProfileController.dart';
 import 'package:mazad_app/data/LocalStorage.dart';
 
 import 'Constants.dart';
@@ -32,7 +33,13 @@ class StarterView extends StatelessWidget {
                   builder: (c) {
                     return IconButton(
                         onPressed: () async {
-                          await Get.offAllNamed(Routers.login);
+                           // Get.offAllNamed(Routers.login);
+                           // Get.toNamed(Routers.login);
+                           // Get.offAndToNamed(Routers.login);
+                           var userID = c.user!.id;
+                           Get.put<ProfileController>(ProfileController()).getAdsListForUser(userID!);
+
+
                         },
                         icon: Icon(Icons.login_rounded));
                   }),
@@ -80,7 +87,12 @@ class StarterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // var isLogged = (value.user);
+    // var isUserThere = Get.find<LoginController>().userLogged.value == false;
+    // return isUserThere ? LoginView() : baseView();
+    Get.put<LoginController>(LoginController());
     var isUserThere = Get.find<LoginController>().userLogged.value == false;
     return isUserThere ? LoginView() : baseView();
+    //
+    // return baseView();
   }
 }

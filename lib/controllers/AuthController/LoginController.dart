@@ -18,7 +18,7 @@ class LoginController extends GetxController {
   signInUser() async {
     var ok = await authService.userLogin(identifier, password);
     if (ok) {
-      Get.offAllNamed(Routers.initialRoute);
+      Get.offAndToNamed(Routers.initialRoute);
     }else{
       Get.snackbar(
         'Somthing Wrong',
