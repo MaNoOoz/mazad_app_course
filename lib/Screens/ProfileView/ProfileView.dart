@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:flutter_card_swipper/widgets/flutter_page_indicator/flutter_page_indicator.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:mazad_app/Screens/AdView/AdView.dart';
 import 'package:mazad_app/controllers/ProfileController/ProfileController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
-import 'package:mazad_app/models/Ad.dart';
 
 class ProfileView extends GetView<ProfileController> {
   @override
@@ -58,12 +58,10 @@ class ProfileView extends GetView<ProfileController> {
                 ? Container(
                     child: Center(child: Text("لايوجد إعلانات")),
                   )
-                :
+                : LimitedBox(maxHeight: 200, child: adsList(context)),
 
-            LimitedBox(maxHeight: 200, child: adsList(context)),
-            // LimitedBox(maxHeight: 400, child: adsList(context)),
             SizedBox(
-              height: 100,
+              height: 20,
             ),
           ],
         ),
@@ -73,7 +71,7 @@ class ProfileView extends GetView<ProfileController> {
 
   Widget adsList(BuildContext context) {
     return GetBuilder<ProfileController>(builder: (c) {
-      print(c.adList.length);
+      Logger().d(c.adList.length);
       return Padding(
         padding: const EdgeInsets.only(bottom: 18.0),
         child: Swiper(
@@ -83,7 +81,6 @@ class ProfileView extends GetView<ProfileController> {
           itemWidth: 300.00,
           itemHeight: 100.00,
           indicatorLayout: PageIndicatorLayout.NONE,
-
           itemBuilder: (BuildContext context, int index) {
             var item = controller.adList[index];
             var image = "$BaseUrl${controller.adList[index].adImages![0].url}";
@@ -116,7 +113,6 @@ class ProfileView extends GetView<ProfileController> {
                         isThreeLine: true,
                         leading: CircleAvatar(
                           backgroundColor: Colors.blue,
-
                           foregroundColor: Colors.white,
                           backgroundImage: NetworkImage(
                             image,
@@ -136,48 +132,6 @@ class ProfileView extends GetView<ProfileController> {
     });
   }
 
-  Widget adsList2(BuildContext context) {
-    return GetBuilder<ProfileController>(builder: (c) {
-      print(c.adList.length);
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 18.0),
-        child: ListView.builder(
-          itemCount: controller.adList.length,
-          itemBuilder: (BuildContext context, int index) {
-            var item = controller.adList[index];
-            var image = "$BaseUrl${controller.adList[index].adImages![0].url}";
-
-            return Container(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () async {
-                    await Get.to(() => AdView(item));
-                    controller.adList.clear();
-                  },
-                  child: Container(
-                      color: Colors.red,
-                      child: Column(
-                        children: [
-                          // Expanded(
-                          //     child: Container(
-                          //   color: Colors.green,
-                          //   child: Image.network(
-                          //     image,
-                          //     fit: BoxFit.fill,
-                          //   ),
-                          // )),
-                          Expanded(child: Placeholder()),
-                        ],
-                      )),
-                ),
-              ),
-            );
-          },
-        ),
-      );
-    });
-  }
 
   Widget wallImage(double screenW) {
     return Container(
@@ -243,33 +197,6 @@ class ClippingClass extends CustomClipper<Path> {
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
-Future showAlert(BuildContext context, Ad ad, ProfileController pc) async {
-  return await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: const Text("Delete Confirmation"),
-        content: const Text("Are you sure you want to delete this item?"),
-        actions: <Widget>[
-          FlatButton(
-              onPressed: () async {
-                Navigator.of(context).pop(true);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text("${ad.title} Removed."),
-                  backgroundColor: Colors.red,
-                ));
-              },
-              child: const Text("Delete")),
-          FlatButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text("Cancel"),
-          ),
-        ],
-      );
-    },
-  );
-}
-
 /// crash code  ==================
 //              return Dismissible(
 //               background: Container(
@@ -330,7 +257,7 @@ Future showAlert(BuildContext context, Ad ad, ProfileController pc) async {
 //               ),
 //               onDismissed: (direction) {
 //                 if (direction == DismissDirection.startToEnd) {
-//                   print("Add to favorite list");
+//                   Logger().d("Add to favorite list");
 //                 } else {
 //                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
 //                     content: Text("${item.title} Removed."),
@@ -339,12 +266,12 @@ Future showAlert(BuildContext context, Ad ad, ProfileController pc) async {
 //
 //                   /// todo send delete request to backend
 //
-//                   print("Delete From Cart List");
+//                   Logger().d("Delete From Cart List");
 //                 }
 //               },
 //               confirmDismiss: (DismissDirection direction) async {
 //                 if (direction == DismissDirection.endToStart) {
-//                   print("Add to favorite list");
+//                   Logger().d("Add to favorite list");
 //                   ScaffoldMessenger.of(context).showSnackBar(
 //                     SnackBar(
 //                       content: Text("${item.title} Added."),

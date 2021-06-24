@@ -19,9 +19,9 @@ class NewAdService {
   Future createNewAd(Map<String, dynamic> body) async {
     var url = "$BaseUrl/ads/";
     String userToken = await authService.getLoggedUserId();
-    // print(body);
-    // print(userToken.toString());
-    // print(userToken.runtimeType);
+    // Logger().d(body);
+    // Logger().d(userToken.toString());
+    // Logger().d(userToken.runtimeType);
 
     var headers = {
       'Authorization': 'Bearer $userToken',
@@ -33,14 +33,14 @@ class NewAdService {
     var response = await http
         .post(Uri.parse("$url"), headers: headers, body: encodedData)
         .catchError((dynamic e) {
-      print("Error");
-      print("${e.toString()}");
+      Logger().d("Error");
+      Logger().d("${e.toString()}");
     });
-    print(response.statusCode);
+    Logger().d(response.statusCode);
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print("createNewAd  json result :$data");
+      Logger().d("createNewAd  json result :$data");
     }
   }
 
@@ -65,7 +65,7 @@ class NewAdService {
 
     FormData formData = FormData.fromMap(body);
 
-    print("files count in body in map ${formData.files.length}");
+    Logger().d("files count in body in map ${formData.files.length}");
 
     Response response = await dio.post(url, data: formData, options: Options(headers: headers));
     if (response.statusCode == 200) {
@@ -84,7 +84,7 @@ class NewAdService {
       }
       return listOfImages;
     } else {
-      print("uploadImage  json result :");
+      Logger().d("uploadImage  json result :");
     }
   }
 
@@ -97,8 +97,8 @@ class NewAdService {
        formData.files.addAll([
         MapEntry("files", await MultipartFile.fromFile(file.path,filename: file.path.split("/").last, contentType: MediaType('image', 'jpg'))),
       ]);
-      print(file.path);
-      print(formData.files[0].value);
+      Logger().d(file.path);
+      Logger().d(formData.files[0].value);
     }
     var url = "$BaseUrl/upload/";
     String userToken = await authService.getLoggedUserId();
@@ -122,7 +122,7 @@ class NewAdService {
       }
       return listOfImages;
     } else {
-      print("uploadImage  json result :");
+      Logger().d("uploadImage  json result :");
     }
 
   }

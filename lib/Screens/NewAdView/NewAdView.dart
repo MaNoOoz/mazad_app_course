@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:mazad_app/controllers/NewAdController/NewAdController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
+import 'package:mazad_app/utils/app_state.dart';
 import 'package:photo_view/photo_view.dart';
 
 /// todo : implemnt logic and move it to controller
@@ -18,6 +19,7 @@ class NewAdView extends GetView<NewAdController> {
     Logger().d("files from server " + "${file.length}");
 
     return Scaffold(
+      key: UniqueKey(),
       resizeToAvoidBottomInset: true,
       bottomSheet: _buildBottomSheet(),
       appBar: AppBar(
@@ -38,7 +40,7 @@ class NewAdView extends GetView<NewAdController> {
                 height: 100,
                 // color: Colors.blue,
                 child: GestureDetector(
-                  onTap: () => print("Cliked"),
+                  onTap: () => Logger().d("Cliked"),
                   child: Row(
                     textDirection: TextDirection.rtl,
                     children: [
@@ -135,7 +137,7 @@ class NewAdView extends GetView<NewAdController> {
                                 itemBuilder: (BuildContext context, int index) {
                                   return GestureDetector(
                                       onTap: () {
-                                        print("sans-serif");
+                                        Logger().d("sans-serif");
                                       },
                                       child: ImageItem(c.files2[index]));
                                 },
@@ -252,8 +254,8 @@ class NewAdView extends GetView<NewAdController> {
                       onChanged: (value) {
                         controller.selectedCat = "$value";
                         controller.catTitle = controller.selectedCat;
-                        // print("${controller.catTitle}");
-                        // print("${controller.selectedCat}");
+                        Logger().d("${controller.catTitle}");
+                        // Logger().d("${controller.selectedCat}");
                       },
                       hint: Center(
                         child: Text(
@@ -293,30 +295,35 @@ class NewAdView extends GetView<NewAdController> {
           Expanded(
             flex: 1,
             child: MaterialButton(
-              child: Text(
-                'رفع الإعلان',
-                style: fontStyle.copyWith(color: Colors.white, fontSize: 18),
-              ),
-              shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(10.0),
-              ),
-              color: kPrimaryColor,
-              onPressed: () async {
-                // await controller.uploadImage(controller.files);
-                // var q = await controller.adFromInput();
-                // Logger().e(q.images![0].id);
-                // Logger().e(q.toJson());
-                // await controller.newAddService.uploadImages(controller.files2);
+                child: Obx(
+                  () {
+                    if (controller.appState() == AppState.LOADING) {
+                      return CircularProgressIndicator(
+                        color: Colors.white,
+                      );
+                    }
+                    // if (controller.appState() == AppState.ERROR) {
+                    //   return FlatButton(
+                        // child: Text('مشكلة  حاول مرة أخرى ',style: fontStyle,),
+                    //     onPressed: () async => controller.sendToServer(),
+                    //   );
+                    // }
+                    return Text(
+                      'رفع الإعلان',
+                      style:
+                          fontStyle.copyWith(color: Colors.white, fontSize: 18),
+                    );
+                  },
+                ),
+                shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(10.0),
+                ),
+                color: kPrimaryColor,
+                onPressed:() async{
+                  var  ok = await controller.sendToServer();
+                  if(ok) await controller.showOkMessage();
 
-                controller.formKey.currentState!.save();
-
-                if (controller.formKey.currentState!.validate()) {
-                  // await controller.adFromInput();
-                  await controller.sendToServer();
-
-                }
-              },
-            ),
+                }),
           ),
         ],
       ),
@@ -351,6 +358,7 @@ class NewAdView extends GetView<NewAdController> {
               style: fontStyle,
             ),
             onTap: () async {
+              controller.files2.clear();
               Get.back();
               await controller.chosenImagesMultiFilePicker(context);
               // await controller.chosenImagesSingleImagePicker(ImageSource.gallery);

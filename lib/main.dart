@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:logger/logger.dart';
 import 'package:mazad_app/controllers/ProfileController/ProfileController.dart';
 
 import 'Bindings/Bindings.dart';
@@ -29,6 +30,6 @@ class MyApp extends StatelessWidget {
 
   fetchAll() {
     Get.put<ProfileController>(ProfileController());
-    print("fetchAll");
+    Logger().d("fetchAll");
   }
 }

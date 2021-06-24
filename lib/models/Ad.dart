@@ -301,11 +301,12 @@ class Category {
 
 class Comment {
   Comment({
-    required this.id,
-    required this.commentText,
-    required this.publishedAt,
-    required this.createdAt,
-    required this.updatedAt,
+     this.id,
+     this.commentText,
+     this.publishedAt,
+     this.createdAt,
+     this.updatedAt,
+    // this.user,
   });
 
   int? id;
@@ -313,10 +314,12 @@ class Comment {
   DateTime? publishedAt;
   DateTime? createdAt;
   DateTime? updatedAt;
+  // User? user;
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
         id: json["id"],
         commentText: json["CommentText"] == null ? null : json["CommentText"],
+        // user: json["user"] == null ? null : User.fromJson(json["user"]),
         publishedAt: DateTime.parse(json["published_at"]),
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
@@ -328,6 +331,7 @@ class Comment {
         "published_at": publishedAt!.toIso8601String(),
         "created_at": createdAt!.toIso8601String(),
         "updated_at": updatedAt!.toIso8601String(),
+        // "user": user == null ? null : user!.toJson(),
       };
 }
 
@@ -342,6 +346,7 @@ class User {
     // this.role,
     this.createdAt,
     this.updatedAt,
+    this.comments,
   });
 
   int? id;
@@ -350,6 +355,7 @@ class User {
   String? provider;
   bool? confirmed;
   dynamic blocked;
+  List<Comment>? comments;
 
   // Role? role;
   DateTime? createdAt;
@@ -370,6 +376,10 @@ class User {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
+        comments: json["comments"] == null
+            ? null
+            : List<Comment>.from(
+                json["comments"].map((x) => Comment.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -384,6 +394,9 @@ class User {
 
         "created_at": createdAt == null ? null : createdAt!.toIso8601String(),
         "updated_at": updatedAt == null ? null : updatedAt!.toIso8601String(),
+        "comments": comments == null
+            ? null
+            : List<dynamic>.from(comments!.map((x) => x.toJson())),
       };
 }
 

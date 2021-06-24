@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:mazad_app/Bindings/Routers.dart';
 import 'package:mazad_app/data/LocalStorage.dart';
 import 'package:mazad_app/models/Ad.dart';
@@ -19,7 +20,7 @@ class LoginController extends GetxController {
     var ok = await authService.userLogin(identifier, password);
     if (ok) {
       Get.offAndToNamed(Routers.initialRoute);
-    }else{
+    } else {
       Get.snackbar(
         'Somthing Wrong',
         'Make Sure Login Info Is Correct',
@@ -27,6 +28,7 @@ class LoginController extends GetxController {
         backgroundColor: Colors.red,
       );
     }
+    update();
   }
 
   Future<User?> getUser() async {
@@ -34,7 +36,7 @@ class LoginController extends GetxController {
       User user = await authService.getUserApi();
       _user = user;
     } catch (e) {
-      print(e);
+      Logger().d(e);
     }
     update();
 
@@ -46,14 +48,7 @@ class LoginController extends GetxController {
     // TODO: implement onInit
     super.onInit();
 
-    var checkLogin = storage.readToken();
-    if (checkLogin != null) {
-      userLogged.value = true;
-      print("User Logged : ${userLogged.value}");
-      await getUser();
 
-      update();
-    }
   }
 
   @override

@@ -5,19 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
+import 'package:mazad_app/Bindings/Routers.dart';
 import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/controllers/HomeController/HomeController.dart';
+import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
 import 'package:mazad_app/models/NewAd.dart';
 import 'package:mazad_app/models/UploadModel.dart';
 import 'package:mazad_app/services/NewAddService.dart';
+import 'package:mazad_app/utils/app_state.dart';
 
 class NewAdController extends GetxController {
   static NewAdController to = Get.find();
   var logger = Logger();
 
   NewAdService newAddService = NewAdService();
-  final HomeViewController homeViewController = Get.put<HomeViewController>(HomeViewController());
+  final HomeViewController homeViewController =
+      Get.put<HomeViewController>(HomeViewController());
   String title = '';
   String content = "";
   List<Tag> tags = <Tag>[];
@@ -27,8 +31,9 @@ class NewAdController extends GetxController {
   DateTime publishedAt = DateTime.now();
   String createdBy = "";
   String updatedBy = "";
-  var id;
+  var userId;
   var username;
+  var catId;
 
   // dropdown
   var selectedCat = "";
@@ -44,18 +49,26 @@ class NewAdController extends GetxController {
   List<Upload> ImagesFilesFromServer = [];
   var pathes = [];
   var path;
+  final appState = Rx<AppState>(AppState.IDLE);
 
   /// =======================================================
 
   /// form
   GlobalKey<FormState> get formKey => _formKey;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalObjectKey<FormState> _formKey =
+      GlobalObjectKey<FormState>("_UploadFormState");
 
   /// methods ============================================================
 
   tester() async {
-    // print("A");
+    // Logger().d("A");
     await newAddService.test();
+  }
+
+  cleanControllers() {
+    titleController.text = "";
+    contentController.text = "";
+    tagsController.text = "";
   }
 
   chosenImagesSingleImagePicker(ImageSource imageSource) async {
@@ -65,7 +78,7 @@ class NewAdController extends GetxController {
     final pickedFile = await ImagePicker().getImage(source: imageSource);
     if (pickedFile != null) {
       _image = File(pickedFile.path);
-      // print(_image.path);
+      // Logger().d(_image.path);
       logger.d(_image.path);
 
       files.add(_image);
@@ -107,18 +120,18 @@ class NewAdController extends GetxController {
         String path = file.path;
         pathes.add(path);
         // logger.d("path : ${path}");
-        // print("path : ${path}");
+        // Logger().d("path : ${path}");
         files2.add(file);
       }
       logger.d("files2 leng : ${files2.length}");
 
       // PlatformFile file = result.files.first;
-      // print(file.name);
-      // print(file.bytes);
-      // print(file.size);
-      // print(file.extension);
-      // print(file.path);
-      // print("files2 : ${files2.length}");
+      // Logger().d(file.name);
+      // Logger().d(file.bytes);
+      // Logger().d(file.size);
+      // Logger().d(file.extension);
+      // Logger().d(file.path);
+      // Logger().d("files2 : ${files2.length}");
     } else {
       // User canceled the picker
     }
@@ -133,9 +146,9 @@ class NewAdController extends GetxController {
       ImagesFilesFromServer = await newAddService
           .uploadImage(file)
           .catchError((onError) => printError(info: onError.toString()));
-      // print(ImagesFilesFromServer.length);
+      // Logger().d(ImagesFilesFromServer.length);
     } catch (e) {
-      print(e);
+      Logger().d(e);
     }
     return ImagesFilesFromServer;
   }
@@ -179,7 +192,12 @@ class NewAdController extends GetxController {
     username = await Get.find<LoginController>()
         .getUser()
         .then((value) => value!.username);
-    id = await Get.find<LoginController>().getUser().then((value) => value!.id);
+    userId = await Get.find<LoginController>().getUser().then((value) => value!.id);
+    var catList = Get.find<HomeViewController>().categories;
+
+    var cat = catList.map((e) => e).where((element) => element.title==catTitle).toList();
+    catId = cat.map((e) => e.id.toString());
+    Logger().d("WW"+catId.toString());
 
     // var ImageId = image.id;
     // var ImageUrl = image.url;
@@ -187,9 +205,9 @@ class NewAdController extends GetxController {
     ad = NewAd(
       title: title,
       content: content,
-      user: User(id: id, username: username),
+      user: User(id: userId, username: username),
       tags: tags,
-      category: Category(id: 2, title: catTitle),
+      category: Category(id: catId, title: catTitle),
       comments: comments,
       likes: 50,
       images: list,
@@ -202,11 +220,103 @@ class NewAdController extends GetxController {
     return ad;
   }
 
-  sendToServer() async {
-    var newAd = await adFromInput();
-    var mapFromObject = newAd.toJson(); //todo uncommit
-    // logger.d(mapFromObject.length);
-    await newAddService.createNewAd(mapFromObject);
+  showOkMessage() async {
+    Get.snackbar(
+      "",
+      "",
+      titleText: Text(
+        "تمام",
+        style: fontStyle.copyWith(color: Colors.white),
+      ),
+      messageText: Text(
+        "تم رفع الإعلان بنجاح",
+        style: fontStyle.copyWith(color: Colors.white),
+      ),
+      backgroundColor: Colors.green,
+      icon: Icon(
+        Icons.done_rounded,
+        color: Colors.white,
+      ),
+      snackPosition: SnackPosition.TOP,
+      duration: Duration(seconds: 3),
+      backgroundGradient: LinearGradient(
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        colors: [
+          Colors.green,
+          // Colors.green.shade200,
+          // Colors.green.shade300,
+          // Colors.green.shade400,
+          // Colors.green.shade500,
+          Colors.green.shade800,
+        ],
+      ),
+      colorText: Colors.white,
+    );
+  }
+
+  showNotOkMessage() async {
+    Get.snackbar(
+      "",
+      "",
+      titleText: Text(
+        "خطأ",
+        style: fontStyle.copyWith(color: Colors.white),
+      ),
+      messageText: Text(
+        "يجب عليك إختيار صورة قبل رفع الإعلان",
+        style: fontStyle.copyWith(color: Colors.white),
+      ),
+      backgroundColor: Colors.red,
+      icon: Icon(
+        Icons.error,
+        color: Colors.white,
+      ),
+      snackPosition: SnackPosition.TOP,
+      duration: Duration(seconds: 3),
+      backgroundGradient: LinearGradient(
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        colors: [
+          Colors.red,
+          // Colors.green.shade200,
+          // Colors.green.shade300,
+          // Colors.green.shade400,
+          // Colors.green.shade500,
+          Colors.red.shade800,
+        ],
+      ),
+      colorText: Colors.white,
+    );
+  }
+
+  Future<bool> sendToServer() async {
+    if (files2.length == 0) {
+      showNotOkMessage();
+    }
+    if (formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      try {
+        appState.value = AppState.LOADING;
+
+        var newAd = await adFromInput();
+        var mapFromObject = newAd.toJson(); //todo uncommit
+        // logger.d(mapFromObject.length);
+        await newAddService.createNewAd(mapFromObject);
+        appState.value = AppState.DONE;
+
+        // await showOkMessage();
+        // Get.back();
+        await Get.offAndToNamed(Routers.initialRoute);
+      } on Exception catch (_) {
+        await showNotOkMessage();
+
+        appState.value = AppState.ERROR;
+      }
+      return true;
+    }
+    return false;
   }
 
   List<String>? _dropDownMenuItemsStrings = <String>[];
@@ -214,14 +324,21 @@ class NewAdController extends GetxController {
   List<String>? get dropDownMenuItemsStrings => _dropDownMenuItemsStrings;
 
   List<DropdownMenuItem<String>> getCats() {
-    var list = Get.find<HomeViewController>();
+    var list = Get.find<HomeViewController>().categories;
     _dropDownMenuItemsStrings =
-        list.categories.map((e) => e.title).cast<String>().toList();
+        list.map((e) => e.title).cast<String>().toList();
     var list2 = _dropDownMenuItemsStrings!
         .map((e) => DropdownMenuItem<String>(value: e, child: Text(e)))
         .toList();
     return list2;
     // update();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    // cleanControllers();
   }
 
   @override

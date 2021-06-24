@@ -1,37 +1,62 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:mazad_app/data/LocalStorage.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
 
-class AuthService {
-  // LoginController _loginController = Get.find();
+import '../helpers/Constants.dart';
 
+class AuthService {
   var token;
 
   Future<bool> userLogin(identifier, password) async {
     var headers = {'Content-Type': 'application/json'};
-    var request = http.Request('POST', Uri.parse('$BaseUrl$AuthUrlLogin'));
-    request.body =
-        json.encode({"identifier": "$identifier", "password": "$password"});
-    request.headers.addAll(headers);
+    var body = jsonEncode({
+      "identifier": "$identifier",
+      "password": "$password"
+    });
+    var response = await http.post(Uri.parse('$BaseUrl$AuthUrlLogin'),
+        headers: headers, body: body);
 
-    http.StreamedResponse streamedResponse = await request.send();
-    var response = await http.Response.fromStream(streamedResponse);
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      var jwtToken = data['jwt'];
-      // print(data);
-      storage.saveToken("jwt", jwtToken);
-      print(" Token From Login : $jwtToken");
+      var jwtToken = data['jwt'].runtimeType;
+      // // Logger().d(data);
+      // storage.write("jwt", jwtToken);
+      // Logger().d(" Token From Login : $jwtToken");
+      // AuthStore.to.saveToken(jwtToken);
+      Logger().d(" Token from response : $jwtToken");
+
       var a = await storage.readToken();
-      print(" Token From app : $a");
+      Logger().d(" Token From app : $a");
       return true;
     } else {
-      print(response.reasonPhrase);
+      Logger().d(response.reasonPhrase);
       return false;
     }
+  }
+
+  Future<bool> userSignUp({identifier, password, email}) async {
+    var headers = {'Content-Type': 'application/json'};
+    var body = jsonEncode({
+      "username": "$identifier",
+      "email": "$email",
+      "password": "$password",
+    });
+    var response = await http.post(Uri.parse('$BaseUrl$AuthUrlRegister'),
+        headers: headers, body: body);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      Logger().d("userSignUp  json result : $data");
+      // Logger().d("getUserApi  json result : ${data.runtimeType}");
+      // Logger().d("getUserApi  json result : ${a.email}");
+      return true;
+    }
+    return false;
   }
 
   // get Logged User Id
@@ -42,9 +67,9 @@ class AuthService {
     var isUserLogged = await storage.readToken();
     if (isUserLogged != 0) {
       token = isUserLogged;
-      // print(token);
+      // Logger().d(token);
     } else {
-      // print("getLoggedUserId : error in user token");
+      // Logger().d("getLoggedUserId : error in user token");
     }
     return token;
   }
@@ -56,15 +81,15 @@ class AuthService {
   //   if (isUserLogged) {
   //     return "Ok";
   //   } else {
-  //     print("getLoggedUserId : error in user token");
+  //     Logger().d("getLoggedUserId : error in user token");
   //   }
   // }
 
   Future getUserApi() async {
     var url = "$BaseUrl/users/me";
     String userToken = await getLoggedUserId();
-    // print(userToken.toString());
-    // print(userToken.runtimeType);
+    // Logger().d(userToken.toString());
+    // Logger().d(userToken.runtimeType);
 
     Map<String, String> headersAuth = {
       'Content-Type': 'application/json',
@@ -81,9 +106,9 @@ class AuthService {
     var a = userFromJson(response.body);
 
     if (response.statusCode == 200) {
-      // print("getUserApi  json result : $data");
-      // print("getUserApi  json result : ${data.runtimeType}");
-      // print("getUserApi  json result : ${a.email}");
+      // Logger().d("getUserApi  json result : $data");
+      // Logger().d("getUserApi  json result : ${data.runtimeType}");
+      // Logger().d("getUserApi  json result : ${a.email}");
 
       return a;
     }

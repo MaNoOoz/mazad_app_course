@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:mazad_app/Screens/SignUpView/SignUpView.dart';
 import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
+import 'package:mazad_app/helpers/StarterView.dart';
 import 'package:mazad_app/widgets/custom_text_form_field.dart';
 
 class LoginView extends GetView<LoginController> {
@@ -51,7 +53,7 @@ class LoginView extends GetView<LoginController> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    print("ERROR");
+                    Logger().d("ERROR");
                   }
                 },
                 labelText: 'إيميل',
@@ -77,7 +79,7 @@ class LoginView extends GetView<LoginController> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    print("ERROR");
+                    Logger().d("ERROR");
                   }
                 },
                 labelText: 'كلمة السر',
@@ -104,18 +106,18 @@ class LoginView extends GetView<LoginController> {
                 onPressed: () async {
                   Get.put<LoginController>(LoginController());
 
-                  _formKey.currentState!.save();
 
                   if (_formKey.currentState!.validate()) {
-                    Get.put<LoginController>(LoginController());
-                    await controller.signInUser();
+                    _formKey.currentState!.save();
+
+                    var a=await controller.signInUser();
                     // await controller.loginUser2();
-                    // print(" loginUser Pressed login value is  : $a");
-                    // if (a == true) {
-                    //   Get.to(() => StarterView());
-                    // } else {
-                    //   print(" somthing wrong  : $a");
-                    // }
+                    // Logger().d(" loginUser Pressed login value is  : $a");
+                    if (a == true) {
+                      Get.to(() => StarterView());
+                    } else {
+                      Logger().d(" somthing wrong  : $a");
+                    }
                   }
                 },
               ),

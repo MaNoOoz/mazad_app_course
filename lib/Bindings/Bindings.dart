@@ -7,11 +7,14 @@ import 'package:mazad_app/controllers/HomeController/HomeController.dart';
 import 'package:mazad_app/controllers/NavController/NavController.dart';
 import 'package:mazad_app/controllers/NewAdController/NewAdController.dart';
 import 'package:mazad_app/controllers/ProfileController/ProfileController.dart';
+import 'package:mazad_app/data/LocalStorage.dart';
 
 class InitialBinding extends Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies
+    Get.lazyPut<LocalStorage>(() => LocalStorage());
+
     Get.lazyPut<NavController>(() => NavController());
     Get.lazyPut<NewAdController>(() => NewAdController());
     Get.lazyPut<ProfileController>(() => ProfileController());

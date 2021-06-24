@@ -46,10 +46,10 @@ class BottomNav extends GetView<NavController> {
       ],
       currentIndex: controller.tapValue,
       onTap: (index) {
-        // print(index);
+        // Logger().d(index);
         controller.changeScreen(index);
       },
-      selectedItemColor: kPrimaryColor,
+      selectedItemColor: Colors.blue,
       selectedLabelStyle: fontStyle.copyWith(fontSize: 17),
       unselectedLabelStyle: fontStyle.copyWith(color: Colors.black,fontSize: 16),
     );

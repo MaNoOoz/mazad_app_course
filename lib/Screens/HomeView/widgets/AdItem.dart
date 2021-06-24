@@ -22,8 +22,8 @@ class AdCard extends StatelessWidget {
 
     var checkImages = model.adImages!.length == 0;
     // if (checkImages) {
-    //   print("this add has no  images ");
-    //   print("${model.adImages![0]!.url}");
+    //   Logger().d("this add has no  images ");
+    //   Logger().d("${model.adImages![0]!.url}");
     // }
 
     return GestureDetector(

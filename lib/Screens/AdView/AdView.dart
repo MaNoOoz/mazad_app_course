@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:mazad_app/controllers/AdViewContoller/AdViewContoller.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
@@ -50,7 +51,6 @@ class AdView extends GetView<AdViewContoller> {
             children: [
               header(),
               body(),
-
             ],
           ),
         ),
@@ -94,19 +94,23 @@ class AdView extends GetView<AdViewContoller> {
             ),
             textDirection: TextDirection.rtl,
             onSaved: (String? val) {
-              // controller.title = val!;
+              controller.commentText = val!;
             },
 
             onChanged: (String? val) {
               // controller.title = val!;
+              controller.commentText = val!;
+
             },
           ),
           LimitedBox(
             maxHeight: 50,
             maxWidth: 150,
             child: OutlineButton(
-              onPressed: () {
-                print("OutlineButton");
+              onPressed: () async {
+                Logger().d("OutlineButton");
+                Get.put(AdViewContoller());
+                await controller.createNewComment(model);
               },
               child: Text(
                 "إرسال",
@@ -153,7 +157,7 @@ class AdView extends GetView<AdViewContoller> {
               AutoSizeText.rich(
                 TextSpan(
                   style:
-                  fontStyle.copyWith(fontSize: 14, color: Colors.black45),
+                      fontStyle.copyWith(fontSize: 14, color: Colors.black45),
                   children: [
                     TextSpan(
                       text: "منذ ",
@@ -221,7 +225,11 @@ class AdView extends GetView<AdViewContoller> {
           ),
 
           // images
-          model.adImages!.length ==0?  Container(child: Text("لايوجد صور"),):LimitedBox(maxHeight: 400, child: adImages()),
+          model.adImages!.length == 0
+              ? Container(
+                  child: Text("لايوجد صور"),
+                )
+              : LimitedBox(maxHeight: 400, child: adImages()),
 
           // title
           Container(
@@ -261,7 +269,7 @@ class AdView extends GetView<AdViewContoller> {
                 child: AutoSizeText.rich(
                   TextSpan(
                     style:
-                    fontStyle.copyWith(fontSize: 22, color: Colors.black45),
+                        fontStyle.copyWith(fontSize: 22, color: Colors.black45),
                     children: [
                       TextSpan(
                         text: "${model.content.toString()} ",
@@ -345,9 +353,10 @@ class AdView extends GetView<AdViewContoller> {
             padding: EdgeInsets.all(10),
             height: 100,
             child: Column(
+              textDirection: TextDirection.rtl,
               children: [
                 Row(
-                  // textDirection: TextDirection.rtl,
+                  textDirection: TextDirection.rtl,
                   children: [
                     Text.rich(
                       TextSpan(
@@ -377,15 +386,15 @@ class AdView extends GetView<AdViewContoller> {
                     Text.rich(
                       TextSpan(
                         children: [
+                          TextSpan(
+                              text: "  ${model.user?.email ?? " No Name "}  ",
+                              style: fontStyle),
                           WidgetSpan(
                             child: Icon(
                               Icons.mail,
                               color: kPrimaryColorShadow,
                             ),
                           ),
-                          TextSpan(
-                              text: "  ${model.user?.email ?? " No Name "}  ",
-                              style: fontStyle),
                         ],
                         style: fontStyle,
                       ),
@@ -427,16 +436,17 @@ class AdView extends GetView<AdViewContoller> {
           SizedBox(
             height: 10,
           ),
-          model.adImages!.length ==0? LimitedBox(
-            maxHeight: 350,
-            child: adComments(),
-          ):Container(child: Text("لا يوجد تعليقات"),),
+          model.comments!.length != 0
+              ? LimitedBox(
+                  maxHeight: 350,
+                  child: adComments(),
+                )
+              : Container(
+                  child: Text("لا يوجد تعليقات"),
+                ),
           Container(
             height: 150,
           ),
-
-
-
         ],
       ),
     );
@@ -561,7 +571,7 @@ class AdView extends GetView<AdViewContoller> {
                       children: [
                         TextSpan(
                             text:
-                            "  ${model.comments?[i].commentText ?? "No Name"}")
+                                "  ${model.comments?[i].commentText ?? "No Name"}")
                       ],
                     ),
                   ),
@@ -573,7 +583,6 @@ class AdView extends GetView<AdViewContoller> {
             ),
           ),
         );
-
       },
     );
   }

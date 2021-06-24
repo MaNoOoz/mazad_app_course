@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:mazad_app/Screens/LoginView/LoginView.dart';
 import 'package:mazad_app/controllers/AuthController/SignUpController.dart';
 import 'package:mazad_app/data/LocalStorage.dart';
@@ -60,8 +61,8 @@ class SignUpView extends GetView<SignUpContoller> {
                 },
                 onTap: () {
                   _formKey.currentState!.save();
-                  if (controller.name.isNotEmpty)
-                    printError(info: "${controller.name}");
+                  if (controller.name.isNotEmpty) print(controller.name);
+
                   if (controller.name.isEmpty) printError(info: "NO TEXT");
                 },
                 hintTextStyle:
@@ -70,7 +71,7 @@ class SignUpView extends GetView<SignUpContoller> {
                     fontStyle.copyWith(color: Colors.black, fontSize: 14),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    print("isEmpty");
+                    Logger().d("isEmpty");
                   }
                 },
                 labelText: 'الإسم',
@@ -87,9 +88,14 @@ class SignUpView extends GetView<SignUpContoller> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    print("ERROR");
+                    Logger().d("ERROR");
                   }
-                },
+                },onTap: () {
+                _formKey.currentState!.save();
+                if (controller.email.isNotEmpty) print(controller.email);
+
+                if (controller.email.isEmpty) printError(info: "NO TEXT");
+              },
                 hintTextStyle:
                     fontStyle.copyWith(color: Colors.black45, fontSize: 14),
                 labelTextStyle:
@@ -108,9 +114,14 @@ class SignUpView extends GetView<SignUpContoller> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    print("ERROR");
+                    Logger().d("ERROR");
                   }
-                },
+                },onTap: () {
+                _formKey.currentState!.save();
+                if (controller.password.isNotEmpty) print(controller.password);
+
+                if (controller.password.isEmpty) printError(info: "NO TEXT");
+              },
                 hintTextStyle:
                     fontStyle.copyWith(color: Colors.black45, fontSize: 14),
                 labelTextStyle:
@@ -125,6 +136,8 @@ class SignUpView extends GetView<SignUpContoller> {
                   _formKey.currentState!.save();
 
                   if (_formKey.currentState!.validate()) {
+                    Get.put<SignUpContoller>(SignUpContoller());
+
                     await controller.createNewUser2();
                   }
                 },
@@ -140,7 +153,7 @@ class SignUpView extends GetView<SignUpContoller> {
               MaterialButton(
                 onPressed: () async {
                   var storedToken = await storage.readToken();
-                  print(storedToken);
+                  Logger().d(storedToken);
                 },
                 child: Text(
                   'Read Token',

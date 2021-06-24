@@ -1,10 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:mazad_app/models/Ad.dart' show Ad,Category;
 // import 'package:mazad_app/models/Category.dart';
 import 'package:mazad_app/services/Home%20Service.dart';
 import 'package:mazad_app/utils/app_state.dart';
 
-class HomeViewController extends GetxController {
+class HomeViewController extends GetxController with SingleGetTickerProviderMixin{
   final homeService = HomeService();
 
   List<Category> _categories = <Category>[];
@@ -31,7 +33,7 @@ class HomeViewController extends GetxController {
             value!.map((element) => Category.fromJson(element)).toList();
       });
     } catch (e) {
-      print(e);
+      Logger().d(e);
     }
     update();
 
@@ -39,28 +41,31 @@ class HomeViewController extends GetxController {
   }
 
 
-  Future<List<Ad>?> getAdsListWithFilter(var catId) async {
-    print("getAdsListWithFilter ");
+  Future<List<Ad>?> getAdsListWithFilter(int catId) async {
+    Logger().d("getAdsListWithFilter ");
 
+    appState.value = AppState.LOADING;
     try {
       await homeService.getAdsWithFilter(catId).then((value) {
         _adsListFilter.clear();
 
         _adsListFilter = value!.map((element) => Ad.fromJson(element)).toList();
         _adsListFilter.forEach((Ad element) {
-          // print("${element.adImages!.length}");
+          // Logger().d("${element.adImages!.length}");
         });
-        print("FILTER LIST ${adsListFilter.length}");
+        Logger().d("FILTER LIST ${adsListFilter.length}");
         // var imageList = _adsListFilter!.map((e) => e.adImages!.map((e) => e!.url)).toList();
-        // print(imageList.runtimeType);
+        // Logger().d(imageList.runtimeType);
         // if(_Ads!.map((e) => e.adImages!.length) == null){
-        // print('Hi ${adImages!.length.toString()}');
+        // Logger().d('Hi ${adImages!.length.toString()}');
         // }
       });
+      appState.value = AppState.DONE;
+      update();
+
     } catch (e) {
-      print(e);
+      Logger().d(e);
     }
-    update();
 
     return adsListFilter;
   }
@@ -72,6 +77,7 @@ class HomeViewController extends GetxController {
 
     await getCategoryList();
     await getAdsListWithFilter(catId);
+
     appState.value = AppState.DONE;
 
   }
