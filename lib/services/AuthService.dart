@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
+import 'package:mazad_app/Bindings/Routers.dart';
 import 'package:mazad_app/data/LocalStorage.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
@@ -10,33 +12,37 @@ import '../helpers/Constants.dart';
 
 class AuthService {
   var token;
+  LocalStorage storage = LocalStorage();
+  User? user;
 
-  Future<bool> userLogin(identifier, password) async {
+  Future<User?> userLogin(identifier, password) async {
     var headers = {'Content-Type': 'application/json'};
-    var body = jsonEncode({
-      "identifier": "$identifier",
-      "password": "$password"
-    });
+    var body =
+        jsonEncode({"identifier": "$identifier", "password": "$password"});
     var response = await http.post(Uri.parse('$BaseUrl$AuthUrlLogin'),
         headers: headers, body: body);
 
-
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      var jwtToken = data['jwt'].runtimeType;
+      var jwtToken = data['jwt'];
+      var userData = data['user'];
       // // Logger().d(data);
-      // storage.write("jwt", jwtToken);
-      // Logger().d(" Token From Login : $jwtToken");
+      storage.saveToken("jwt", jwtToken);
+      Logger().d(" Token From Login response: $jwtToken");
+      Logger().d(" Token From Login response: ${userData.runtimeType}");
+      user = User.fromJson(userData);
+      Logger().d(" Token From Login response: ${user!.email}");
+
       // AuthStore.to.saveToken(jwtToken);
-      Logger().d(" Token from response : $jwtToken");
 
       var a = await storage.readToken();
       Logger().d(" Token From app : $a");
-      return true;
+      return user;
     } else {
       Logger().d(response.reasonPhrase);
-      return false;
+      // return false;
     }
+    return null;
   }
 
   Future<bool> userSignUp({identifier, password, email}) async {
@@ -59,11 +65,18 @@ class AuthService {
     return false;
   }
 
-  // get Logged User Id
-  LocalStorage storage = LocalStorage();
+   signOutUser() async {
+    await LocalStorage().deleteToken();
+    user = null;
+    token = null;
+    // Get.back();
+    if (user == null && token == null){
+      Get.offAllNamed(Routers.initialRoute);
+    }
 
-  // get Logged User Id
-  getLoggedUserId() async {
+  }
+
+   getLoggedUserId() async {
     var isUserLogged = await storage.readToken();
     if (isUserLogged != 0) {
       token = isUserLogged;
@@ -74,18 +87,7 @@ class AuthService {
     return token;
   }
 
-  // Future getLoggedUserId2() async {
-  //   var isUserLogged = _loginController.userLogged.value;
-  //   // var getUserId =  await getUserId();
-  //
-  //   if (isUserLogged) {
-  //     return "Ok";
-  //   } else {
-  //     Logger().d("getLoggedUserId : error in user token");
-  //   }
-  // }
-
-  Future getUserApi() async {
+  Future getMe() async {
     var url = "$BaseUrl/users/me";
     String userToken = await getLoggedUserId();
     // Logger().d(userToken.toString());

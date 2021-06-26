@@ -56,7 +56,7 @@ class AdViewContoller extends GetxController {
 
   Future<NewComment> createNewCommentObject(ad) async {
     NewComment comment;
-    User? user = await Get.find<LoginController>().getUser();
+    User? user = await Get.find<LoginController>().getLoggedInUserObject();
 
     comment = NewComment(
       commentText: commentText,

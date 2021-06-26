@@ -19,6 +19,7 @@ class NewAdView extends GetView<NewAdController> {
     Logger().d("files from server " + "${file.length}");
 
     return Scaffold(
+
       key: UniqueKey(),
       resizeToAvoidBottomInset: true,
       bottomSheet: _buildBottomSheet(),

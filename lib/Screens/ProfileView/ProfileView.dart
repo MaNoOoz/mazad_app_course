@@ -14,12 +14,28 @@ class ProfileView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     var screenW = MediaQuery.of(context).size.width;
     var screenH = MediaQuery.of(context).size.height;
+    Logger().d("ProfileView list "+ "${controller.adList.length}");
+
 
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "الحساب",
+          style: fontStyle.copyWith(color: Colors.white),
+        ),
+      ),
       body: Container(
         // color: Colors.red,
         child: ListView(
           children: [
+            TextButton.icon(
+                onPressed: () async {
+                  print("TextButton.icon");
+                 await controller.getAdsListForUser();
+                },
+                icon: Icon(Icons.local_florist),
+                label: Text("TextButton.icon")),
             Container(
               height: 100,
               child: Stack(
@@ -38,28 +54,36 @@ class ProfileView extends GetView<ProfileController> {
                 child: Align(
                   alignment: AlignmentDirectional.center,
                   child: AutoSizeText.rich(
+
                     TextSpan(
                       style: fontStyle,
+
                       children: [
                         TextSpan(
                           text: "إعلاناتي",
                         ),
                         TextSpan(
-                          style: fontStyle,
+                          style: fontStyle.copyWith(
+                              color: CupertinoColors.black, fontSize: 26),
                           // text: "  (${ad.adImages!.length})",
                         ),
                       ],
                     ),
+                    minFontSize: 26,
+                    maxFontSize: 32,
                   ),
                 ),
               ),
             ),
             controller.adList.length == 0
                 ? Container(
-                    child: Center(child: Text("لايوجد إعلانات")),
+                    child: Center(
+                        child: Text(
+                      "لايوجد إعلانات",
+                      style: fontStyle.copyWith(color: CupertinoColors.black),
+                    )),
                   )
-                : LimitedBox(maxHeight: 200, child: adsList(context)),
-
+                : LimitedBox(maxHeight: 400, child: adsList(context)),
             SizedBox(
               height: 20,
             ),
@@ -83,7 +107,9 @@ class ProfileView extends GetView<ProfileController> {
           indicatorLayout: PageIndicatorLayout.NONE,
           itemBuilder: (BuildContext context, int index) {
             var item = controller.adList[index];
-            var image = "$BaseUrl${controller.adList[index].adImages![0].url}";
+            // var image = "$BaseUrl${controller.adList[index].adImages![0].url}";
+            var hasImage = controller.adList[index].adImages!.length;
+            // var image = "$BaseUrl${controller.adList[index].adImages![0].url}";
 
             return Container(
               child: Padding(
@@ -112,12 +138,15 @@ class ProfileView extends GetView<ProfileController> {
                         onTap: () => Get.to(() => AdView(item)),
                         isThreeLine: true,
                         leading: CircleAvatar(
-                          backgroundColor: Colors.blue,
-                          foregroundColor: Colors.white,
-                          backgroundImage: NetworkImage(
-                            image,
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.green,
+                          backgroundImage: hasImage >0? NetworkImage(
+                            "$BaseUrl${controller.adList[index].adImages![0].formats!.small!.url}",
                             // fit: BoxFit.fill,
-                          ),
+                          ):NetworkImage(
+                            "https://image.shutterstock.com/image-vector/ui-image-placeholder-wireframes-apps-260nw-1037719204.jpg",
+                            // fit: BoxFit.fill,
+                          )
                         ),
                         title: Text('${item.title}'),
                         subtitle: Text(
@@ -131,7 +160,6 @@ class ProfileView extends GetView<ProfileController> {
       );
     });
   }
-
 
   Widget wallImage(double screenW) {
     return Container(
@@ -158,7 +186,7 @@ class ProfileView extends GetView<ProfileController> {
                 Container(
                   // color: Colors.red,
                   child: Text(
-                    "${controller.user!.email}",
+                    "${controller.user!.id}",
                     // "User Name",
                     style: fontStyle.copyWith(
                         color: Colors.white,

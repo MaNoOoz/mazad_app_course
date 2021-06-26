@@ -5,6 +5,7 @@ import 'package:mazad_app/Screens/NewAdView/NewAdView.dart';
 import 'package:mazad_app/Screens/ProfileView/ProfileView.dart';
 import 'package:mazad_app/Screens/SignUpView/SignUpView.dart';
 import 'package:mazad_app/helpers/StarterView.dart';
+import 'package:mazad_app/middleware/userMiddileware.dart';
 
 import 'Routers.dart';
 
@@ -13,6 +14,9 @@ class Pages {
     GetPage(
       name: Routers.initialRoute,
       page: () => StarterView(),
+      middlewares: [
+        userMiddileWare()
+      ]
     ),
     GetPage(
       name: Routers.login,

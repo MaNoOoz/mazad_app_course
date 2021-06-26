@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:mazad_app/Bindings/Routers.dart';
 import 'package:mazad_app/Screens/LoginView/LoginView.dart';
 import 'package:mazad_app/controllers/AuthController/SignUpController.dart';
 import 'package:mazad_app/data/LocalStorage.dart';
@@ -169,7 +170,7 @@ class SignUpView extends GetView<SignUpContoller> {
               ),
               GestureDetector(
                 onTap: () {
-                  Get.to(LoginView());
+                  Get.toNamed(Routers.login);
                 },
                 child: Center(
                   child: Text(

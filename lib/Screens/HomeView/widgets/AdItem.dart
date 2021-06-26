@@ -100,7 +100,7 @@ class AdCard extends StatelessWidget {
   }
 
   Widget rightSide() {
-    var image = "$BaseUrl${model.adImages![0].url}";
+    var image = "$BaseUrl${model.adImages![0].formats!.thumbnail!.url}";
 
     return Container(
       color: Colors.white,

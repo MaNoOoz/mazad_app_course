@@ -33,4 +33,18 @@ class HomeService {
       Logger().d("Error in Data");
     }
   }
+  Future<List<dynamic>?> getAllAds () async {
+    // var url = "$BaseUrl/Ads?category.id=2";
+    var url = "$BaseUrl/Ads";
+    var response = await http.get(Uri.parse("$url"), headers: headersNoAuth);
+    final data = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      // Logger().d(response.body);
+      // Logger().d(jsonEncode(response.body));
+
+      return data;
+    } else {
+      Logger().d("Error in Data");
+    }
+  }
 }

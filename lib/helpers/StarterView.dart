@@ -1,97 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mazad_app/Bindings/Widgets/BottomNavBar.dart';
+import 'package:logger/logger.dart';
 import 'package:mazad_app/Screens/HomeView/HomeView.dart';
 import 'package:mazad_app/controllers/AuthController/LoginController.dart';
-import 'package:mazad_app/controllers/NavController/NavController.dart';
-import 'package:mazad_app/data/LocalStorage.dart';
-import 'package:mazad_app/widgets/side_drawer.dart';
+import 'package:mazad_app/models/Ad.dart';
 
-import 'Constants.dart';
-
-class buildSearch extends StatelessWidget {
+class StarterView extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Container(
-        margin: EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.white,
-        ),
-        child: Center(
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: "بحث",
-              hintStyle:
-                  fontStyle.copyWith(color: Colors.black54, fontSize: 16),
-              border: InputBorder.none,
-              prefixIcon: Icon(
-                Icons.search,
-                color: Colors.black54,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  _StarterViewState createState() => _StarterViewState();
 }
 
-class StarterView extends StatelessWidget {
-  final LocalStorage storage = LocalStorage();
+class _StarterViewState extends State<StarterView> {
+  var isLogged;
+  // var isUser;
+  User? user;
 
-  Widget baseView() {
-    return GetBuilder<NavController>(
-      builder: (navController) {
-        return Scaffold(
-          drawer: SideDrawer(),
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(130),
-            child: Container(
-              color: Colors.blue,
-              child: Column(
-                children: [
-                  AppBar(
-                    centerTitle: true,
-                    title: Text(
-                      "مزاد",
-                      style:
-                          fontStyle.copyWith(color: Colors.white, fontSize: 22),
-                    ),
-                  ),
-                  buildSearch(),
-                ],
-              ),
-            ),
-          ),
-          body: SafeArea(
-            child: IndexedStack(
-              index: navController.tapValue,
-              children: [
-                HomeView(),
-                // StoreView(),
-                // ProfileView(),
-              ],
-            ),
-          ),
-          bottomNavigationBar: BottomNav(),
-        );
-      },
-    );
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initValues();
   }
+
+  // final LocalStorage storage = LocalStorage();
 
   @override
   Widget build(BuildContext context) {
     // var isLogged = (value.user);
+    // return isUserThere ? LoginView() : baseView();
+    // Get.put<LoginController>(LoginController());
     // var isUserThere = Get.find<LoginController>().userLogged.value == false;
     // return isUserThere ? LoginView() : baseView();
-    Get.put<LoginController>(LoginController());
-    var isUserThere = Get.find<LoginController>().userLogged.value == false;
-    // return isUserThere ? LoginView() : baseView();
-    return baseView();
-    //
-    // return baseView();
+
+    return HomeView(
+
+    );
+  }
+
+  void initValues() async {
+    isLogged = Get.find<LoginController>().userLogged.value;
+    user =  await Get.find<LoginController>().getLoggedInUserObject();
+    // isUser = Get.put<LoginController>(LoginController()).user;
+    if (user != null) {
+      Logger().d("user ${user!.email}");
+    } else {
+      Logger().d("user == null");
+    }
+    // Logger().d(isLogged.toString());
+    // Logger().d(user!.email.toString());
   }
 }

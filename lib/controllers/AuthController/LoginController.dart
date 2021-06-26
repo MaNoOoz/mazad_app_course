@@ -5,6 +5,7 @@ import 'package:mazad_app/Bindings/Routers.dart';
 import 'package:mazad_app/data/LocalStorage.dart';
 import 'package:mazad_app/models/Ad.dart';
 import 'package:mazad_app/services/AuthService.dart';
+import 'package:mazad_app/utils/app_state.dart';
 
 class LoginController extends GetxController {
   String identifier = "", password = "", name = "";
@@ -12,13 +13,17 @@ class LoginController extends GetxController {
   LocalStorage storage = LocalStorage();
   User? _user;
 
+  final appState = Rx<AppState>(AppState.IDLE);
+
   User? get user => _user;
 
-  final AuthService authService = AuthService();
+   final AuthService authService = AuthService() ;
 
   signInUser() async {
-    var ok = await authService.userLogin(identifier, password);
-    if (ok) {
+    appState.value = AppState.LOADING;
+
+    _user = await authService.userLogin(identifier, password);
+    if (_user != null) {
       Get.offAndToNamed(Routers.initialRoute);
     } else {
       Get.snackbar(
@@ -29,14 +34,29 @@ class LoginController extends GetxController {
       );
     }
     update();
+    appState.value = AppState.DONE;
   }
 
-  Future<User?> getUser() async {
+  Future signOutUser() async {
+    appState.value = AppState.LOADING;
+
+    await authService.signOutUser();
+
+    // Get.offAndToNamed(Routers.initialRoute);
+    Logger().d("signOutUser called");
+
+    update();
+    // Get.offAndToNamed(Routers.initialRoute);
+
+    appState.value = AppState.DONE;
+  }
+
+  Future<User?> getLoggedInUserObject() async {
     try {
-      User user = await authService.getUserApi();
-      _user = user;
+      _user = await authService.getMe();
+      // _user = user;
     } catch (e) {
-      Logger().d(e);
+      Logger().d(e.toString());
     }
     update();
 
@@ -47,8 +67,6 @@ class LoginController extends GetxController {
   void onInit() async {
     // TODO: implement onInit
     super.onInit();
-
-
   }
 
   @override
@@ -60,4 +78,5 @@ class LoginController extends GetxController {
   @override
   // TODO: implement onDelete
   get onDelete => super.onDelete;
+
 }

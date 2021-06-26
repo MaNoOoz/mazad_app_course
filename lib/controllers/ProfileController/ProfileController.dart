@@ -10,12 +10,14 @@ class ProfileController extends GetxController {
   List<Ad> adList = <Ad>[];
   List<Comment> commentList = <Comment>[];
 
-  int userId = 4;
+  // int userId = 4;
   User? user = User();
 
-  Future<List<Ad>?> getAdsListForUser(int userId) async {
+  Future<List<Ad>?> getAdsListForUser() async {
     Logger().d("getAdsListForUser ");
-    userId = user!.id!;
+    user = await Get.find<LoginController>().getLoggedInUserObject();
+
+    var userId = user!.id!;
     Logger().d(userId.toString());
 
     try {
@@ -62,8 +64,7 @@ class ProfileController extends GetxController {
   void onInit() async {
     // TODO: implement onInit
     super.onInit();
-    user = await Get.find<LoginController>().getUser();
-    await getAdsListForUser(userId);
+    await getAdsListForUser();
     // await getCommentsForUser(userId);
   }
 

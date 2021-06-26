@@ -6,6 +6,7 @@ import 'package:mazad_app/controllers/ProfileController/ProfileController.dart';
 
 import 'Bindings/Bindings.dart';
 import 'Bindings/pages.dart';
+import 'controllers/HomeController/HomeController.dart';
 
 void main() async {
   await GetStorage.init();
@@ -18,6 +19,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      locale:  Locale("ar", "AE"),
+      fallbackLocale: Locale("ar", "AE"),
+
       onInit: fetchAll(),
       smartManagement: SmartManagement.full,
       debugShowCheckedModeBanner: false,
@@ -29,7 +33,8 @@ class MyApp extends StatelessWidget {
   }
 
   fetchAll() {
-    Get.put<ProfileController>(ProfileController());
+   var s = Get.put<HomeViewController>(HomeViewController());
     Logger().d("fetchAll");
+   //  Logger().d("${s.categories.length}");
   }
 }

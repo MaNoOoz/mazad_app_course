@@ -48,8 +48,14 @@ class LoginView extends GetView<LoginController> {
                 onSaved: (value) async {
                   controller.identifier = value!.trim();
                 },
+                onChanged: (value) {
+                  controller.identifier = value.trim();
+                  Logger().d("${controller.identifier}");
+                },
                 onTap: () {
-                  printInfo(info: "${controller.identifier}");
+                  Logger().d("${controller.identifier}");
+
+                  // printInfo(info: "${controller.identifier}");
                 },
                 validator: (value) {
                   if (value == null) {
@@ -75,7 +81,16 @@ class LoginView extends GetView<LoginController> {
                     fontStyle.copyWith(color: Colors.black, fontSize: 14),
                 onSaved: (value) {
                   controller.password = value!.trim();
-                  printInfo(info: "$value");
+                  Logger().d("${controller.password}");
+                },
+                onChanged: (value) {
+                  controller.password = value.trim();
+                  Logger().d("${controller.password}");
+                },
+                onTap: () {
+                  Logger().d("${controller.password}");
+
+                  // printInfo(info: "${controller.identifier}");
                 },
                 validator: (value) {
                   if (value == null) {
@@ -110,14 +125,10 @@ class LoginView extends GetView<LoginController> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
-                    var a=await controller.signInUser();
+                   await controller.signInUser();
                     // await controller.loginUser2();
                     // Logger().d(" loginUser Pressed login value is  : $a");
-                    if (a == true) {
-                      Get.to(() => StarterView());
-                    } else {
-                      Logger().d(" somthing wrong  : $a");
-                    }
+
                   }
                 },
               ),

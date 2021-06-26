@@ -4,51 +4,78 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:mazad_app/Screens/AdView/AdView.dart';
 import 'package:mazad_app/Screens/HomeView/widgets/AdItem.dart';
+import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/controllers/HomeController/HomeController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
+import 'package:mazad_app/widgets/buildSearch.dart';
+import 'package:mazad_app/widgets/side_drawer.dart';
 
 class HomeView extends GetWidget<HomeViewController> {
   var catID = 4;
 
+  HomeView();
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body:
-            // Obx(
-            //   () {
-            //     if (controller.appState() == AppState.LOADING) {
-            //       return Center(child: CircularProgressIndicator());
-            //     }
-            //     if (controller.appState() == AppState.ERROR) {
-            //       return Center(
-            //           child: FlatButton(
-            //         child: Text('مشكلة بالإتصال حاول مرة أخرى '),
-            //         onPressed: () async => controller.getCategoryList(),
-            //       ));
-            //     }
-
-            // return
-            Column(
-          children: [
-            _buildTabBar(),
-            SizedBox(
-              height: 30,
-            ),
-            _bulidBody(),
-            Container(
-              height: 10,
-            ),
-            // Container(
-            //   height: 10,
-            //   color: Colors.blue.shade300,
-            // ),
-          ],
-        ),
-        // },
-        // ),
+    return Scaffold(
+      drawer: GetBuilder<LoginController>(
+        builder: (c) {
+          return SideDrawer();
+        }
       ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(130),
+        child: Container(
+          color: Colors.blue,
+          child: Column(
+            children: [
+              AppBar(
+                centerTitle: true,
+                title: Text(
+                  "مزاد ",
+                  // "${controller.user!.email} ",
+                  style: fontStyle.copyWith(color: Colors.white, fontSize: 22),
+                ),
+              ),
+              buildSearch(),
+            ],
+          ),
+        ),
+      ),
+      body:
+          // Obx(
+          //   () {
+          //     if (controller.appState() == AppState.LOADING) {
+          //       return Center(child: CircularProgressIndicator());
+          //     }
+          //     if (controller.appState() == AppState.ERROR) {
+          //       return Center(
+          //           child: FlatButton(
+          //         child: Text('مشكلة بالإتصال حاول مرة أخرى '),
+          //         onPressed: () async => controller.getCategoryList(),
+          //       ));
+          //     }
+
+          // return
+          Column(
+        children: [
+          _buildTabBar(),
+          SizedBox(
+            height: 30,
+          ),
+          _bulidBody(),
+          Container(
+            height: 10,
+          ),
+          // Container(
+          //   height: 10,
+          //   color: Colors.blue.shade300,
+          // ),
+        ],
+      ),
+      // },
+      // ),
     );
   }
 
@@ -64,34 +91,33 @@ class HomeView extends GetWidget<HomeViewController> {
             // height: 100,
             // width: 300,
             child: TabBar(
-                onTap: (index) async {
-                  catID = c.categories[index].id!;
-                  c.catId = catID;
-                  Logger().d("message");
-                  Logger().d(index);
+              onTap: (index) async {
+                catID = c.categories[index].id!;
+                c.catId = catID;
+                Logger().d("message");
+                Logger().d(index);
 
-                  await c.getAdsListWithFilter(catID);
-                },
-                labelColor: Colors.blue,
-                isScrollable: true,
-                unselectedLabelStyle: fontStyle.copyWith( fontSize: 16),
-                indicatorSize: TabBarIndicatorSize.label,
-                enableFeedback: true,
-                physics: BouncingScrollPhysics(),
-                indicatorColor: Colors.blue,
-                unselectedLabelColor: Colors.grey,
-                labelStyle: fontStyle.copyWith(fontSize: 18),
-                tabs: List.generate(
-                  c.categories.length,
-                  (index) => Tab(
-                    text: c.categories[index].title,
-                  ),
-                  // )
+                await c.getAdsListWithFilter(catID);
+              },
+              labelColor: Colors.blue,
+              isScrollable: true,
+              unselectedLabelStyle: fontStyle.copyWith(fontSize: 16),
+              indicatorSize: TabBarIndicatorSize.label,
+              enableFeedback: true,
+              physics: BouncingScrollPhysics(),
+              indicatorColor: Colors.blue,
+              unselectedLabelColor: Colors.grey,
+              labelStyle: fontStyle.copyWith(fontSize: 18),
+              tabs: List.generate(
+                c.categories.length,
+                (index) => Tab(
+                  text: c.categories[index].title,
                 ),
-                // tabs: _tabs
                 // )
-
-                ),
+              ),
+              // tabs: _tabs
+              // )
+            ),
           ),
         );
       },
@@ -144,5 +170,4 @@ class HomeView extends GetWidget<HomeViewController> {
       ),
     );
   }
-
 }

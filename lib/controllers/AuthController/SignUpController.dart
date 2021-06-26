@@ -29,6 +29,7 @@ class SignUpContoller extends GetxController {
     var response =
         await http.post(Uri.parse("$url"), headers: headers, body: body);
     final data = jsonDecode(response.body);
+
     if (response.statusCode == 200) {
       var jwtToken = data['jwt'];
       storage.saveToken("jwt", jwtToken);
@@ -39,6 +40,7 @@ class SignUpContoller extends GetxController {
   }
 
   createNewUser2() async {
+
     var ok = await authService.userSignUp(
         identifier: name, email: email, password: password);
     if (ok) {

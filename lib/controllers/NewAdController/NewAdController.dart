@@ -190,9 +190,9 @@ class NewAdController extends GetxController {
     catTitle = selectedCat;
     //  get User name
     username = await Get.find<LoginController>()
-        .getUser()
+        .getLoggedInUserObject()
         .then((value) => value!.username);
-    userId = await Get.find<LoginController>().getUser().then((value) => value!.id);
+    userId = await Get.find<LoginController>().getLoggedInUserObject().then((value) => value!.id);
     var catList = Get.find<HomeViewController>().categories;
 
     var cat = catList.map((e) => e).where((element) => element.title==catTitle).toList();
@@ -207,7 +207,7 @@ class NewAdController extends GetxController {
       content: content,
       user: User(id: userId, username: username),
       tags: tags,
-      category: Category(id: catId, title: catTitle),
+      category: Category(id: 4, title: catTitle),
       comments: comments,
       likes: 50,
       images: list,
