@@ -8,26 +8,33 @@ import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:mazad_app/controllers/NewAdController/NewAdController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
+import 'package:mazad_app/models/Ad.dart';
 import 'package:mazad_app/utils/app_state.dart';
 import 'package:photo_view/photo_view.dart';
 
 /// todo : implemnt logic and move it to controller
 class NewAdView extends GetView<NewAdController> {
+
+  var chooseCatList = Get.find<NewAdController>().MenuItemsList();
+
   @override
   Widget build(BuildContext context) {
     var file = controller.ImagesFilesFromServer;
     Logger().d("files from server " + "${file.length}");
 
     return Scaffold(
-
       key: UniqueKey(),
       resizeToAvoidBottomInset: true,
       bottomSheet: _buildBottomSheet(),
       appBar: AppBar(
-        title: Text(
-          // "إعلان جديد",
-          "${controller.dropDownMenuItemsStrings!.length}",
-          style: fontStyle.copyWith(color: Colors.white, fontSize: 24),
+        title: GetBuilder<NewAdController>(
+          builder: (c) {
+            return Text(
+              "إعلان جديد",
+              // "${c.selectedCat}",
+              style: fontStyle.copyWith(color: Colors.white, fontSize: 24),
+            );
+          }
         ),
         centerTitle: true,
       ),
@@ -248,15 +255,18 @@ class NewAdView extends GetView<NewAdController> {
                   // height: 100,
                   child: Directionality(
                     textDirection: TextDirection.rtl,
-                    child: new DropdownButtonFormField(
-                      items: controller.getCats(),
+                    child: new DropdownButtonFormField<Category>(
+                      items: chooseCatList,
                       style: fontStyle.copyWith(fontSize: 16),
                       isExpanded: true,
+                      value: chooseCatList.map((e) => e.value).toList()[0],
                       onChanged: (value) {
-                        controller.selectedCat = "$value";
-                        controller.catTitle = controller.selectedCat;
-                        Logger().d("${controller.catTitle}");
+                        // controller.selectedCat = "$value";
+                        controller.selectedCat = value!.id;
+                        controller.selectedCatTitle = value.title;
+                        // Logger().d("${controller.selectedCatTitle}");
                         // Logger().d("${controller.selectedCat}");
+                        controller.update();
                       },
                       hint: Center(
                         child: Text(
@@ -305,7 +315,7 @@ class NewAdView extends GetView<NewAdController> {
                     }
                     // if (controller.appState() == AppState.ERROR) {
                     //   return FlatButton(
-                        // child: Text('مشكلة  حاول مرة أخرى ',style: fontStyle,),
+                    // child: Text('مشكلة  حاول مرة أخرى ',style: fontStyle,),
                     //     onPressed: () async => controller.sendToServer(),
                     //   );
                     // }
@@ -320,10 +330,9 @@ class NewAdView extends GetView<NewAdController> {
                   borderRadius: new BorderRadius.circular(10.0),
                 ),
                 color: kPrimaryColor,
-                onPressed:() async{
-                  var  ok = await controller.sendToServer();
-                  if(ok) await controller.showOkMessage();
-
+                onPressed: () async {
+                  var ok = await controller.sendToServer();
+                  if (ok) await controller.showOkMessage();
                 }),
           ),
         ],

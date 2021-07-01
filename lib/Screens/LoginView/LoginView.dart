@@ -5,14 +5,14 @@ import 'package:logger/logger.dart';
 import 'package:mazad_app/Screens/SignUpView/SignUpView.dart';
 import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
-import 'package:mazad_app/helpers/StarterView.dart';
+import 'package:mazad_app/utils/app_state.dart';
 import 'package:mazad_app/widgets/custom_text_form_field.dart';
 
 class LoginView extends GetView<LoginController> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
+    var _formKey = controller.formKey;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -110,28 +110,35 @@ class LoginView extends GetView<LoginController> {
                 height: 15,
               ),
               MaterialButton(
-                child: Text(
-                  'دخول',
-                  style: fontStyle.copyWith(color: Colors.white, fontSize: 18),
-                ),
-                shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(10.0),
-                ),
-                color: kPrimaryColor,
-                onPressed: () async {
-                  Get.put<LoginController>(LoginController());
+                  disabledColor: Colors.grey,
+                  focusColor: Colors.red,
+                  highlightColor: Colors.red,
+                  hoverColor: Colors.red,
+                  child: Obx(
+                    () {
+                      if (controller.appState() == AppState.LOADING) {
+                        return Center(child: CircularProgressIndicator());
+                      } else {
+                        // Logger().d(
+                        //     "// controller.appState.value = AppState.LOADING; LIST ${controller.appState.value}");
+                        // Logger().d(" ${controller.isPreesed.value.toString()}");
 
-
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-
-                   await controller.signInUser();
-                    // await controller.loginUser2();
-                    // Logger().d(" loginUser Pressed login value is  : $a");
-
-                  }
-                },
-              ),
+                        return Text(
+                          'دخول',
+                          style: fontStyle.copyWith(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        );
+                      }
+                    },
+                  ),
+                  shape: new RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(10.0),
+                  ),
+                  color: kPrimaryColor,
+                  // onPressed: controller.isPreesed ? () => loginUser(_formKey) : null),
+                  onPressed: () async => loginUser(_formKey)),
               SizedBox(
                 height: 40,
               ),
@@ -156,5 +163,18 @@ class LoginView extends GetView<LoginController> {
         ),
       ),
     );
+  }
+
+  loginUser(_formKey) async {
+    Get.put<LoginController>(LoginController());
+
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      await controller.signInUser();
+      // await controller.loginUser2();
+      // Logger().d(" loginUser Pressed login value is  : $a");
+
+    }
   }
 }

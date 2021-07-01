@@ -87,7 +87,7 @@ class AuthService {
     return token;
   }
 
-  Future getMe() async {
+  Future<dynamic> getMe() async {
     var url = "$BaseUrl/users/me";
     String userToken = await getLoggedUserId();
     // Logger().d(userToken.toString());
@@ -105,14 +105,13 @@ class AuthService {
       headers: headersAuth,
     );
     final data = jsonDecode(response.body);
-    var a = userFromJson(response.body);
 
     if (response.statusCode == 200) {
       // Logger().d("getUserApi  json result : $data");
       // Logger().d("getUserApi  json result : ${data.runtimeType}");
       // Logger().d("getUserApi  json result : ${a.email}");
 
-      return a;
+      return data;
     }
   }
 }

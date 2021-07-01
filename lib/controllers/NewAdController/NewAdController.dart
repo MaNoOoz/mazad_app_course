@@ -36,8 +36,8 @@ class NewAdController extends GetxController {
   var catId;
 
   // dropdown
-  var selectedCat = "";
-  String? catTitle = "w";
+  int? selectedCat = 0;
+  String? selectedCatTitle = "غير مصنف";
 
   /// =======================================================
   var titleController = TextEditingController();
@@ -187,17 +187,28 @@ class NewAdController extends GetxController {
     }
     // logger.d(list.length);
 
-    catTitle = selectedCat;
+
     //  get User name
     username = await Get.find<LoginController>()
         .getLoggedInUserObject()
         .then((value) => value!.username);
-    userId = await Get.find<LoginController>().getLoggedInUserObject().then((value) => value!.id);
+
+    //  get user Id
+
+    userId = await Get.find<LoginController>()
+        .getLoggedInUserObject()
+        .then((value) => value!.id);
+
     var catList = Get.find<HomeViewController>().categories;
 
-    var cat = catList.map((e) => e).where((element) => element.title==catTitle).toList();
+    var cat = catList
+        .map((e) => e)
+        .where((element) => element.title == selectedCatTitle)
+        .toList();
+
     catId = cat.map((e) => e.id.toString());
-    Logger().d("WW"+catId.toString());
+
+    Logger().d("WW" + catId.toString());
 
     // var ImageId = image.id;
     // var ImageUrl = image.url;
@@ -207,7 +218,7 @@ class NewAdController extends GetxController {
       content: content,
       user: User(id: userId, username: username),
       tags: tags,
-      category: Category(id: 4, title: catTitle),
+      category: Category(id: selectedCat, title: selectedCatTitle),
       comments: comments,
       likes: 50,
       images: list,
@@ -319,19 +330,27 @@ class NewAdController extends GetxController {
     return false;
   }
 
-  List<String>? _dropDownMenuItemsStrings = <String>[];
+  List<Category>? _dropDownMenuItemsStrings2 = <Category>[];
 
-  List<String>? get dropDownMenuItemsStrings => _dropDownMenuItemsStrings;
 
-  List<DropdownMenuItem<String>> getCats() {
+  List<Category>? get dropDownMenuItemsStrings2 => _dropDownMenuItemsStrings2;
+
+
+
+  List<DropdownMenuItem<Category>> MenuItemsList() {
     var list = Get.find<HomeViewController>().categories;
-    _dropDownMenuItemsStrings =
-        list.map((e) => e.title).cast<String>().toList();
-    var list2 = _dropDownMenuItemsStrings!
-        .map((e) => DropdownMenuItem<String>(value: e, child: Text(e)))
+    _dropDownMenuItemsStrings2 = list.cast<Category>();
+    var list2 = _dropDownMenuItemsStrings2!
+        .map(
+          (e) => DropdownMenuItem<Category>(
+            value: e,
+            child: Text(
+              e.title.toString(),
+            ),
+          ),
+        )
         .toList();
     return list2;
-    // update();
   }
 
   @override
@@ -350,7 +369,8 @@ class NewAdController extends GetxController {
   }
 
   injectValues() async {
-    getCats();
+    MenuItemsList();
     update();
   }
+
 }

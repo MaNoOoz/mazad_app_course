@@ -134,9 +134,10 @@ class SignUpView extends GetView<SignUpContoller> {
               ),
               MaterialButton(
                 onPressed: () async {
-                  _formKey.currentState!.save();
 
                   if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+
                     Get.put<SignUpContoller>(SignUpContoller());
 
                     await controller.createNewUser2();

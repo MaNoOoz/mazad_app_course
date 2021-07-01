@@ -12,17 +12,23 @@ class LoginController extends GetxController {
   RxBool userLogged = false.obs;
   LocalStorage storage = LocalStorage();
   User? _user;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  GlobalKey<FormState> get formKey => _formKey;
+
+  var isPreesed = false.obs;
   final appState = Rx<AppState>(AppState.IDLE);
 
   User? get user => _user;
 
-   final AuthService authService = AuthService() ;
+  final AuthService authService = AuthService();
 
   signInUser() async {
     appState.value = AppState.LOADING;
+    isPreesed.value = true;
 
     _user = await authService.userLogin(identifier, password);
+    await Future.delayed(Duration(seconds: 3));
     if (_user != null) {
       Get.offAndToNamed(Routers.initialRoute);
     } else {
@@ -33,14 +39,16 @@ class LoginController extends GetxController {
         backgroundColor: Colors.red,
       );
     }
-    update();
     appState.value = AppState.DONE;
+    isPreesed.value = false;
+    update();
   }
 
   Future signOutUser() async {
     appState.value = AppState.LOADING;
 
     await authService.signOutUser();
+    await Future.delayed(Duration(seconds: 3));
 
     // Get.offAndToNamed(Routers.initialRoute);
     Logger().d("signOutUser called");
@@ -52,14 +60,22 @@ class LoginController extends GetxController {
   }
 
   Future<User?> getLoggedInUserObject() async {
-    try {
-      _user = await authService.getMe();
-      // _user = user;
-    } catch (e) {
-      Logger().d(e.toString());
-    }
-    update();
+    // try {
+      Map<String, dynamic> res = await authService.getMe();
+      User? user_FromJson = User.fromJson(res);
 
+      // if (user_FromJson !=null ) {
+        _user = user_FromJson;
+        Logger().d("user_FromJson : ${_user!.email}");
+
+      // } else {
+      //   Logger().d("user is null");
+      //   return null;
+      // }
+    // } catch (e) {
+    //   Logger().d(e.toString());
+    // }
+    // // update();
     return _user;
   }
 
@@ -67,6 +83,12 @@ class LoginController extends GetxController {
   void onInit() async {
     // TODO: implement onInit
     super.onInit();
+    Logger().d("onInit Login Controlelr called : ");
+    ever(isPreesed, (_) {
+      Logger().d("isPreesed called");
+
+      return !isPreesed.value;
+    });
   }
 
   @override
@@ -78,5 +100,4 @@ class LoginController extends GetxController {
   @override
   // TODO: implement onDelete
   get onDelete => super.onDelete;
-
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mazad_app/Screens/AdView/AdView.dart';
@@ -18,22 +19,25 @@ class buildSearch extends StatelessWidget {
           color: Colors.white,
         ),
         child: Center(
-          child: TextField(
+          child: GestureDetector(
             onTap: () async {
               await Get.find<HomeViewController>().getAllAds();
               return showSearch(context: context, delegate: searchProducts());
             },
-            decoration: InputDecoration(
-              hintText: "بحث",
-              hintStyle:
-                  fontStyle.copyWith(color: Colors.black54, fontSize: 16),
-              border: InputBorder.none,
-              prefixIcon: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.black54,
-                ),
+            child: Container(
+              padding: EdgeInsets.only(right: 8),
+              child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(
+                    "بحث",
+                    style:
+                        fontStyle.copyWith(color: Colors.black54, fontSize: 16),
+                  )),
+              height: 33,
+              decoration: BoxDecoration(
+                color: Color(0xFFFFFFFF),
+                borderRadius: BorderRadius.all(Radius.circular(10)
+                 ),
               ),
             ),
           ),
@@ -82,8 +86,9 @@ class searchProducts extends SearchDelegate {
       return Container(
         child: GetBuilder<HomeViewController>(builder: (c) {
           List<Ad> filterdList = c.allAds.where((element) {
-            var _searchResult = element.content!.toLowerCase().contains(query) ||
-                element.title!.toLowerCase().contains(query);
+            var _searchResult =
+                element.content!.toLowerCase().contains(query) ||
+                    element.title!.toLowerCase().contains(query);
 
             return _searchResult;
           }).toList();
@@ -120,7 +125,6 @@ class searchProducts extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
 
     return Container(
       // height: 232,

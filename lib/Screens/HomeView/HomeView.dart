@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:mazad_app/Screens/AdView/AdView.dart';
 import 'package:mazad_app/Screens/HomeView/widgets/AdItem.dart';
-import 'package:mazad_app/controllers/AuthController/LoginController.dart';
+import 'package:mazad_app/controllers/AdViewContoller/AdViewContoller.dart';
 import 'package:mazad_app/controllers/HomeController/HomeController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
@@ -19,11 +19,7 @@ class HomeView extends GetWidget<HomeViewController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: GetBuilder<LoginController>(
-        builder: (c) {
-          return SideDrawer();
-        }
-      ),
+      drawer: SideDrawer(),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(130),
         child: Container(
@@ -43,28 +39,13 @@ class HomeView extends GetWidget<HomeViewController> {
           ),
         ),
       ),
-      body:
-          // Obx(
-          //   () {
-          //     if (controller.appState() == AppState.LOADING) {
-          //       return Center(child: CircularProgressIndicator());
-          //     }
-          //     if (controller.appState() == AppState.ERROR) {
-          //       return Center(
-          //           child: FlatButton(
-          //         child: Text('مشكلة بالإتصال حاول مرة أخرى '),
-          //         onPressed: () async => controller.getCategoryList(),
-          //       ));
-          //     }
-
-          // return
-          Column(
+      body: Column(
         children: [
           _buildTabBar(),
           SizedBox(
             height: 30,
           ),
-          _bulidBody(),
+          _buildBody(),
           Container(
             height: 10,
           ),
@@ -94,7 +75,7 @@ class HomeView extends GetWidget<HomeViewController> {
               onTap: (index) async {
                 catID = c.categories[index].id!;
                 c.catId = catID;
-                Logger().d("message");
+                // Logger().d("message");
                 Logger().d(index);
 
                 await c.getAdsListWithFilter(catID);
@@ -124,12 +105,12 @@ class HomeView extends GetWidget<HomeViewController> {
     );
   }
 
-  Widget _bulidBody() {
+  Widget _buildBody() {
     return GetBuilder<HomeViewController>(builder: (controller) {
       // Logger().d("_bulidBody called");
 
       return controller.adsListFilter.length == 0
-          ? _EmptyView()
+          ? _noneView()
           : Expanded(
               child: Container(
                 // height: 500,
@@ -149,7 +130,11 @@ class HomeView extends GetWidget<HomeViewController> {
                     // }
                     return AdCard(
                         model: adModel,
-                        press: () => Get.to(() => AdView(adModel)));
+                        press: () async {
+                          Get.put<AdViewContoller>(AdViewContoller());
+
+                          return Get.to(() => AdView(adModel));
+                        });
                   },
                 ),
               ),
@@ -157,7 +142,7 @@ class HomeView extends GetWidget<HomeViewController> {
     });
   }
 
-  Widget _EmptyView() {
+  Widget _noneView() {
     return Container(
       color: Colors.white,
       // height: 100,

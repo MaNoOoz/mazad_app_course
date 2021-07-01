@@ -53,7 +53,10 @@ class SideDrawer extends StatelessWidget {
           onTap: () async {
             // Get.offAllNamed(Routers.login);
             // Update the state of the app.
-            await Get.put<LoginController>(LoginController()).signOutUser();
+            var c = Get.put<LoginController>(LoginController());
+            await c.signOutUser();
+            // c.update();
+
             // ...
             // await LocalStorage().deleteToken();
             // user=null;
@@ -70,7 +73,10 @@ class SideDrawer extends StatelessWidget {
 
   Widget buildListView(BuildContext context) {
     return GetBuilder<LoginController>(builder: (c) {
-      if (c.user.isNull) {}
+      if (c.user.isNull) {
+        c.update();
+      }
+
       return ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
@@ -83,6 +89,25 @@ class SideDrawer extends StatelessWidget {
                   'https://cdn.pixabay.com/photo/2018/08/28/12/41/avatar-3637425_960_720.png'),
             ),
           ),
+          // todo fix null error after signout
+
+          // Container(
+          //   child: ListTile(
+          //     title: Text('تسجيل الدخول',
+          //         style:
+          //             fontStyle.copyWith(color: kPrimaryColor, fontSize: 18)),
+          //     onTap: () {
+          //       // Get.offAllNamed(Routers.login);
+          //       // Update the state of the app.
+          //       // ...
+          //       Get.put<LoginController>(LoginController());
+          //       // Get.toNamed(Routers.login);
+          //       Get.offAndToNamed(Routers.login);
+          //     },
+          //   ),
+          // ),
+
+
           c.user.isNull
               ? Container(
                   child: ListTile(
@@ -279,7 +304,6 @@ class SideDrawer extends StatelessWidget {
 //            Get.toNamed(Routers.login);
 //          },
 //        ),
-//        // todo remove late
 //        ListTile(
 //          title: Text(
 //            'Logout',
