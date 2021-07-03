@@ -129,16 +129,17 @@ class NewAdService {
 
   Future test() async {
     var url = "https://jsonplaceholder.typicode.com/users";
-    var response = await dio.get(url);
+    var url2 = "$BaseUrl/ads/";
+    var response = await dio.get(url2);
     if (response.statusCode == 200) {
       log("${response.statusCode}");
-      log("${response.data.runtimeType}");
-      var data = response.data as List;
+      log("${response.data}");
+      // var data = response.data as List;
 
       // final prettyString = JsonEncoder.withIndent('  ').convert(response.data);
       // log("OK $prettyString");
 
-      log("${data.map((e) => e).map((e) => e['address']['street'])}");
+      // log("${data.map((e) => e).map((e) => e['address']['street'])}");
       // log("${response.data['address']['street']}");
       // log("${response.data['medium']}");
 

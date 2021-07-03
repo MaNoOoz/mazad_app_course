@@ -21,6 +21,8 @@ class Ad {
     this.id,
     this.title,
     this.content,
+    this.contactNumber,
+
     this.user,
     this.category,
     this.publishedAt,
@@ -35,6 +37,8 @@ class Ad {
   int? id;
   String? title;
   String? content;
+  String? contactNumber;
+
   String? likes;
   User? user;
   Category? category;
@@ -49,6 +53,7 @@ class Ad {
         id: json["id"] == null ? null : json["id"],
         title: json["title"] == null ? null : json["title"],
         content: json["content"] == null ? null : json["content"],
+    contactNumber: json["contactNumber"] == null ? null : json["contactNumber"],
         likes: json["likes"] == null ? null : json["likes"],
         user: json["user"] == null ? null : User.fromJson(json["user"]),
         category: json["category"] == null
@@ -73,7 +78,7 @@ class Ad {
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
-        "content": content,
+        "contactNumber": contactNumber,
         "likes": likes,
         "user": user!.toJson(),
         "category": category!.toJson(),

@@ -14,6 +14,7 @@ class NewAd {
   NewAd({
     this.title,
     this.content,
+    this.contactNumber,
     this.user,
     this.tags,
     this.images,
@@ -27,6 +28,7 @@ class NewAd {
 
   String? title;
   String? content;
+  String? contactNumber;
   User? user;
   List<Tag>? tags;
   List<AdImage>? images;
@@ -40,6 +42,8 @@ class NewAd {
   NewAd copyWith({
     String? title,
     String? content,
+    String? contactNumber,
+
     User? user,
     List<AdImage>? images,
     List<Tag>? tags,
@@ -53,6 +57,7 @@ class NewAd {
       NewAd(
         title: title ?? this.title,
         content: content ?? this.content,
+        contactNumber: contactNumber ?? this.contactNumber,
         user: user ?? this.user,
         tags: tags ?? this.tags,
         category: category ?? this.category,
@@ -67,6 +72,7 @@ class NewAd {
   factory NewAd.fromJson(Map<String, dynamic> json) => NewAd(
         title: json["title"] == null ? null : json["title"],
         content: json["content"] == null ? null : json["content"],
+    contactNumber: json["contactNumber"] == null ? null : json["contactNumber"],
         user: json["user"] == null ? null : json["user"],
         tags: List<Tag>.from(json["tags"].map((x) => Tag.fromJson(x))),
         category: json["category"] == null ? null : json["category"],
@@ -86,6 +92,7 @@ class NewAd {
   Map<String, dynamic> toJson() => {
         "title": title == null ? null : title,
         "content": content == null ? null : content,
+        "contactNumber": contactNumber == null ? null : contactNumber,
         "user": user == null ? null : user!.toJson(),
         "tags":
             tags == null ? null : List<Tag>.from(tags!.map((x) => x.toJson())),

@@ -63,63 +63,66 @@ class AdView extends GetView<AdViewContoller> {
   }
 
   Widget _buildBottomSheet() {
-
-    return GetBuilder<LoginController>(
-      builder: (c) {
-      return  c.user.isNull ? Container(height: 1,) :
-         Container(
-          padding: EdgeInsets.all(12),
-          height: 150,
-          decoration: BoxDecoration(
-            color: Color(0xFFFFFFFF),
-            borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(0), bottomLeft: Radius.circular(0)),
-          ),
-          child: Column(
-            children: [
-              Form(
-                key: controller.send_comment_Key,
-                child: TextFormField(
-                  maxLength: 100,
-                  minLines: 1,
-                  keyboardType: TextInputType.text,
-                  // controller: controller.titleController,
-                  maxLines: 1,
-                  onTap: () {
-                    print(controller.commentText.toString());
-                  },
-                  validator: (value) {
-                    return value!.length < 3 ? 'أدخل على الأقل 3 أحرف' : null;
-                  },
-                  style: fontStyle.copyWith(
-                    color: Colors.black54,
-                  ),
-                  // style: UtilsImporter().uStyleUtils.loginTextFieldStyle(),
-                  decoration: textFieldDecorationCircle(
-                    hint: "مثال: 500 ريال",
-                    lable: 'تعليق جديد',
-                    style: fontStyle.copyWith(
-                      color: Colors.black26,
-                    ),
-                    icon: Icon(Icons.title),
-                  ),
-                  textDirection: TextDirection.rtl,
-                  onSaved: (String? val) {
-                    controller.commentText = val!;
-                  },
-
-                  onChanged: (String? val) {
-                    // controller.title = val!;
-                    controller.commentText = val!;
-                  },
-                ),
+    return GetBuilder<LoginController>(builder: (c) {
+      return c.user.isNull
+          ? Container(
+              height: 1,
+            )
+          : Container(
+              padding: EdgeInsets.all(12),
+              height: 150,
+              decoration: BoxDecoration(
+                color: Color(0xFFFFFFFF),
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(0),
+                    bottomLeft: Radius.circular(0)),
               ),
-              sendBtn(),
-            ],
-          ),
-        );
-      }
-    );
+              child: Column(
+                children: [
+                  Form(
+                    key: controller.send_comment_Key,
+                    child: TextFormField(
+                      maxLength: 100,
+                      minLines: 1,
+                      keyboardType: TextInputType.text,
+                      // controller: controller.titleController,
+                      maxLines: 1,
+                      onTap: () {
+                        print(controller.commentText.toString());
+                      },
+                      validator: (value) {
+                        return value!.length < 3
+                            ? 'أدخل على الأقل 3 أحرف'
+                            : null;
+                      },
+                      style: fontStyle.copyWith(
+                        color: Colors.black54,
+                      ),
+                      // style: UtilsImporter().uStyleUtils.loginTextFieldStyle(),
+                      decoration: textFieldDecorationCircle(
+                        hint: "مثال: 500 ريال",
+                        lable: 'تعليق جديد',
+                        style: fontStyle.copyWith(
+                          color: Colors.black26,
+                        ),
+                        icon: Icon(Icons.title),
+                      ),
+                      textDirection: TextDirection.rtl,
+                      onSaved: (String? val) {
+                        controller.commentText = val!;
+                      },
+
+                      onChanged: (String? val) {
+                        // controller.title = val!;
+                        controller.commentText = val!;
+                      },
+                    ),
+                  ),
+                  sendBtn(),
+                ],
+              ),
+            );
+    });
   }
 
   Widget sendBtn() {
@@ -228,11 +231,17 @@ class AdView extends GetView<AdViewContoller> {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
+          Container(
+
+            height: 12,
+          ),
           // title
           LimitedBox(
             maxHeight: 60,
             child: Container(
-              color: Color(0xFFFFFFFF),
+              // color: Color(0xFFFFFFFF),
+              color: Colors.blue.shade200,
+
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Padding(
@@ -268,7 +277,9 @@ class AdView extends GetView<AdViewContoller> {
 
           // title
           Container(
-            color: Color(0xFFFFFFFF),
+            // color: Color(0xFFFFFFFF),
+            color: Colors.blue.shade200,
+
             child: LimitedBox(
               maxHeight: 60,
               child: Padding(
@@ -293,9 +304,13 @@ class AdView extends GetView<AdViewContoller> {
               ),
             ),
           ),
+          Container(
+            height: 12,
+          ),
           // ad content
           Flexible(
             child: Container(
+              width: double.infinity,
               // color: Color(0xFFFFFFFF),
               color: Color(0xFFFFFFFF),
 
@@ -378,10 +393,42 @@ class AdView extends GetView<AdViewContoller> {
               ),
             ),
           ),
+          // todo share btn logic
+
           SizedBox(
             height: 10,
           ),
 
+          Container(
+            color: Color(0xFFFFFFFF),
+            child: LimitedBox(
+              maxHeight: 60,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: AlignmentDirectional.center,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: AutoSizeText.rich(
+                      TextSpan(
+                        style: fontStyle,
+                        children: [
+                          TextSpan(
+                            text: "التواصل",
+                          ),
+                        ],
+                      ),
+                      textDirection: TextDirection.rtl,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          Container(
+            height: 12,
+          ),
           // contact card
           Container(
             color: Color(0xFFFFFFFF),
@@ -403,7 +450,7 @@ class AdView extends GetView<AdViewContoller> {
                             ),
                           ),
                           TextSpan(
-                              text: "  ${model.user?.username ?? "No Name"}  "),
+                              text: "  ${model.contactNumber ?? "No Name"}  "),
                         ],
                       ),
                       style: fontStyle,

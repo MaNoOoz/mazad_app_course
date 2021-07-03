@@ -20,8 +20,13 @@ class NewAdController extends GetxController {
   var logger = Logger();
 
   NewAdService newAddService = NewAdService();
-  final HomeViewController homeViewController =
-      Get.put<HomeViewController>(HomeViewController());
+
+  final HomeViewController homeViewController = Get.put<HomeViewController>(HomeViewController());
+
+  // form =================================================
+  GlobalKey<FormState> get formKey => _formKey;
+  final GlobalObjectKey<FormState> _formKey =
+  GlobalObjectKey<FormState>("_UploadFormState");
   String title = '';
   String content = "";
   List<Tag> tags = <Tag>[];
@@ -31,32 +36,29 @@ class NewAdController extends GetxController {
   DateTime publishedAt = DateTime.now();
   String createdBy = "";
   String updatedBy = "";
-  var userId;
-  var username;
-  var catId;
+  int? userId;
+  String? username;
+  var contactNumber;
 
-  // dropdown
-  int? selectedCat = 0;
+  // dropdown  =================================================
+  int? selectedCatId = 5;
   String? selectedCatTitle = "غير مصنف";
+  List<Category>? _dropDownMenuItemsStrings2 = <Category>[];
+  List<Category>? get dropDownMenuItemsStrings2 => _dropDownMenuItemsStrings2;
 
-  /// =======================================================
   var titleController = TextEditingController();
   var contentController = TextEditingController();
   var tagsController = TextEditingController();
+  var contactNumberController = TextEditingController();
 
+  // Images =======================================================
   List<File> files = [];
   List<File> files2 = [];
   List<Upload> ImagesFilesFromServer = [];
   var pathes = [];
-  var path;
   final appState = Rx<AppState>(AppState.IDLE);
 
-  /// =======================================================
 
-  /// form
-  GlobalKey<FormState> get formKey => _formKey;
-  final GlobalObjectKey<FormState> _formKey =
-      GlobalObjectKey<FormState>("_UploadFormState");
 
   /// methods ============================================================
 
@@ -66,9 +68,12 @@ class NewAdController extends GetxController {
   }
 
   cleanControllers() {
+
+    files2.clear();
     titleController.text = "";
     contentController.text = "";
     tagsController.text = "";
+    contactNumberController.text = "";
   }
 
   chosenImagesSingleImagePicker(ImageSource imageSource) async {
@@ -88,24 +93,6 @@ class NewAdController extends GetxController {
     // files.clear();
   }
 
-  void _clearCachedFiles() async {
-    FilePicker.platform.clearTemporaryFiles().then((result) {
-      Get.snackbar(
-        'Somthing Wrong',
-        'Make Sure Login Info Is Correct',
-        colorText: Colors.white,
-        backgroundColor: Colors.red,
-      );
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     backgroundColor: result == true ? Colors.green : Colors.red,
-      //     content: Text((result == true
-      //         ? 'Temporary files removed with success.'
-      //         : 'Failed to clean temporary files')),
-      //   ),
-      // );
-    });
-  }
 
   chosenImagesMultiFilePicker(context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -139,6 +126,8 @@ class NewAdController extends GetxController {
     update();
   }
 
+
+  // Server ===============================================================
   Future<List<Upload>> uploadImage(List<File> files) async {
     File file = files.first;
 
@@ -152,85 +141,37 @@ class NewAdController extends GetxController {
     }
     return ImagesFilesFromServer;
   }
-
-  Future<NewAd> adFromInput() async {
-    NewAd ad;
-    // var image;
-
-    // /// trying single image
-    // var UploadImage = await uploadImage(files);
-    // // String json = jsonEncode(UploadImage);
-    // // logger.d(json);
-    // Upload image = Upload();
-    //
-    // for (Upload q in UploadImage) {
-    //   image = q;
-    //   // logger.d(image.toJson());
-    // }
-
-    // todo first upload image to backend then take the id and url and linked to new ad object [*]
-
-    // var map = UploadImage.map((e) => e.toJson());
-    // logger.d(map);
-
-    /// trying multi image
-    // todo first upload images to backend related to an object [*]
-
-    List UploadImage = await newAddService.uploadImages(files2);
-    List<AdImage> list = [];
-
-    for (Upload a in UploadImage) {
-      var mapFromObject = a.toJson();
-      AdImage imageFromUploadMoedl = AdImage.fromJson(mapFromObject);
-      // logger.d(imageFromUploadMoedl.id);
-      list.add(imageFromUploadMoedl);
+  Future<bool> sendToServer() async {
+    if (files2.length == 0 || formKey.currentState!.validate()==false) {
+      showNotOkMessage();
     }
-    // logger.d(list.length);
+    if (formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
 
+      try {
+        appState.value = AppState.LOADING;
 
-    //  get User name
-    username = await Get.find<LoginController>()
-        .getLoggedInUserObject()
-        .then((value) => value!.username);
+        var newAd = await adFromInput();
+        var mapFromObject = newAd.toJson(); //todo uncommit
+        // logger.d(mapFromObject.length);
+        await newAddService.createNewAd(mapFromObject);
+        appState.value = AppState.DONE;
 
-    //  get user Id
+        // await showOkMessage();
+        // Get.back();
+        await Get.offAndToNamed(Routers.initialRoute);
+      } on Exception catch (_) {
+        await showNotOkMessage();
 
-    userId = await Get.find<LoginController>()
-        .getLoggedInUserObject()
-        .then((value) => value!.id);
-
-    var catList = Get.find<HomeViewController>().categories;
-
-    var cat = catList
-        .map((e) => e)
-        .where((element) => element.title == selectedCatTitle)
-        .toList();
-
-    catId = cat.map((e) => e.id.toString());
-
-    Logger().d("WW" + catId.toString());
-
-    // var ImageId = image.id;
-    // var ImageUrl = image.url;
-
-    ad = NewAd(
-      title: title,
-      content: content,
-      user: User(id: userId, username: username),
-      tags: tags,
-      category: Category(id: selectedCat, title: selectedCatTitle),
-      comments: comments,
-      likes: 50,
-      images: list,
-      publishedAt: publishedAt,
-      createdBy: createdBy,
-      updatedBy: updatedBy,
-    );
-
-    // logger.d(ad.images);
-    return ad;
+        appState.value = AppState.ERROR;
+      }
+      return true;
+    }
+    return false;
   }
 
+
+  // UI ===============================================================
   showOkMessage() async {
     Get.snackbar(
       "",
@@ -265,7 +206,6 @@ class NewAdController extends GetxController {
       colorText: Colors.white,
     );
   }
-
   showNotOkMessage() async {
     Get.snackbar(
       "",
@@ -275,7 +215,7 @@ class NewAdController extends GetxController {
         style: fontStyle.copyWith(color: Colors.white),
       ),
       messageText: Text(
-        "يجب عليك إختيار صورة قبل رفع الإعلان",
+        "يجب عليك إختيار صورة  قبل رفع الإعلان والتأكد من ملء جميع الحقول",
         style: fontStyle.copyWith(color: Colors.white),
       ),
       backgroundColor: Colors.red,
@@ -301,42 +241,88 @@ class NewAdController extends GetxController {
     );
   }
 
-  Future<bool> sendToServer() async {
-    if (files2.length == 0) {
-      showNotOkMessage();
+  Future<NewAd> adFromInput() async {
+    NewAd ad;
+    // var image;
+
+    // /// trying single image
+    // var UploadImage = await uploadImage(files);
+    // // String json = jsonEncode(UploadImage);
+    // // logger.d(json);
+    // Upload image = Upload();
+    //
+    // for (Upload q in UploadImage) {
+    //   image = q;
+    //   // logger.d(image.toJson());
+    // }
+
+    // todo first upload image to backend then take the id and url and linked to new ad object [*]
+
+    // var map = UploadImage.map((e) => e.toJson());
+    // logger.d(map);
+
+    /// trying multi image
+    // todo first upload images to backend related to an object [*]
+
+    List UploadImage = await newAddService.uploadImages(files2);
+
+
+    List<AdImage> list = [];
+
+    for (Upload a in UploadImage) {
+      var mapFromObject = a.toJson();
+      AdImage imageFromUploadMoedl = AdImage.fromJson(mapFromObject);
+      // logger.d(imageFromUploadMoedl.id);
+      list.add(imageFromUploadMoedl);
     }
-    if (formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
+    // logger.d(list.length);
 
-      try {
-        appState.value = AppState.LOADING;
 
-        var newAd = await adFromInput();
-        var mapFromObject = newAd.toJson(); //todo uncommit
-        // logger.d(mapFromObject.length);
-        await newAddService.createNewAd(mapFromObject);
-        appState.value = AppState.DONE;
+    //  get User name
+    username = await Get.find<LoginController>()
+        .getLoggedInUserObject()
+        .then((value) => value!.username);
 
-        // await showOkMessage();
-        // Get.back();
-        await Get.offAndToNamed(Routers.initialRoute);
-      } on Exception catch (_) {
-        await showNotOkMessage();
+    //  get user Id
 
-        appState.value = AppState.ERROR;
-      }
-      return true;
-    }
-    return false;
+    userId = await Get.find<LoginController>()
+        .getLoggedInUserObject()
+        .then((value) => value!.id);
+
+    // var catList = Get.find<HomeViewController>().categories;
+    //
+    // var cat = catList
+    //     .map((e) => e)
+    //     .where((element) => element.title == selectedCatTitle)
+    //     .toList();
+    //
+    // catId = cat.map((e) => e.id.toString());
+
+    contactNumber = "0551954619";
+
+    // Logger().d("WW" + catId.toString());
+
+    // var ImageId = image.id;
+    // var ImageUrl = image.url;
+
+    ad = NewAd(
+      title: title,
+      content: content,
+      user: User(id: userId, username: username),
+      tags: tags,
+      category: Category(id: selectedCatId, title: selectedCatTitle),
+      comments: comments,
+      likes: 50,
+      images: list,
+      contactNumber: contactNumber,
+      publishedAt: publishedAt,
+      createdBy: createdBy,
+      updatedBy: updatedBy,
+    );
+
+    // logger.d(ad.images);
+    return ad;
   }
-
-  List<Category>? _dropDownMenuItemsStrings2 = <Category>[];
-
-
-  List<Category>? get dropDownMenuItemsStrings2 => _dropDownMenuItemsStrings2;
-
-
-
   List<DropdownMenuItem<Category>> MenuItemsList() {
     var list = Get.find<HomeViewController>().categories;
     _dropDownMenuItemsStrings2 = list.cast<Category>();
@@ -357,7 +343,7 @@ class NewAdController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-    // cleanControllers();
+    cleanControllers();
   }
 
   @override
@@ -369,6 +355,7 @@ class NewAdController extends GetxController {
   }
 
   injectValues() async {
+    Logger().d(selectedCatId);
     MenuItemsList();
     update();
   }

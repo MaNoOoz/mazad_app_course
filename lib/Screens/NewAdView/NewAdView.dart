@@ -14,28 +14,26 @@ import 'package:photo_view/photo_view.dart';
 
 /// todo : implemnt logic and move it to controller
 class NewAdView extends GetView<NewAdController> {
-
   var chooseCatList = Get.find<NewAdController>().MenuItemsList();
 
   @override
   Widget build(BuildContext context) {
     var file = controller.ImagesFilesFromServer;
     Logger().d("files from server " + "${file.length}");
+    Logger().d("catId" + "${controller.selectedCatId}");
 
     return Scaffold(
       key: UniqueKey(),
       resizeToAvoidBottomInset: true,
       bottomSheet: _buildBottomSheet(),
       appBar: AppBar(
-        title: GetBuilder<NewAdController>(
-          builder: (c) {
-            return Text(
-              "إعلان جديد",
-              // "${c.selectedCat}",
-              style: fontStyle.copyWith(color: Colors.white, fontSize: 24),
-            );
-          }
-        ),
+        title: GetBuilder<NewAdController>(builder: (c) {
+          return Text(
+            "إعلان جديد",
+            // "${c.selectedCat}",
+            style: fontStyle.copyWith(color: Colors.white, fontSize: 24),
+          );
+        }),
         centerTitle: true,
       ),
       body: Padding(
@@ -181,116 +179,151 @@ class NewAdView extends GetView<NewAdController> {
 
   Widget FormUi() {
     return Expanded(
-      child: Card(
+      child: Card (
         child: Padding(
           padding: const EdgeInsets.all(18.0),
           child: Form(
             key: controller.formKey,
-            child: ListView(
-              children: [
-                TextFormField(
-                  maxLength: 32,
-                  minLines: 1,
-                  keyboardType: TextInputType.text,
-                  controller: controller.titleController,
-                  maxLines: 1,
-                  validator: (value) {
-                    return value!.length < 10
-                        ? 'Name must be greater than 10 characters'
-                        : null;
-                  },
-                  // style: UtilsImporter().uStyleUtils.loginTextFieldStyle(),
-                  decoration: textFieldDecorationCircle(
-                    hint: "TV",
-                    lable: 'عنوان الإعلان',
-                    style: fontStyle.copyWith(
-                      color: Colors.black26,
-                    ),
-                    icon: Icon(Icons.title),
-                  ),
-                  textDirection: TextDirection.rtl,
-                  onSaved: (String? val) {
-                    controller.title = val!;
-                  },
-
-                  onChanged: (String? val) {
-                    controller.title = val!;
-                  },
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                TextFormField(
-                  maxLength: 5000,
-                  keyboardType: TextInputType.text,
-                  controller: controller.contentController,
-                  maxLines: 10,
-                  validator: (value) {
-                    return value!.length < 20
-                        ? 'content must be greater than 10 characters'
-                        : null;
-                  },
-                  // style: UtilsImporter().uStyleUtils.loginTextFieldStyle(),
-                  decoration: textFieldDecorationCircle(
-                    hint: "TV",
-                    lable: 'تفاصيل الإعلان',
-                    style: fontStyle.copyWith(
-                      color: Colors.black26,
-                    ),
-                    icon: Icon(Icons.title),
-                  ),
-                  onSaved: (String? val) {
-                    controller.content = val!;
-                  },
-                  onTap: () {},
-                  onChanged: (String? val) {
-                    controller.content = val!;
-                  },
-                  textDirection: TextDirection.rtl,
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  // height: 100,
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: new DropdownButtonFormField<Category>(
-                      items: chooseCatList,
-                      style: fontStyle.copyWith(fontSize: 16),
-                      isExpanded: true,
-                      value: chooseCatList.map((e) => e.value).toList()[0],
-                      onChanged: (value) {
-                        // controller.selectedCat = "$value";
-                        controller.selectedCat = value!.id;
-                        controller.selectedCatTitle = value.title;
-                        // Logger().d("${controller.selectedCatTitle}");
-                        // Logger().d("${controller.selectedCat}");
-                        controller.update();
+            child: GetBuilder<NewAdController>(
+              init: NewAdController(),
+              dispose: (state)  => state.controller!.cleanControllers(),
+              builder: (c) {
+                return ListView(
+                  children: [
+                    TextFormField(
+                      maxLength: 32,
+                      minLines: 1,
+                      keyboardType: TextInputType.text,
+                      controller: controller.titleController,
+                      maxLines: 1,
+                      validator: (value) {
+                        return value!.length < 10
+                            ? 'Name must be greater than 10 characters'
+                            : null;
                       },
-                      hint: Center(
-                        child: Text(
-                          "إختر التصنيف",
+                      // style: UtilsImporter().uStyleUtils.loginTextFieldStyle(),
+                      decoration: textFieldDecorationCircle(
+                        hint: "TV",
+                        lable: 'عنوان الإعلان',
+                        style: fontStyle.copyWith(
+                          color: Colors.black26,
+                        ),
+                        icon: Icon(Icons.title),
+                      ),
+                      textDirection: TextDirection.rtl,
+                      onSaved: (String? val) {
+                        controller.title = val!;
+                      },
+
+                      onChanged: (String? val) {
+                        controller.title = val!;
+                      },
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    TextFormField(
+                      maxLength: 5000,
+                      keyboardType: TextInputType.text,
+                      controller: controller.contentController,
+                      maxLines: 10,
+                      validator: (value) {
+                        return value!.length < 20
+                            ? 'content must be greater than 10 characters'
+                            : null;
+                      },
+                      // style: UtilsImporter().uStyleUtils.loginTextFieldStyle(),
+                      decoration: textFieldDecorationCircle(
+                        hint: "TV",
+                        lable: 'تفاصيل الإعلان',
+                        style: fontStyle.copyWith(
+                          color: Colors.black26,
+                        ),
+                        icon: Icon(Icons.title),
+                      ),
+                      onSaved: (String? val) {
+                        controller.content = val!;
+                      },
+                      onTap: () {},
+                      onChanged: (String? val) {
+                        controller.content = val!;
+                      },
+                      textDirection: TextDirection.rtl,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      // height: 100,
+                      child: Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: new DropdownButtonFormField<Category>(
+                          items: chooseCatList,
                           style: fontStyle.copyWith(fontSize: 16),
+                          isExpanded: true,
+                          value: chooseCatList.map((e) => e.value).toList()[4],
+                          onChanged: (value) {
+                            // controller.selectedCat = "$value";
+                            controller.selectedCatId = value!.id;
+                            controller.selectedCatTitle = value.title;
+                            Logger().d("${controller.selectedCatTitle}");
+                            // Logger().d("${controller.selectedCatId}");
+                            controller.update();
+                          },
+                          hint: Center(
+                            child: Text(
+                              "إختر التصنيف",
+                              style: fontStyle.copyWith(fontSize: 16),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                // Image.memory(controller.path),
-                SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-              ],
+                    // Image.memory(controller.path),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    TextFormField(
+                      maxLength: 10,
+                      keyboardType: TextInputType.phone,
+                      controller: controller.contactNumberController,
+                      maxLines: 1,
+                      validator: (value) {
+                        return value!.length < 10
+                            ? 'contactNumber must be = than 10 characters'
+                            : null;
+                      },
+                      // style: UtilsImporter().uStyleUtils.loginTextFieldStyle(),
+                      decoration: textFieldDecorationCircle(
+                        lable: "رقم التواصل",
+                        hint: '0555555555 مثال :',
+                        style: fontStyle.copyWith(
+                          color: Colors.black26,
+                        ),
+                        icon: Icon(Icons.title),
+                      ),
+                      onSaved: (String? val) {
+                        controller.contactNumber = val!;
+                      },
+                      onTap: () {},
+                      onChanged: (String? val) {
+                        controller.contactNumber = val!;
+                      },
+                      textDirection: TextDirection.rtl,
+                    ),
+
+                    SizedBox(
+                      height: 16,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         ),

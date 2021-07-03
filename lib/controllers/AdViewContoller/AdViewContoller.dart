@@ -11,6 +11,7 @@ import 'package:mazad_app/models/Ad.dart';
 import 'package:mazad_app/models/NewComment.dart';
 import 'package:mazad_app/services/AuthService.dart';
 import 'package:mazad_app/utils/app_state.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AdViewContoller extends GetxController {
   AuthService authService = AuthService();
@@ -58,7 +59,7 @@ class AdViewContoller extends GetxController {
   }
 
   Future showConfirmAlert(model) async {
-     await Get.defaultDialog(
+    await Get.defaultDialog(
       title: "تنبيه",
       titleStyle: fontStyle.copyWith(color: Colors.blue),
       content: Text(
@@ -74,6 +75,11 @@ class AdViewContoller extends GetxController {
         child: Text("لا"),
       ),
     );
+  }
+
+  Future contactWhatsApp(Ad model, String message) async {
+    String url = "whatsapp://send?phone=${model}&text=$message";
+    await canLaunch(url) ? launch(url) : printError(info: "canot open");
   }
 
   Future createNewComment(ad) async {
@@ -120,12 +126,10 @@ class AdViewContoller extends GetxController {
       Logger().d("${response.data}");
       await showOkMessage();
       Get.offAndToNamed(Routers.initialRoute);
-
     } else {
       Logger().d("uploadImage  json result :");
     }
     appState.value = AppState.DONE;
-
   }
 
   Future<NewComment> createNewCommentObject(ad) async {

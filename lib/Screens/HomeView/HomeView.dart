@@ -76,7 +76,7 @@ class HomeView extends GetWidget<HomeViewController> {
                 catID = c.categories[index].id!;
                 c.catId = catID;
                 // Logger().d("message");
-                Logger().d(index);
+                Logger().d("catID"+  catID.toString() );
 
                 await c.getAdsListWithFilter(catID);
               },
