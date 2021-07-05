@@ -14,6 +14,7 @@ import 'package:mazad_app/widgets/side_drawer.dart';
 class HomeView extends GetWidget<HomeViewController> {
   var catID = 4;
 
+
   HomeView();
 
   @override
@@ -76,7 +77,7 @@ class HomeView extends GetWidget<HomeViewController> {
                 catID = c.categories[index].id!;
                 c.catId = catID;
                 // Logger().d("message");
-                Logger().d("catID"+  catID.toString() );
+                Logger().d("catID" + catID.toString());
 
                 await c.getAdsListWithFilter(catID);
               },
@@ -133,7 +134,7 @@ class HomeView extends GetWidget<HomeViewController> {
                         press: () async {
                           Get.put<AdViewContoller>(AdViewContoller());
 
-                          return Get.to(() => AdView(adModel));
+                          Get.to(() => AdView(adModel));
                         });
                   },
                 ),

@@ -8,11 +8,11 @@ import 'package:logger/logger.dart';
 import 'package:mazad_app/Bindings/Routers.dart';
 import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/controllers/HomeController/HomeController.dart';
-import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
 import 'package:mazad_app/models/NewAd.dart';
 import 'package:mazad_app/models/UploadModel.dart';
 import 'package:mazad_app/services/NewAddService.dart';
+import 'package:mazad_app/utils/alerts.dart';
 import 'package:mazad_app/utils/app_state.dart';
 
 class NewAdController extends GetxController {
@@ -21,12 +21,13 @@ class NewAdController extends GetxController {
 
   NewAdService newAddService = NewAdService();
 
-  final HomeViewController homeViewController = Get.put<HomeViewController>(HomeViewController());
+  final HomeViewController homeViewController =
+      Get.put<HomeViewController>(HomeViewController());
 
   // form =================================================
   GlobalKey<FormState> get formKey => _formKey;
   final GlobalObjectKey<FormState> _formKey =
-  GlobalObjectKey<FormState>("_UploadFormState");
+      GlobalObjectKey<FormState>("_UploadFormState");
   String title = '';
   String content = "";
   List<Tag> tags = <Tag>[];
@@ -44,6 +45,7 @@ class NewAdController extends GetxController {
   int? selectedCatId = 5;
   String? selectedCatTitle = "غير مصنف";
   List<Category>? _dropDownMenuItemsStrings2 = <Category>[];
+
   List<Category>? get dropDownMenuItemsStrings2 => _dropDownMenuItemsStrings2;
 
   var titleController = TextEditingController();
@@ -58,8 +60,6 @@ class NewAdController extends GetxController {
   var pathes = [];
   final appState = Rx<AppState>(AppState.IDLE);
 
-
-
   /// methods ============================================================
 
   tester() async {
@@ -68,7 +68,6 @@ class NewAdController extends GetxController {
   }
 
   cleanControllers() {
-
     files2.clear();
     titleController.text = "";
     contentController.text = "";
@@ -93,6 +92,22 @@ class NewAdController extends GetxController {
     // files.clear();
   }
 
+  chosenImagesSingleImagePicker2(ImageSource imageSource) async {
+    final File _image;
+    // files2.clear();
+
+    final pickedFile = await ImagePicker().getImage(source: imageSource);
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+      // Logger().d(_image.path);
+      logger.d(_image.path);
+
+      files2.add(_image);
+      update();
+    }
+    return files;
+    // files.clear();
+  }
 
   chosenImagesMultiFilePicker(context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -100,7 +115,7 @@ class NewAdController extends GetxController {
     );
 
     if (result != null) {
-      files2.clear();
+      // files2.clear();
       var chosenImages = result.paths.map((path) => File(path!)).toList();
 
       for (File file in chosenImages) {
@@ -126,10 +141,9 @@ class NewAdController extends GetxController {
     update();
   }
 
-
   // Server ===============================================================
-  Future<List<Upload>> uploadImage(List<File> files) async {
-    File file = files.first;
+  Future<List<Upload>> uploadImage(file) async {
+    // File file = files.first;
 
     try {
       ImagesFilesFromServer = await newAddService
@@ -141,9 +155,10 @@ class NewAdController extends GetxController {
     }
     return ImagesFilesFromServer;
   }
+
   Future<bool> sendToServer() async {
-    if (files2.length == 0 || formKey.currentState!.validate()==false) {
-      showNotOkMessage();
+    if (files2.length == 0 || formKey.currentState!.validate() == false) {
+      Alerts.showNotOkMessage();
     }
     if (formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -161,7 +176,7 @@ class NewAdController extends GetxController {
         // Get.back();
         await Get.offAndToNamed(Routers.initialRoute);
       } on Exception catch (_) {
-        await showNotOkMessage();
+        await Alerts.showNotOkMessage();
 
         appState.value = AppState.ERROR;
       }
@@ -170,76 +185,7 @@ class NewAdController extends GetxController {
     return false;
   }
 
-
   // UI ===============================================================
-  showOkMessage() async {
-    Get.snackbar(
-      "",
-      "",
-      titleText: Text(
-        "تمام",
-        style: fontStyle.copyWith(color: Colors.white),
-      ),
-      messageText: Text(
-        "تم رفع الإعلان بنجاح",
-        style: fontStyle.copyWith(color: Colors.white),
-      ),
-      backgroundColor: Colors.green,
-      icon: Icon(
-        Icons.done_rounded,
-        color: Colors.white,
-      ),
-      snackPosition: SnackPosition.TOP,
-      duration: Duration(seconds: 3),
-      backgroundGradient: LinearGradient(
-        begin: Alignment.topRight,
-        end: Alignment.bottomLeft,
-        colors: [
-          Colors.green,
-          // Colors.green.shade200,
-          // Colors.green.shade300,
-          // Colors.green.shade400,
-          // Colors.green.shade500,
-          Colors.green.shade800,
-        ],
-      ),
-      colorText: Colors.white,
-    );
-  }
-  showNotOkMessage() async {
-    Get.snackbar(
-      "",
-      "",
-      titleText: Text(
-        "خطأ",
-        style: fontStyle.copyWith(color: Colors.white),
-      ),
-      messageText: Text(
-        "يجب عليك إختيار صورة  قبل رفع الإعلان والتأكد من ملء جميع الحقول",
-        style: fontStyle.copyWith(color: Colors.white),
-      ),
-      backgroundColor: Colors.red,
-      icon: Icon(
-        Icons.error,
-        color: Colors.white,
-      ),
-      snackPosition: SnackPosition.TOP,
-      duration: Duration(seconds: 3),
-      backgroundGradient: LinearGradient(
-        begin: Alignment.topRight,
-        end: Alignment.bottomLeft,
-        colors: [
-          Colors.red,
-          // Colors.green.shade200,
-          // Colors.green.shade300,
-          // Colors.green.shade400,
-          // Colors.green.shade500,
-          Colors.red.shade800,
-        ],
-      ),
-      colorText: Colors.white,
-    );
-  }
 
   Future<NewAd> adFromInput() async {
     NewAd ad;
@@ -264,19 +210,17 @@ class NewAdController extends GetxController {
     /// trying multi image
     // todo first upload images to backend related to an object [*]
 
-    List UploadImage = await newAddService.uploadImages(files2);
+    List images = await newAddService.uploadImages(files2);
 
+    List<AdImage> uploadedImages = [];
 
-    List<AdImage> list = [];
-
-    for (Upload a in UploadImage) {
+    for (Upload a in images) {
       var mapFromObject = a.toJson();
       AdImage imageFromUploadMoedl = AdImage.fromJson(mapFromObject);
       // logger.d(imageFromUploadMoedl.id);
-      list.add(imageFromUploadMoedl);
+      uploadedImages.add(imageFromUploadMoedl);
     }
     // logger.d(list.length);
-
 
     //  get User name
     username = await Get.find<LoginController>()
@@ -313,7 +257,7 @@ class NewAdController extends GetxController {
       category: Category(id: selectedCatId, title: selectedCatTitle),
       comments: comments,
       likes: 50,
-      images: list,
+      images: uploadedImages,
       contactNumber: contactNumber,
       publishedAt: publishedAt,
       createdBy: createdBy,
@@ -323,6 +267,7 @@ class NewAdController extends GetxController {
     // logger.d(ad.images);
     return ad;
   }
+
   List<DropdownMenuItem<Category>> MenuItemsList() {
     var list = Get.find<HomeViewController>().categories;
     _dropDownMenuItemsStrings2 = list.cast<Category>();
@@ -359,5 +304,4 @@ class NewAdController extends GetxController {
     MenuItemsList();
     update();
   }
-
 }

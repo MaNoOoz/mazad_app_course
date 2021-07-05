@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 import 'package:mazad_app/Bindings/Routers.dart';
 import 'package:mazad_app/controllers/AuthController/LoginController.dart';
@@ -10,6 +11,7 @@ import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
 import 'package:mazad_app/models/NewComment.dart';
 import 'package:mazad_app/services/AuthService.dart';
+import 'package:mazad_app/utils/alerts.dart';
 import 'package:mazad_app/utils/app_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,48 +20,9 @@ class AdViewContoller extends GetxController {
   Dio dio = Dio();
   var commentText = "test";
   final appState = Rx<AppState>(AppState.IDLE);
-  final GlobalObjectKey<FormState> _send_comment_Key =
-      GlobalObjectKey<FormState>("_SendCommentsBtn");
-
-  GlobalObjectKey<FormState> get send_comment_Key => _send_comment_Key;
-
-  Future showOkMessage() async {
-    Get.snackbar(
-      "",
-      "",
-      titleText: Text(
-        "تمام",
-        style: fontStyle.copyWith(color: Colors.white),
-      ),
-      messageText: Text(
-        "تم إضافه التعليق بنجاح",
-        style: fontStyle.copyWith(color: Colors.white),
-      ),
-      backgroundColor: Colors.green,
-      icon: Icon(
-        Icons.done_rounded,
-        color: Colors.white,
-      ),
-      snackPosition: SnackPosition.TOP,
-      duration: Duration(seconds: 3),
-      backgroundGradient: LinearGradient(
-        begin: Alignment.topRight,
-        end: Alignment.bottomLeft,
-        colors: [
-          Colors.green,
-          // Colors.green.shade200,
-          // Colors.green.shade300,
-          // Colors.green.shade400,
-          // Colors.green.shade500,
-          Colors.green.shade800,
-        ],
-      ),
-      colorText: Colors.white,
-    );
-  }
 
   Future showConfirmAlert(model) async {
-    await Get.defaultDialog(
+    return await Get.defaultDialog(
       title: "تنبيه",
       titleStyle: fontStyle.copyWith(color: Colors.blue),
       content: Text(
@@ -67,7 +30,9 @@ class AdViewContoller extends GetxController {
         style: fontStyle,
       ),
       confirm: TextButton(
-        onPressed: () async => createNewComment(model),
+        onPressed: () async {
+          await sendNewComment(model);
+        },
         child: Text("نعم"),
       ),
       cancel: TextButton(
@@ -77,35 +42,30 @@ class AdViewContoller extends GetxController {
     );
   }
 
-  Future contactWhatsApp(Ad model, String message) async {
-    String url = "whatsapp://send?phone=${model}&text=$message";
-    await canLaunch(url) ? launch(url) : printError(info: "canot open");
+  Future<void> makePhoneCall(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
-  Future createNewComment(ad) async {
-    appState.value = AppState.LOADING;
+  Future contactWhatsApp(Ad model, String message) async {
+    Logger().d("contactWhatsApp ${model.contactNumber}");
 
+    String url = "whatsapp://send?phone=${model.contactNumber}&text=$message";
+    // String url = "whatsapp://send?phone=${model.contactNumber}&text=$message";
+    await canLaunch(url) ? await launch(url) : printError(info: "canot open");
+  }
+
+  Future<void> sendNewComment(ad) async {
+    appState.value = AppState.LOADING;
     var newAd = await createNewCommentObject(ad);
-    var mapFromObject = newAd.toJson(); //todo uncommit
+    var mapFromObject = newAd.toJson();
     // Logger().d(mapFromObject);
     await Future.delayed(Duration(seconds: 3));
-
     final String encodedData = json.encode(mapFromObject);
-    // final prettyString = JsonEncoder.withIndent('  ').convert(mapFromObject);
-    // Logger().d(prettyString);
-    // Logger().d(prettyString);
-
     var url = "$BaseUrl/comments";
-
-    // var body = jsonEncode({
-    //   "CommentText": "$commentText",
-    //   "user": "string",
-    //   "ad": "string",
-    //   "published_at": "2021-06-21T23:29:27.278Z",
-    //   "created_by": "string",
-    //   "updated_by": "string"
-    // });
-
     String userToken = await authService.getLoggedUserId();
     var headers = {
       'Authorization':
@@ -113,21 +73,22 @@ class AdViewContoller extends GetxController {
           'Bearer $userToken',
       'Content-Type': 'application/json'
     };
-    var response = await dio.post(
-      url,
-      data: encodedData,
-      options: Options(
-        headers: headers,
-        receiveTimeout: 5000,
-      ),
-    );
+    var response = await http
+        .post(Uri.parse("$url"), headers: headers, body: encodedData)
+        .catchError((dynamic e) {
+      Logger().d("Error");
+      Logger().d("${e.toString()}");
+    });
+
     if (response.statusCode == 200) {
       Logger().d("${response.statusCode}");
-      Logger().d("${response.data}");
-      await showOkMessage();
-      Get.offAndToNamed(Routers.initialRoute);
+      await Alerts.showOkMessageComment();
+      update();
+      Get.toNamed(Routers.home);
+
     } else {
-      Logger().d("uploadImage  json result :");
+      Logger().d("response.statusCode !!${response.statusCode.toString()}  ");
+      await Alerts.showNotOkMessageComment();
     }
     appState.value = AppState.DONE;
   }

@@ -12,7 +12,7 @@ class LoginController extends GetxController {
   RxBool userLogged = false.obs;
   LocalStorage storage = LocalStorage();
   User? _user;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   GlobalKey<FormState> get formKey => _formKey;
 

@@ -11,6 +11,9 @@ class SideDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // todo fixed Error
+    Get.put<LoginController>(LoginController());
+
     return Container(
       child: SafeArea(
           child: Drawer(

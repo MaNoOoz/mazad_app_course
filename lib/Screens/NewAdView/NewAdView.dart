@@ -9,6 +9,7 @@ import 'package:logger/logger.dart';
 import 'package:mazad_app/controllers/NewAdController/NewAdController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
+import 'package:mazad_app/utils/alerts.dart';
 import 'package:mazad_app/utils/app_state.dart';
 import 'package:photo_view/photo_view.dart';
 
@@ -365,7 +366,7 @@ class NewAdView extends GetView<NewAdController> {
                 color: kPrimaryColor,
                 onPressed: () async {
                   var ok = await controller.sendToServer();
-                  if (ok) await controller.showOkMessage();
+                  if (ok) await Alerts.showOkMessageAd();
                 }),
           ),
         ],
@@ -390,7 +391,7 @@ class NewAdView extends GetView<NewAdController> {
             onTap: () async {
               Get.back();
               await controller
-                  .chosenImagesSingleImagePicker(ImageSource.camera);
+                  .chosenImagesSingleImagePicker2(ImageSource.camera);
               // await controller.tester();
             },
           ),
@@ -401,7 +402,7 @@ class NewAdView extends GetView<NewAdController> {
               style: fontStyle,
             ),
             onTap: () async {
-              controller.files2.clear();
+              // controller.files2.clear();
               Get.back();
               await controller.chosenImagesMultiFilePicker(context);
               // await controller.chosenImagesSingleImagePicker(ImageSource.gallery);

@@ -116,6 +116,7 @@ class ProfileView extends GetView<ProfileController> {
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () async {
+
                     await Get.to(() => AdView(item));
                     // controller.adList.clear();
                   },

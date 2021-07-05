@@ -9,7 +9,7 @@ import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/widgets/custom_text_form_field.dart';
 
 class SignUpView extends GetView<SignUpContoller> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   LocalStorage storage = LocalStorage();
 
   @override

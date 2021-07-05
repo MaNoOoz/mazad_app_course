@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:mazad_app/Screens/HomeView/HomeView.dart';
 import 'package:mazad_app/Screens/LoginView/LoginView.dart';
+import 'package:mazad_app/controllers/AdViewContoller/AdViewContoller.dart';
 import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/controllers/AuthController/SignUpController.dart';
 import 'package:mazad_app/controllers/HomeController/HomeController.dart';
@@ -16,6 +17,7 @@ class InitialBinding extends Bindings {
 
     Get.lazyPut<NewAdController>(() => NewAdController());
     Get.lazyPut<ProfileController>(() => ProfileController());
+    Get.lazyPut<AdViewContoller>(() => AdViewContoller());
     Get.lazyPut<LoginController>(() => LoginController());
     Get.lazyPut<SignUpContoller>(() => SignUpContoller());
     Get.lazyPut<HomeViewController>(() => HomeViewController());

@@ -89,7 +89,8 @@ class AuthService {
 
   Future<dynamic> getMe() async {
     var url = "$BaseUrl/users/me";
-    String userToken = await getLoggedUserId();
+    var userToken = await getLoggedUserId();
+
     // Logger().d(userToken.toString());
     // Logger().d(userToken.runtimeType);
 
