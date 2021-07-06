@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mazad_app/controllers/ProfileController/ProfileController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
+import 'package:mazad_app/models/Ad.dart';
 
 class Alerts {
 
@@ -144,6 +146,32 @@ class Alerts {
     );
   }
 
+  static showDeleteConfirm(Ad model) async {
+    return await Get.defaultDialog(
+      title: "تنبيه",
+      titleStyle: fontStyle.copyWith(color: Colors.blue),
+      content: Text(
+        "حذف الإعلان",
+        style: fontStyle,
+      ),
+      confirm: TextButton(
+        onPressed: () async {
+           Get.put<ProfileController>(ProfileController());
+
+          await Get.find<ProfileController>().deleteAd(model.id!);
+          Get.back();
+           Get.find<ProfileController>().update();
+
+
+        },
+        child: Text("نعم"),
+      ),
+      cancel: TextButton(
+        onPressed: () => Get.back(),
+        child: Text("لا"),
+      ),
+    );
+  }
 
 
 }

@@ -37,6 +37,27 @@ class ProfileController extends GetxController {
 
     return adList;
   }
+
+  Future deleteAd(int adId) async {
+    Logger().d("deleteAd ");
+
+    try {
+      await profileService.deleteAd(adId).then((value) {
+        adList.removeWhere((element) => element.id == adId);
+        Logger().d(adList);
+        update();
+
+        var a = Ad.fromJson(value);
+        Logger().d(a);
+      });
+    } catch (e) {
+      Logger().d(e);
+    }
+    update();
+
+    return adList;
+  }
+
   // Future<List<Comment>?> getCommentsForUser(int userId) async {
   //   Logger().d("getCommentsForUser ");
   //   userId = user!.id!;
@@ -67,5 +88,4 @@ class ProfileController extends GetxController {
     await getAdsListForUser();
     // await getCommentsForUser(userId);
   }
-
 }

@@ -6,6 +6,7 @@ import 'package:mazad_app/Screens/AdView/AdView.dart';
 import 'package:mazad_app/Screens/HomeView/widgets/AdItem.dart';
 import 'package:mazad_app/controllers/AdViewContoller/AdViewContoller.dart';
 import 'package:mazad_app/controllers/HomeController/HomeController.dart';
+import 'package:mazad_app/controllers/ProfileController/ProfileController.dart';
 import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
 import 'package:mazad_app/widgets/buildSearch.dart';
@@ -80,6 +81,7 @@ class HomeView extends GetWidget<HomeViewController> {
                 Logger().d("catID" + catID.toString());
 
                 await c.getAdsListWithFilter(catID);
+                await Get.find<ProfileController>().getAdsListForUser();
               },
               labelColor: Colors.blue,
               isScrollable: true,

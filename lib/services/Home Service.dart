@@ -19,6 +19,7 @@ class HomeService {
       Logger().d("Error Geting Data");
     }
   }
+
   Future<List<dynamic>?> getAdsWithFilter(catId) async {
     // var url = "$BaseUrl/Ads?category.id=2";
     var url = "$BaseUrl/Ads?category.id=$catId";
@@ -33,6 +34,7 @@ class HomeService {
       Logger().d("Error in Data");
     }
   }
+
   Future<List<dynamic>?> getAllAds () async {
     // var url = "$BaseUrl/Ads?category.id=2";
     var url = "$BaseUrl/Ads";

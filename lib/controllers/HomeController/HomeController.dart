@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:mazad_app/controllers/AuthController/LoginController.dart';
+import 'package:mazad_app/controllers/ProfileController/ProfileController.dart';
 import 'package:mazad_app/models/Ad.dart' show Ad, Category, User;
 // import 'package:mazad_app/models/Category.dart';
 import 'package:mazad_app/services/Home%20Service.dart';
@@ -44,6 +45,7 @@ class HomeViewController extends GetxController with SingleGetTickerProviderMixi
 
   Future<List<Ad>?> getAdsListWithFilter(int catId) async {
     Logger().d("getAdsListWithFilter ");
+    Get.put<ProfileController>(ProfileController());
 
     appState.value = AppState.LOADING;
     try {
