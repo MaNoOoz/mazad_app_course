@@ -13,7 +13,6 @@ import 'package:mazad_app/utils/alerts.dart';
 import 'package:mazad_app/utils/app_state.dart';
 import 'package:photo_view/photo_view.dart';
 
-/// todo : implemnt logic and move it to controller
 class NewAdView extends GetView<NewAdController> {
   var chooseCatList = Get.find<NewAdController>().MenuItemsList();
 

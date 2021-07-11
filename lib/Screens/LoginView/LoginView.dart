@@ -104,20 +104,24 @@ class LoginView extends GetView<LoginController> {
               ),
               Text(
                 'نسيت كلمة السر',
-                style: fontStyle.copyWith(color: Colors.black, fontSize: 14),
+                style: fontStyle.copyWith(color: Colors.blue, fontSize: 14),
               ),
               SizedBox(
-                height: 15,
+                height: 50,
               ),
               MaterialButton(
                   disabledColor: Colors.grey,
                   focusColor: Colors.red,
                   highlightColor: Colors.red,
                   hoverColor: Colors.red,
+                  height: 55,
                   child: Obx(
                     () {
                       if (controller.appState() == AppState.LOADING) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ));
                       } else {
                         // Logger().d(
                         //     "// controller.appState.value = AppState.LOADING; LIST ${controller.appState.value}");

@@ -16,6 +16,7 @@ import 'package:mazad_app/utils/alerts.dart';
 import 'package:mazad_app/utils/app_state.dart';
 
 class NewAdController extends GetxController {
+
   static NewAdController to = Get.find();
   var logger = Logger();
 

@@ -24,6 +24,8 @@ class LoginController extends GetxController {
   final AuthService authService = AuthService();
 
   signInUser() async {
+    Logger().d("signInUser called");
+
     appState.value = AppState.LOADING;
     isPreesed.value = true;
 

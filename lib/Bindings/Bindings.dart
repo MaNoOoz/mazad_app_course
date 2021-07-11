@@ -14,7 +14,6 @@ class InitialBinding extends Bindings {
   void dependencies() {
     // TODO: implement dependencies
     Get.lazyPut<LocalStorage>(() => LocalStorage());
-
     Get.lazyPut<NewAdController>(() => NewAdController());
     Get.lazyPut<ProfileController>(() => ProfileController());
     Get.lazyPut<AdViewContoller>(() => AdViewContoller());

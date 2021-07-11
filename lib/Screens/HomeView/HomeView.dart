@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 import 'package:mazad_app/Screens/AdView/AdView.dart';
 import 'package:mazad_app/Screens/HomeView/widgets/AdItem.dart';
 import 'package:mazad_app/controllers/AdViewContoller/AdViewContoller.dart';
@@ -13,10 +12,6 @@ import 'package:mazad_app/widgets/buildSearch.dart';
 import 'package:mazad_app/widgets/side_drawer.dart';
 
 class HomeView extends GetWidget<HomeViewController> {
-  var catID = 4;
-
-
-  HomeView();
 
   @override
   Widget build(BuildContext context) {
@@ -62,8 +57,11 @@ class HomeView extends GetWidget<HomeViewController> {
     );
   }
 
+
+
   Widget _buildTabBar() {
-    // final _tabs = controller.categories.map<Tab>((e) => Tab(text: e.title)).toList();
+
+
     return GetBuilder<HomeViewController>(
       builder: (c) {
         return DefaultTabController(
@@ -74,14 +72,13 @@ class HomeView extends GetWidget<HomeViewController> {
             // height: 100,
             // width: 300,
             child: TabBar(
-              onTap: (index) async {
-                catID = c.categories[index].id!;
-                c.catId = catID;
-                // Logger().d("message");
-                Logger().d("catID" + catID.toString());
 
-                await c.getAdsListWithFilter(catID);
-                await Get.find<ProfileController>().getAdsListForUser();
+              onTap: (index) async {
+                var catId = c.categories[index].id!;
+                await c.getAdsListWithFilter(catId);
+                var anotherController = Get.find<ProfileController>();
+                await anotherController.getAdsListForUser();
+
               },
               labelColor: Colors.blue,
               isScrollable: true,
@@ -94,7 +91,7 @@ class HomeView extends GetWidget<HomeViewController> {
               labelStyle: fontStyle.copyWith(fontSize: 18),
               tabs: List.generate(
                 c.categories.length,
-                (index) => Tab(
+                    (index) => Tab(
                   text: c.categories[index].title,
                 ),
                 // )

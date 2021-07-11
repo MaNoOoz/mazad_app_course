@@ -16,13 +16,14 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       locale:  Locale("ar", "AE"),
       fallbackLocale: Locale("ar", "AE"),
-
-      onInit: fetchAll(),
+      // onInit: fetchAll(),
       smartManagement: SmartManagement.full,
       debugShowCheckedModeBanner: false,
       getPages: Pages.getPages,
@@ -32,9 +33,10 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  fetchAll() {
-   var s = Get.put<HomeViewController>(HomeViewController());
-    Logger().d("fetchAll");
-   //  Logger().d("${s.categories.length}");
-  }
+  // fetchAll() {
+  //
+  //  var s = Get.put<HomeViewController>(HomeViewController());
+  //   Logger().d("fetchAll");
+  //
+  // }
 }

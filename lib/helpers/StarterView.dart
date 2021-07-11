@@ -19,7 +19,7 @@ class _StarterViewState extends State<StarterView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    initValues();
+    // initValues();
   }
 
   // final LocalStorage storage = LocalStorage();
@@ -38,7 +38,7 @@ class _StarterViewState extends State<StarterView> {
   }
 
   void initValues() async {
-    isLogged = Get.find<LoginController>().userLogged.value;
+    isLogged = Get.find<LoginController>().userLogged.value ;
     user =  await Get.find<LoginController>().getLoggedInUserObject();
     // isUser = Get.put<LoginController>(LoginController()).user;
     if (user != null) {

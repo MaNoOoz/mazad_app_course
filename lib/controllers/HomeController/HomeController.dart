@@ -1,21 +1,25 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
-import 'package:mazad_app/controllers/AuthController/LoginController.dart';
 import 'package:mazad_app/controllers/ProfileController/ProfileController.dart';
 import 'package:mazad_app/models/Ad.dart' show Ad, Category, User;
+
 // import 'package:mazad_app/models/Category.dart';
 import 'package:mazad_app/services/Home%20Service.dart';
 import 'package:mazad_app/utils/app_state.dart';
 
-class HomeViewController extends GetxController with SingleGetTickerProviderMixin{
+class HomeViewController extends GetxController {
   final homeService = HomeService();
 
   List<Category> _categories = <Category>[];
+
   List<Ad> _adList = <Ad>[];
+
   List<Ad> _adsListFilter = <Ad>[];
+
 // User? user =User();
-  int catId = 2;
+
+  int catId = 4;
+
   var likes = 0.obs;
   final appState = Rx<AppState>(AppState.LOADING);
 
@@ -27,12 +31,13 @@ class HomeViewController extends GetxController with SingleGetTickerProviderMixi
 
   List<Ad> get adsListFilter => _adsListFilter;
 
+
   Future<List<Category>?> getCategoryList() async {
     try {
       homeService.getCategories().then((value) {
         // _categories.clear();
-        _categories =
-            value!.map((element) => Category.fromJson(element)).toList();
+
+        _categories = value!.map((dynamic element) => Category.fromJson(element)).toList();
       });
     } catch (e) {
       Logger().d(e);
@@ -41,7 +46,6 @@ class HomeViewController extends GetxController with SingleGetTickerProviderMixi
 
     return categories;
   }
-
 
   Future<List<Ad>?> getAdsListWithFilter(int catId) async {
     Logger().d("getAdsListWithFilter ");
@@ -65,13 +69,13 @@ class HomeViewController extends GetxController with SingleGetTickerProviderMixi
       });
       appState.value = AppState.DONE;
       update();
-
     } catch (e) {
       Logger().d(e);
     }
 
     return adsListFilter;
   }
+
   Future<List<Ad>?> getAllAds() async {
     Logger().d("getAllAds ");
 
@@ -93,7 +97,6 @@ class HomeViewController extends GetxController with SingleGetTickerProviderMixi
       });
       appState.value = AppState.DONE;
       update();
-
     } catch (e) {
       Logger().d(e);
     }
@@ -112,8 +115,6 @@ class HomeViewController extends GetxController with SingleGetTickerProviderMixi
     await getAdsListWithFilter(catId);
     await getAllAds();
 
-
     appState.value = AppState.DONE;
-
   }
 }
