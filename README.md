@@ -1,8 +1,12 @@
 # mazad_app
-
 كورس عمل تطبيق Flutter + Strapi
-Github: Flutter App Source Code : https://github.com/MaNoOoz/mazad_app_course
-Github: Backend Strapi Source Code : https://github.com/MaNoOoz/backend
+
+Github: Flutter App Source Code :
+  https://github.com/MaNoOoz/mazad_app_course
+  
+Github: Backend Strapi Source Code :
+  https://github.com/MaNoOoz/backend
+
 
 youtube : https://www.youtube.com/channel/UCYuo5V0GKQGCStTQBGJQNVQ
 
@@ -10,7 +14,9 @@ youtube : https://www.youtube.com/channel/UCYuo5V0GKQGCStTQBGJQNVQ
 Getting Started
 
 
-    Clone the repository git clone https://github.com/MaNoOoz/mazad_app_course.git
+Clone the repository 
+
+    git clone https://github.com/MaNoOoz/mazad_app_course.git
     Navigate to cloned folder 
     Get packages using flutter pub get
     Run flutter run
