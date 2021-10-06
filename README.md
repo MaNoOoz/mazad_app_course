@@ -14,6 +14,8 @@ youtube : https://www.youtube.com/channel/UCYuo5V0GKQGCStTQBGJQNVQ
 Getting Started
 
 
+-- Backend Required  https://github.com/MaNoOoz/backend
+
 Clone the repository 
 
     git clone https://github.com/MaNoOoz/mazad_app_course.git
