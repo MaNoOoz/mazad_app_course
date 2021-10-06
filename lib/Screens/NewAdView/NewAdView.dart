@@ -11,7 +11,6 @@ import 'package:mazad_app/helpers/Constants.dart';
 import 'package:mazad_app/models/Ad.dart';
 import 'package:mazad_app/utils/alerts.dart';
 import 'package:mazad_app/utils/app_state.dart';
-import 'package:photo_view/photo_view.dart';
 
 class NewAdView extends GetView<NewAdController> {
   var chooseCatList = Get.find<NewAdController>().MenuItemsList();
@@ -423,8 +422,10 @@ class ImageItem extends StatelessWidget {
     // TODO: implement build
     if (url == null) return Text('no image');
     return GestureDetector(
-      onTap: () =>
-          PhotoView(imageProvider: AssetImage("assets/icons/home.png")),
+      onTap: () {
+        // return PhotoView(imageProvider: AssetImage("assets/icons/home.png"));
+
+      },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Image.file(url!),
